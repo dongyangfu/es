@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.teacher.mapper.TeaCourseMapper">
+
+    <resultMap type="TeaCourse" id="TeaCourseResult">
+        <id property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseType" column="course_type"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <!--通过教师ID查询此教师主要的担任课程-->
+    <select id="selectTeaCourseById" parameterType="Long" resultMap="TeaCourseResult">
+        SELECT
+            C.course_name,
+            C.course_type
+        FROM
+            tea_user T
+            LEFT JOIN tea_user_course TUC ON T.tea_id = TUC.tea_id
+            LEFT JOIN tea_course C ON c.course_id = TUC.course_id
+        WHERE
+            T.tea_id = #{userId}
+            AND C.STATUS = '0'
+	</select>
+    <!--查询所有课程-->
+    <select id="selectTeaCourseName" resultType="map">
+        SELECT DISTINCT
+            C.course_name,
+            C.course_id
+        FROM
+            tea_course C
+        WHERE
+            C.STATUS = '0'
+        ORDER BY
+            C.course_name
+	</select>
+    <!--保存教师的主要担任课程-->
+    <insert id="insertTeaCourse" parameterType="map">
+        INSERT INTO tea_user_course
+        VALUES
+	        (#{userId},#{courseId})
+    </insert>
+    <!--修改教师的主要担任课程-->
+    <update id="updateTeaCourse" parameterType="map">
+        UPDATE tea_user_course
+        SET course_id = #{courseId} WHERE tea_id=#{userId}
+    </update>
+    <!--删除教师的主要担任课程-->
+    <delete id="deleteTeaCourse" parameterType="Long">
+        DELETE
+        FROM
+            tea_user_course
+        WHERE
+            tea_id = #{userId}
+    </delete>
+
+</mapper> 

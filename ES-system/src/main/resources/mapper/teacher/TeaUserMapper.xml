@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.teacher.mapper.TeaUserMapper">
+
+    <resultMap type="TeaUser" id="TeaUserResult">
+        <id property="teaId" column="tea_id"/>
+        <result property="teaProfess" column="tea_profess"/>
+        <result property="teaJobNumber" column="tea_job_number"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <select id="selectTeaUserById" parameterType="Long" resultType="map">
+		SELECT
+            T.tea_job_number,
+            P.profess_name
+        FROM
+            tea_user T
+            LEFT JOIN tea_profess P ON T.tea_profess = P.profess_id
+        WHERE
+            T.tea_id = #{teaId}
+	</select>
+
+</mapper> 

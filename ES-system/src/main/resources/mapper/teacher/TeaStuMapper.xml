@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.teacher.mapper.TeaStuMapper">
+
+	<resultMap type="StuUser" id="StuUserResult">
+		<id     property="stuId"         column="stu_id"        />
+		<result property="stuNum"       column="stu_num"      />
+	</resultMap>
+
+	<select id="selectStuUserListById" parameterType="Long" resultMap="StuUserResult">
+		SELECT
+			s.stu_id,
+			s.stu_num
+		FROM
+			stu_user s
+			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
+		WHERE
+			ts.tea_id = #{teaId}
+		ORDER BY
+			s.stu_id
+	</select>
+
+</mapper> 
