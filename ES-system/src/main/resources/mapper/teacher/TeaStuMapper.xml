@@ -8,7 +8,7 @@
 		<id     property="stuId"         column="stu_id"        />
 		<result property="stuNum"       column="stu_num"      />
 	</resultMap>
-
+	<!--通过教师ID查询教师下的学生列表（实践管理）-->
 	<select id="selectStuUserListById" parameterType="Long" resultMap="StuUserResult">
 		SELECT
 			s.stu_id,
@@ -21,5 +21,60 @@
 		ORDER BY
 			s.stu_id
 	</select>
+	<!--通过教师ID查询教师下的学生列表（选拔阶段）-->
+	<select id="selectStuSelectListById" parameterType="Long" resultType="map">
+		SELECT
+			s.stu_id stuId,
+			s.stu_num stuNum,
+			COALESCE ( ts.machine_score, '' ) machineScore,
+			COALESCE ( ts.interview_result, '' ) interviewResult,
+		CASE
+				ts.STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS status
+		FROM
+			stu_user s
+			LEFT JOIN tea_stu_select_rel ts ON s.stu_id = ts.stu_id
+		WHERE
+			ts.tea_id = #{teaId}
+		ORDER BY
+			s.stu_id
+	</select>
+	<!--通过学生ID查询需要修改成绩的学生信息-->
+	<select id="selectStuByStuId" parameterType="Long" resultType="map">
+		SELECT
+			s.stu_id stuId,
+			s.stu_num stuNum,
+			COALESCE ( ts.machine_score, '' ) machineScore,
+			COALESCE ( ts.interview_result, '' ) interviewResult
+		FROM
+			stu_user s
+			LEFT JOIN tea_stu_select_rel ts ON s.stu_id = ts.stu_id
+		WHERE
+			s.stu_id = #{stuId}
+	</select>
+	<!--保存教师提交的学生成绩（提交状态）-->
+	<update id="updateStuScore" parameterType="map">
+		UPDATE tea_stu_select_rel
+		SET machine_score = #{machineScore},
+		interview_result = #{interviewResult},
+		STATUS = '00'
+		WHERE
+			stu_id = #{stuId}
+			AND tea_id = #{teaId};
+	</update>
 
+	<!--保存教师提交的学生成绩（暂存状态）-->
+	<update id="updateStuScoreTemp" parameterType="map">
+		UPDATE tea_stu_select_rel
+		SET machine_score = #{machineScore},
+		interview_result = #{interviewResult},
+		STATUS = '01'
+		WHERE
+			stu_id = #{stuId}
+			AND tea_id = #{teaId};
+	</update>
 </mapper> 

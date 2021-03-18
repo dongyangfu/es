@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改学生成绩信息')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body>
+<div class="main-content">
+    <form class="form-horizontal" id="form-stu-edit" >
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">学生ID：</label>
+                    <div class="col-sm-5">
+                        <input name="stuId" class="form-control" type="text" id="stuId" th:value="${stuMap.stuId}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">学号：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="stuNum" id="stuNum" th:value="${stuMap.stuNum}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="form-header h4">成绩信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">机试成绩：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" placeholder="请输入0~100的数字" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" id="machineScore" name="machineScore" maxlength="2" th:value="${stuMap.machineScore}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">面试成绩：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="interviewResult" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" placeholder="请输入0~100的数字" id="interviewResult" maxlength="2" th:value="${stuMap.interviewResult}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-done" onclick="submitSaveHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>提 交</button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script type="text/javascript">
+    var prefix = ctx + "teacher/commit";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("提交后就不可再更改，是否确定提交？", function() {
+                var data = $("#form-stu-edit").serializeArray();
+                $.operate.saveTab(prefix + "/edit", data);
+            })
+        }
+    }
+
+    function submitSaveHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("保存后还可以更改，是否确定保存？", function() {
+                var data = $("#form-stu-edit").serializeArray();
+                $.operate.saveTab(prefix + "/editTemp", data);
+            })
+        }
+    }
+</script>
+</body>
+</html>

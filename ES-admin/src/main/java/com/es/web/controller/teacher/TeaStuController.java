@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教师下的学生信息
@@ -43,5 +44,7 @@ public class TeaStuController extends BaseController {
         List<StuUser> list = teaStuService.selectStuUserListById(userId);
         return getDataTable(list);
     }
+
+
 
 }

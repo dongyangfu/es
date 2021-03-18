@@ -31,7 +31,7 @@ public class TeaUserController extends BaseController {
     @ResponseBody
     public AjaxResult updateCourse(@RequestParam("courseName") String courseName) {
         Map<String, Object> map = new HashMap<>(20);
-        int iFlag=0;int uFlag=0;
+        int iFlag=0;
         String[] course = courseName.trim().split(",");
         Long userId = ShiroUtils.getUserId();
         map.put("userId",userId);

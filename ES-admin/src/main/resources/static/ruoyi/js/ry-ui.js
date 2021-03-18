@@ -1075,6 +1075,14 @@ var table = {
             	table.set();
             	$.modal.openTab("修改" + table.options.modalName, $.operate.editUrl(id));
             },
+            editTabSpe: function(id,score,result,status) {
+                if($.common.equals(status,"已提交")){
+                    $.modal.msgWarning("成绩已提交，不可编辑");
+                    return;
+                }
+                table.set();
+                $.modal.openTab("修改" + table.options.modalName, $.operate.editUrl(id));
+            },
             // 修改信息 全屏
             editFull: function(id) {
             	table.set();
