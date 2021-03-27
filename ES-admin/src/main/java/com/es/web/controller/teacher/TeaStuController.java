@@ -31,7 +31,7 @@ public class TeaStuController extends BaseController {
 
     @RequiresPermissions("teacher:mystu:view")
     @GetMapping()
-    public String menu() {
+    public String myStu() {
         return prefix + "/mystu";
     }
 
@@ -44,7 +44,5 @@ public class TeaStuController extends BaseController {
         List<StuUser> list = teaStuService.selectStuUserListById(userId);
         return getDataTable(list);
     }
-
-
 
 }
