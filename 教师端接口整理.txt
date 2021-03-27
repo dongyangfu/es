@@ -1,0 +1,64 @@
+接口整理
+
+教师端：
+selectTeaCourseById     通过教师ID查询此教师主要的担任课程
+    参数:userId         当前登录用户
+    返回:course_name    课程名称
+
+selectTeaCourseName     查询所有课程
+    参数：
+    返回:course_name    课程名称
+         C.course_id    课程ID
+        
+insertTeaCourse         保存教师的主要担任课程
+    参数:userId         当前登录用户
+         courseId       课程ID
+    返回：int            可用于判断插入是否成功
+
+updateTeaCourse         修改教师的主要担任课程
+    参数:userId         当前登录用户
+         courseId       课程ID
+    返回：int            可用于判断更新是否成功
+
+deleteTeaCourse         删除教师的主要担任课程
+    参数:userId         当前登录用户
+    返回：int            可用于判断删除是否成功
+
+selectStuUserListById  通过教师ID查询教师下的学生列表（实践管理）
+    参数:teaId         当前登录用户
+    返回:stuId         学生ID
+         stuNum        学生学号
+
+selectStuSelectListById 通过教师ID查询教师下的学生列表（选拔阶段）
+    参数:teaId         当前登录用户
+    返回:stuId         学生ID
+        stuNum        学生学号
+        machineScore   机试成绩
+        interviewResult 面试成绩
+        status          成绩的状态
+
+selectStuByStuId        通过学生ID查询需要修改成绩的学生信息
+    参数:stuId         学生ID
+    返回:stuId         学生ID
+        stuNum        学生学号
+        machineScore   机试成绩
+        interviewResult 面试成绩
+
+updateStuScore          保存教师提交的学生成绩（提交状态）
+    参数:stuId         学生ID
+        teaId          教师ID
+        machineScore    机试成绩
+        interviewResult 面试成绩
+    返回:int            可用于判断更新是否成功
+
+updateStuScoreTemp      保存教师提交的学生成绩（暂存状态）
+    参数:stuId         学生ID
+        teaId          教师ID
+        machineScore    机试成绩
+        interviewResult 面试成绩
+    返回:int            可用于判断更新是否成功
+
+selectTeaUserById       通过教师ID查询教师的工号与职称
+    参数:teaId         教师ID
+    返回:tea_job_number 教师工号
+        profess_name    职称名称
