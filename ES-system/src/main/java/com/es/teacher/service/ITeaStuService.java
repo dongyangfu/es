@@ -47,4 +47,33 @@ public interface ITeaStuService {
      * @return int
      */
     int updateStuScoreTemp(Map<String,Object> map);
+
+    /**
+     * 通过教师ID查询教师下的学生列表（实践管理-学生选择老师阶段）
+     *
+     * @param teaId 教师ID
+     * @return 学生信息列表
+     */
+    List<StuUser>  selectStuListById(Long teaId);
+
+    /**
+     * 更新学生选择老师后的通过状态（实践管理阶段）
+     * @param map 通过信息
+     * @return int
+     */
+    int updateStatus(Map<String,Object> map);
+
+    /**
+     * 根据教师ID查询当前教师已经选择的学生数量
+     * @param teaId 教师ID
+     * @return int 学生数量
+     */
+    int selectCountById(Long teaId);
+
+    /**
+     * 驳回已满教师的剩余已申请的学生请求
+     * @param teaId 教师ID
+     * @return int
+     */
+    int updateRejectAll(Long teaId);
 }

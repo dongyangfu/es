@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.es.teacher.mapper.TeaStuMapper">
 
-	<resultMap type="StuUser" id="StuUserResult">
-		<id     property="stuId"         column="stu_id"        />
-		<result property="stuNum"       column="stu_num"      />
-	</resultMap>
-	<!--通过教师ID查询教师下的学生列表（实践管理）-->
-	<select id="selectStuUserListById" parameterType="Long" resultMap="StuUserResult">
+    <resultMap type="StuUser" id="StuUserResult">
+        <id property="stuId" column="stu_id"/>
+        <result property="stuNum" column="stu_num"/>
+    </resultMap>
+    <!--通过教师ID查询教师下的学生列表（实践管理-老师通过学生的选择）-->
+    <select id="selectStuUserListById" parameterType="Long" resultMap="StuUserResult">
 		SELECT
 			s.stu_id,
 			s.stu_num
@@ -18,11 +18,27 @@
 			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
 		WHERE
 			ts.tea_id = #{teaId}
+			AND ts.status = '01'
 		ORDER BY
 			s.stu_id
 	</select>
-	<!--通过教师ID查询教师下的学生列表（选拔阶段）-->
-	<select id="selectStuSelectListById" parameterType="Long" resultType="map">
+
+    <!--通过教师ID查询教师下的学生列表（实践管理-学生选择老师阶段）-->
+    <select id="selectStuListById" parameterType="Long" resultMap="StuUserResult">
+		SELECT
+			s.stu_id,
+			s.stu_num
+		FROM
+			stu_user s
+			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
+		WHERE
+			ts.tea_id = #{teaId}
+			AND ts.status = '00'
+		ORDER BY
+			s.stu_id
+	</select>
+    <!--通过教师ID查询教师下的学生列表（选拔阶段）-->
+    <select id="selectStuSelectListById" parameterType="Long" resultType="map">
 		SELECT
 			s.stu_id stuId,
 			s.stu_num stuNum,
@@ -43,8 +59,8 @@
 		ORDER BY
 			s.stu_id
 	</select>
-	<!--通过学生ID查询需要修改成绩的学生信息-->
-	<select id="selectStuByStuId" parameterType="Long" resultType="map">
+    <!--通过学生ID查询需要修改成绩的学生信息-->
+    <select id="selectStuByStuId" parameterType="Long" resultType="map">
 		SELECT
 			s.stu_id stuId,
 			s.stu_num stuNum,
@@ -56,8 +72,8 @@
 		WHERE
 			s.stu_id = #{stuId}
 	</select>
-	<!--保存教师提交的学生成绩（提交状态）-->
-	<update id="updateStuScore" parameterType="map">
+    <!--保存教师提交的学生成绩（提交状态）-->
+    <update id="updateStuScore" parameterType="map">
 		UPDATE tea_stu_select_rel
 		SET machine_score = #{machineScore},
 		interview_result = #{interviewResult},
@@ -67,8 +83,8 @@
 			AND tea_id = #{teaId};
 	</update>
 
-	<!--保存教师提交的学生成绩（暂存状态）-->
-	<update id="updateStuScoreTemp" parameterType="map">
+    <!--保存教师提交的学生成绩（暂存状态）-->
+    <update id="updateStuScoreTemp" parameterType="map">
 		UPDATE tea_stu_select_rel
 		SET machine_score = #{machineScore},
 		interview_result = #{interviewResult},
@@ -76,5 +92,34 @@
 		WHERE
 			stu_id = #{stuId}
 			AND tea_id = #{teaId};
+	</update>
+
+	<!--更新学生选择老师后的通过状态（实践管理阶段）-->
+	<update id="updateStatus" parameterType="map">
+		UPDATE tea_stu_rel
+		SET STATUS = #{status}
+		WHERE
+			stu_id = #{stuId}
+			AND tea_id = #{teaId};
+	</update>
+
+	<!--根据教师ID查询当前教师已经选择的学生数量-->
+	<select id="selectCountById" parameterType="Long" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			tea_stu_rel
+		WHERE
+			tea_id = #{teaId}
+			AND status = '01'
+	</select>
+
+	<!--驳回已满教师的剩余已申请的学生请求-->
+	<update id="updateRejectAll" parameterType="Long">
+		UPDATE tea_stu_rel
+		SET STATUS = '02'
+		WHERE
+			tea_id = #{teaId}
+			AND status = '00'
 	</update>
 </mapper> 

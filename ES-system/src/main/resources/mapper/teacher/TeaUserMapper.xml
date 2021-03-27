@@ -10,11 +10,12 @@
         <result property="teaJobNumber" column="tea_job_number"/>
         <result property="status" column="status"/>
     </resultMap>
-
+    <!--通过教师ID查询教师的工号与职称-->
     <select id="selectTeaUserById" parameterType="Long" resultType="map">
 		SELECT
             T.tea_job_number,
-            P.profess_name
+            P.profess_name,
+            P.max_stu
         FROM
             tea_user T
             LEFT JOIN tea_profess P ON T.tea_profess = P.profess_id

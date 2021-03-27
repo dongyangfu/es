@@ -45,4 +45,25 @@ public class TeaStuServiceImpl implements ITeaStuService {
     public int updateStuScoreTemp(Map<String, Object> map) {
         return teaStuMapper.updateStuScoreTemp(map);
     }
+
+    @Override
+    public List<StuUser> selectStuListById(Long teaId) {
+        List<StuUser> stuUsers = teaStuMapper.selectStuListById(teaId);
+        return stuUsers;
+    }
+
+    @Override
+    public int updateStatus(Map<String, Object> map) {
+        return teaStuMapper.updateStatus(map);
+    }
+
+    @Override
+    public int selectCountById(Long teaId) {
+        return teaStuMapper.selectCountById(teaId);
+    }
+
+    @Override
+    public int updateRejectAll(Long teaId) {
+        return teaStuMapper.updateRejectAll(teaId);
+    }
 }

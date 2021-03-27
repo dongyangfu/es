@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改学生成绩信息')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body>
+<div class="main-content">
+    <form class="form-horizontal" id="form-stu-edit" >
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">学生ID：</label>
+                    <div class="col-sm-5">
+                        <input name="stuId" class="form-control" type="text" id="stuId" th:value="${stuMap.stuId}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">学号：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="stuNum" id="stuNum" th:value="${stuMap.stuNum}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h4 class="form-header h4">成绩信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">机试成绩：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" id="machineScore" name="machineScore" th:value="${stuMap.machineScore}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">面试成绩：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="interviewResult" id="interviewResult" th:value="${stuMap.interviewResult}" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">是否通过学生的选择：</label>
+                    <div class="col-sm-8">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="status" name="status" checked="checked">
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" id="commit" onclick="submitHandler()"><i class="fa fa-check"></i>提 交</button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+    </div>
+</div>
+<!--隐藏数据-->
+<input type="hidden" id="maxStu" th:value="${teaMap.max_stu}" >
+<input type="hidden" id="stuCount" th:value="${count}" >
+<input type="hidden" id="professName" th:value="${teaMap.profess_name}" >
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script type="text/javascript">
+    var prefix = ctx + "teacher/choice";
+    var maxStu=$('#maxStu').val();
+    var stuCount=$('#stuCount').val();
+    var professName=$('#professName').val();
+    $(function () {
+        if($.common.equals(maxStu,stuCount)){
+            $.operate.saveModal(prefix + "/rejectAll");
+            $('#commit').attr("readonly","readonly");
+        } else {
+            $.modal.confirm("根据您的职称："+professName+"，您每一届可选择学生的最大数为："+maxStu+",您当前已选择"+stuCount+"名学生，是否继续？", function() {
+            });
+        }
+    });
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("提交后就不可再更改，是否确定提交？", function() {
+                var data = $("#form-stu-edit").serializeArray();
+                $.operate.saveTab(prefix + "/edit", data);
+            })
+        }
+    }
+</script>
+</body>
+</html>
