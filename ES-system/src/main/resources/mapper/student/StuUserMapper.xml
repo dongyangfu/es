@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.student.mapper.StuUserMapper">
+    
+    <resultMap type="StuUser" id="StuUserResult">
+        <result property="stuId"       column="stu_id"       />
+        <result property="stuNum"    column="stu_num"    />
+        <result property="stuName"     column="stu_name"     />
+        <result property="stuSex"  column="stu_sex"  />
+        <result property="stuAge"         column="stu_age"          />
+        <result property="stuClass"       column="stu_class"       />
+        <result property="stuTel"     column="stu_tel"     />
+        <result property="stuWx"       column="stu_wx"       />
+        <result property="stuQq"     column="stu_qq"     />
+        <result property="stuMail"     column="stu_mail"     />
+        <result property="stuSpe"         column="stu_spe"          />
+        <result property="stuIde"         column="stu_ide"          />
+        <result property="stuPro"         column="stu_pro"          />
+        <result property="stuMt"         column="stu_mt"          />
+        <result property="stuInt"         column="stu_int"          />
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select stu_id, stu_num, stu_name, stu_sex, stu_age, stu_class, stu_tel, stu_wx, stu_qq, stu_mail, stu_spe, stu_ide, stu_pro, stu_mt, stu_int
+		from stu_user
+    </sql>
+    
+    <select id="selectStuUserById" parameterType="Long" resultMap="StuUserResult">
+        <include refid="selectUserVo"/>
+        where stu_id = #{stuId}
+    </select>
+
+    <update id="updateStuUser" parameterType="StuUser">
+        update stu_user
+        <set>
+            <if test="stuSex != null and stuSex != ''">stu_sex = #{stuSex}, </if>
+            <if test="stuAge != null and stuAge != ''">stu_age = #{stuAge}, </if>
+            <if test="stuTel != null">stu_tel = #{stuTel}, </if>
+            <if test="stuWx != null and stuWx != ''">stu_wx = #{stuWx}, </if>
+            <if test="stuQq != null and stuQq != ''">stu_qq = #{stuQq},</if>
+            <if test="stuMail != null and stuMail != ''">stu_mail = #{stuMail},</if>
+            <if test="stuSpe != null and stuSpe != ''">stu_spe = #{stuSpe},</if>
+            stu_ide = 2
+        </set>
+
+        where stu_id = #{stuId}
+    </update>
+    
+</mapper>

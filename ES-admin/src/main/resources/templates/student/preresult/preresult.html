@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('初审结果')" />
+    <link rel="stylesheet" type="text/css" href="https://www.huangwx.cn/css/sweetalert.css">
+    <script type="text/javascript" src="https://www.huangwx.cn/js/sweetalert-dev.js"></script>
+</head>
+<body class="gray-bg" onload="init()">
+<div  class="main-content"><!--class="container-div"-->
+    <form method="post" class="form-horizontal" id="form-user-edit" th:object="${stuUser}"><!--th:object="${user}"-->
+    <h4 class="form-header h4">初审结果查看</h4>
+        <input name="userId"  type="hidden"  th:field="*{StuId}" />
+        <input id="stuIde" name="stuIde"  type="hidden"  th:field="*{stuIde}" />
+    <div id="div">
+        亲爱的<span name="stuName" id="stuName" th:text="*{stuName}"></span>同学，
+
+    </div>
+    </form>
+</div>
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var stuIde;
+    function init() {
+        stuIde = document.getElementById("stuIde");
+        if (stuIde.value==1){
+            $("#div").after("<span>您还未进行申请</span>");
+        }else if(stuIde.value==2){
+            $("#div").after("<span>您已经进行申请，正在审核中...</span>");
+        }else if(stuIde.value==3){
+            $("#div").after("<span>恭喜您，您已经通过初审！</span>");
+        }else if(stuIde.value==4){
+            $("#div").after("<span>很抱歉，您未通过初审</span>");
+        }
+    }
+</script>
+</body>
+</html>

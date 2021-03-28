@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.student.mapper.StuNoticeMapper">
+    
+    <resultMap type="StuNotice" id="StuNoticeResult">
+        <result property="noticeId"       column="stu_notice_id"       />
+        <result property="noticeTitle"    column="stu_notice_title"    />
+        <result property="noticeType"     column="stu_notice_type"     />
+        <result property="noticeContent"  column="stu_notice_content"  />
+        <result property="status"         column="stu_status"          />
+        <result property="createBy"       column="stu_create_by"       />
+        <result property="createTime"     column="stu_create_time"     />
+        <result property="updateBy"       column="stu_update_by"       />
+        <result property="updateTime"     column="stu_update_time"     />
+        <result property="remark"         column="stu_remark"          />
+    </resultMap>
+    
+    <sql id="selectNoticeVo">
+        select stu_notice_id, stu_notice_title, stu_notice_type, stu_notice_content, stu_status, stu_create_by, stu_create_time, stu_update_by, stu_update_time, stu_remark
+		from stu_notice
+    </sql>
+    
+    <select id="selectNoticeById" parameterType="Long" resultMap="StuNoticeResult">
+        <include refid="selectNoticeVo"/>
+        where stu_notice_id = #{noticeId}
+    </select>
+    
+    <select id="selectNoticeList" parameterType="StuNotice" resultMap="StuNoticeResult">
+        <include refid="selectNoticeVo"/>
+        <where>
+			<if test="noticeTitle != null and noticeTitle != ''">
+				AND stu_notice_title like concat('%', #{noticeTitle}, '%')
+			</if>
+			<if test="noticeType != null and noticeType != ''">
+				AND stu_notice_type = #{noticeType}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND stu_create_by like concat('%', #{createBy}, '%')
+			</if>
+		</where>
+    </select>
+    
+</mapper>
