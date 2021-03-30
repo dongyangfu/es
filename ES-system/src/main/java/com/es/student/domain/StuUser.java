@@ -9,26 +9,133 @@ import com.es.common.core.domain.BaseEntity;
  */
 public class StuUser extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    private long stuId;//学生id
-    private String stuNum;//学生学号
-    private String stuName;//学生姓名
-    private String stuSex;//学生性别
-    private String stuAge;//学生年龄
-    private String stuClass;//学生班级
-    private String stuTel;//学生电话
-    private String stuWx;//学生微信
-    private String stuQq;//学生qq
-    private String stuMail;//学生邮箱
-    private String stuSpe;//学生特长
-    private int stuIde;//标识，标记可申请卓越班的同学,0为不可申请，1为未申请状态，2为申请待审核状态，3为申请通过状态，4为申请未通过状态
-    private int stuPro;//申请流程状态，0为未进行面试，1为进行面试未通过，3笔试通过，4为未参加面试，5为参加面试未通过，6面试通过
-    private String stuMt;//机试成绩
-    private String stuInt;//面试成绩
+    /**
+     * 学生id
+     */
+    private long stuId;
+    /**
+     * 学生学号
+     */
+    private String stuNum;
+    /**
+     * 学生姓名
+     */
+    private String stuName;
+    /**
+     * 学生性别
+     */
+    private String stuSex;
+    /**
+     * 学生年龄
+     */
+    private String stuAge;
+    /**
+     * 学生班级
+     */
+    private String stuClass;
+    /**
+     * 学生电话
+     */
+    private String stuTel;
+    /**
+     * 学生微信
+     */
+    private String stuWx;
+    /**
+     * 学生qq
+     */
+    private String stuQq;
+    /**
+     * 学生邮箱
+     */
+    private String stuMail;
+    /**
+     * 学生特长
+     */
+    private String stuSpe;
+    /**
+     * 标识，标记可申请卓越班的同学,0为不可申请，1为未申请状态，2为申请待审核状态，3为申请通过状态，4为申请未通过状态
+     */
+    private int stuIde;
+    /**
+     * 申请流程状态，0为未进行面试，1为进行面试未通过，3笔试通过，4为未参加面试，5为参加面试未通过，6面试通过
+     */
+    private int stuPro;
+    /**
+     * 机试成绩
+     */
+    private String stuMt;
+    /**
+     * 面试成绩
+     */
+    private String stuInt;
+
+    /**
+     * 机试总成绩
+     */
+    private int machineScore;
+
+    /**
+     * 面试成绩
+     */
+    private int interviewResult;
+    /**
+     * 面试成绩状态
+     */
+    private String irStatus;
+    /**
+     * 第一题机试成绩
+     */
+    private int oneMachineScore;
+    /**
+     * 第一题机试成绩状态
+     */
+    private String oneMsStatus;
+    /**
+     * 第二题机试成绩
+     */
+    private int twoMachineScore;
+    /**
+     * 第二题机试成绩状态
+     */
+    private String twoMsStatus;
+    /**
+     * 第三题机试成绩
+     */
+    private int threeMachineScore;
+    /**
+     * 第三题机试成绩状态
+     */
+    private String threeMsStatus;
+    /**
+     * 第四题机试成绩
+     */
+    private int fourMachineScore;
+    /**
+     * 第四题机试成绩状态
+     */
+    private String fourMsStatus;
+    /**
+     * 第五题机试成绩
+     */
+    private int fiveMachineScore;
+    /**
+     * 第五题机试成绩状态
+     */
+    private String fiveMsStatus;
+    /**
+     * 第六题机试成绩
+     */
+    private int sixMachineScore;
+    /**
+     * 第刘题机试成绩状态
+     */
+    private String sixMsStatus;
 
     public StuUser() {
     }
 
-    public StuUser(long stuId, String stuNum, String stuName, String stuSex, String stuAge, String stuClass, String stuTel, String stuWx, String stuQq, String stuMail, String stuSpe, int stuIde, int stuPro, String stuMt, String stuInt) {
+    public StuUser(long stuId, String stuNum, String stuName, String stuSex, String stuAge, String stuClass, String stuTel, String stuWx, String stuQq, String stuMail, String stuSpe, int stuIde, int stuPro, String stuMt, String stuInt, int machineScore, int interviewResult, String irStatus, int oneMachineScore, String oneMsStatus, int twoMachineScore, String twoMsStatus, int threeMachineScore, String threeMsStatus, int fourMachineScore, String fourMsStatus, int fiveMachineScore, String fiveMsStatus, int sixMachineScore, String sixMsStatus) {
         this.stuId = stuId;
         this.stuNum = stuNum;
         this.stuName = stuName;
@@ -38,11 +145,27 @@ public class StuUser extends BaseEntity {
         this.stuTel = stuTel;
         this.stuWx = stuWx;
         this.stuQq = stuQq;
+        this.stuMail = stuMail;
         this.stuSpe = stuSpe;
         this.stuIde = stuIde;
         this.stuPro = stuPro;
         this.stuMt = stuMt;
         this.stuInt = stuInt;
+        this.machineScore = machineScore;
+        this.interviewResult = interviewResult;
+        this.irStatus = irStatus;
+        this.oneMachineScore = oneMachineScore;
+        this.oneMsStatus = oneMsStatus;
+        this.twoMachineScore = twoMachineScore;
+        this.twoMsStatus = twoMsStatus;
+        this.threeMachineScore = threeMachineScore;
+        this.threeMsStatus = threeMsStatus;
+        this.fourMachineScore = fourMachineScore;
+        this.fourMsStatus = fourMsStatus;
+        this.fiveMachineScore = fiveMachineScore;
+        this.fiveMsStatus = fiveMsStatus;
+        this.sixMachineScore = sixMachineScore;
+        this.sixMsStatus = sixMsStatus;
     }
 
     public static long getSerialVersionUID() {
@@ -169,6 +292,126 @@ public class StuUser extends BaseEntity {
         this.stuInt = stuInt;
     }
 
+    public int getOneMachineScore() {
+        return oneMachineScore;
+    }
+
+    public void setOneMachineScore(int oneMachineScore) {
+        this.oneMachineScore = oneMachineScore;
+    }
+
+    public String getOneMsStatus() {
+        return oneMsStatus;
+    }
+
+    public void setOneMsStatus(String oneMsStatus) {
+        this.oneMsStatus = oneMsStatus;
+    }
+
+    public int getTwoMachineScore() {
+        return twoMachineScore;
+    }
+
+    public void setTwoMachineScore(int twoMachineScore) {
+        this.twoMachineScore = twoMachineScore;
+    }
+
+    public String getTwoMsStatus() {
+        return twoMsStatus;
+    }
+
+    public void setTwoMsStatus(String twoMsStatus) {
+        this.twoMsStatus = twoMsStatus;
+    }
+
+    public int getThreeMachineScore() {
+        return threeMachineScore;
+    }
+
+    public void setThreeMachineScore(int threeMachineScore) {
+        this.threeMachineScore = threeMachineScore;
+    }
+
+    public String getThreeMsStatus() {
+        return threeMsStatus;
+    }
+
+    public void setThreeMsStatus(String threeMsStatus) {
+        this.threeMsStatus = threeMsStatus;
+    }
+
+    public int getFourMachineScore() {
+        return fourMachineScore;
+    }
+
+    public void setFourMachineScore(int fourMachineScore) {
+        this.fourMachineScore = fourMachineScore;
+    }
+
+    public String getFourMsStatus() {
+        return fourMsStatus;
+    }
+
+    public void setFourMsStatus(String fourMsStatus) {
+        this.fourMsStatus = fourMsStatus;
+    }
+
+    public int getFiveMachineScore() {
+        return fiveMachineScore;
+    }
+
+    public void setFiveMachineScore(int fiveMachineScore) {
+        this.fiveMachineScore = fiveMachineScore;
+    }
+
+    public String getFiveMsStatus() {
+        return fiveMsStatus;
+    }
+
+    public void setFiveMsStatus(String fiveMsStatus) {
+        this.fiveMsStatus = fiveMsStatus;
+    }
+
+    public int getSixMachineScore() {
+        return sixMachineScore;
+    }
+
+    public void setSixMachineScore(int sixMachineScore) {
+        this.sixMachineScore = sixMachineScore;
+    }
+
+    public String getSixMsStatus() {
+        return sixMsStatus;
+    }
+
+    public void setSixMsStatus(String sixMsStatus) {
+        this.sixMsStatus = sixMsStatus;
+    }
+
+    public int getMachineScore() {
+        return machineScore;
+    }
+
+    public void setMachineScore(int machineScore) {
+        this.machineScore = machineScore;
+    }
+
+    public int getInterviewResult() {
+        return interviewResult;
+    }
+
+    public void setInterviewResult(int interviewResult) {
+        this.interviewResult = interviewResult;
+    }
+
+    public String getIrStatus() {
+        return irStatus;
+    }
+
+    public void setIrStatus(String irStatus) {
+        this.irStatus = irStatus;
+    }
+
     @Override
     public String toString() {
         return "StuUser{" +
@@ -187,6 +430,21 @@ public class StuUser extends BaseEntity {
                 ", stuPro=" + stuPro +
                 ", stuMt='" + stuMt + '\'' +
                 ", stuInt='" + stuInt + '\'' +
+                ", machineScore=" + machineScore +
+                ", interviewResult=" + interviewResult +
+                ", irStatus='" + irStatus + '\'' +
+                ", oneMachineScore=" + oneMachineScore +
+                ", oneMsStatus='" + oneMsStatus + '\'' +
+                ", twoMachineScore=" + twoMachineScore +
+                ", twoMsStatus='" + twoMsStatus + '\'' +
+                ", threeMachineScore=" + threeMachineScore +
+                ", threeMsStatus='" + threeMsStatus + '\'' +
+                ", fourMachineScore=" + fourMachineScore +
+                ", fourMsStatus='" + fourMsStatus + '\'' +
+                ", fiveMachineScore=" + fiveMachineScore +
+                ", fiveMsStatus='" + fiveMsStatus + '\'' +
+                ", sixMachineScore=" + sixMachineScore +
+                ", sixMsStatus='" + sixMsStatus + '\'' +
                 '}';
     }
 }

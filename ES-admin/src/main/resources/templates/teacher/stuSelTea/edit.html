@@ -77,13 +77,7 @@
     var stuCount=$('#stuCount').val();
     var professName=$('#professName').val();
     $(function () {
-        if($.common.equals(maxStu,stuCount)){
-            $.operate.saveModal(prefix + "/rejectAll");
-            $('#commit').attr("readonly","readonly");
-        } else {
-            $.modal.confirm("根据您的职称："+professName+"，您每一届可选择学生的最大数为："+maxStu+",您当前已选择"+stuCount+"名学生，是否继续？", function() {
-            });
-        }
+        $.modal.alertWarning("根据您的职称："+professName+"，您每一届可选择学生的最大数为："+maxStu+",您当前已选择"+stuCount+"名学生！");
     });
     function submitHandler() {
         if ($.validate.form()) {
