@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('通知公告列表')" />
+    <link rel="stylesheet" type="text/css" href="https://www.huangwx.cn/css/sweetalert.css">
+    <script type="text/javascript" src="https://www.huangwx.cn/js/sweetalert-dev.js"></script>
+</head>
+<body class="gray-bg" onload="init()">
+<div  class="main-content"><!--class="container-div"-->
+    <form th:action="@{/student/apply/submit}" method="post" class="form-horizontal" id="form-user-edit" th:object="${stuUser}"><!--th:object="${user}"-->
+    <h4 class="form-header h4">完善个人信息</h4>
+        <input name="userId"  type="hidden"  th:field="*{StuId}" />
+        <input id="stuIde" name="stuIde"  type="hidden"  th:field="*{stuIde}" />
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">学号：</label>
+                    <div class="col-sm-8">
+                        <input name="userName"  class="form-control" type="text" maxlength="30"  required th:field="*{stuNum}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">姓名：</label>
+                    <div class="col-sm-8">
+                        <input name="userName" placeholder="请输入姓名" class="form-control" type="text" maxlength="30"  required th:field="*{stuName}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">班级：</label>
+                    <div class="col-sm-8">
+                        <input name="userName" placeholder="请输入班级" class="form-control" type="text" maxlength="30"  required th:field="*{stuClass}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">性别：</label>
+                    <div class="col-sm-8">
+                        <input name="userName" id="t1" placeholder="请输入性别" class="form-control" type="text" maxlength="30" th:field="*{stuSex}" required><!--th:field="*{userName}"-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">年龄：</label>
+                    <div class="col-sm-8">
+                        <input name="userName" id="t2" placeholder="请输入年龄" class="form-control" type="text" maxlength="30" th:field="*{stuAge}" required><!--th:field="*{userName}"-->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">手机号码：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="phonenumber"  id="t3" placeholder="请输入手机号码" class="form-control" type="text" maxlength="11" th:field="*{stuTel}">
+                            <span class="input-group-addon"><i class="fa fa-mobile"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">邮箱：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="email"  id="t4" class="form-control email" type="text" maxlength="50" placeholder="请输入邮箱" th:field="*{stuMail}">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">微信：</label>
+                    <div class="col-sm-8">
+                        <input name="userName"  id="t5" placeholder="请输入微信号码" class="form-control" type="text" maxlength="30" th:field="*{stuWx}" required><!--th:field="*{userName}"-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">QQ：</label>
+                    <div class="col-sm-8">
+                        <input name="userName"  id="t6" placeholder="请输入请求号码" class="form-control" type="text" maxlength="30" th:field="*{stuQq}" required><!--th:field="*{userName}"-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">特长：</label>
+                    <div class="col-xs-10">
+                        <textarea name="remark"  id="t7" maxlength="500" class="form-control" rows="3" th:field="*{stuSpe}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">申请状态：</label>
+                    <div class="col-sm-8">
+                        <input name="userName" id="t8"  class="form-control" type="text" maxlength="30"  th:value="*{stuIde}==1?'未申请':'已申请'" required disabled><!--th:field="*{userName}"-->
+                    </div>
+                </div>
+            </div>
+
+            <!--<table id="bootstrap-table"></table>-->
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button id="alarm3" type="button" class="btn btn-sm btn-primary" onclick="saveStorage()"><i  class="fa fa-check"></i>暂时保存</button>&nbsp;
+                <button id="alarm4" type="submit" class="btn btn-sm btn-danger"  ><i class="fa fa-check">提交申请</i></button>
+            </div><!--onclick="submitHandler()"-->
+        </div>
+    </form>
+</div>
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "student/apply";
+    /*暂时保存*/
+    var t1,t2,t3,t4,t5,t6,t7,stuIde,alarm3,alarm4;
+    var oStorage;
+    var oStorage;
+    function init() {
+        t1 = document.getElementById("t1");
+        t2 = document.getElementById("t2");
+        t3 = document.getElementById("t3");
+        t4 = document.getElementById("t4");
+        t5 = document.getElementById("t5");
+        t6 = document.getElementById("t6");
+        t7 = document.getElementById("t7");
+        alarm3 = document.getElementById("alarm3");
+        alarm4 = document.getElementById("alarm4");
+
+        /*lStorage = window.localStorage;
+        t1.value = localStorage.getItem("t1");
+        t2.value = localStorage.getItem("t2");
+        t3.value = localStorage.getItem("t3");
+        t4.value = localStorage.getItem("t4");
+        t5.value = localStorage.getItem("t5");
+        t6.value = localStorage.getItem("t6");
+        t7.value = localStorage.getItem("t7");*/
+        stuIde = document.getElementById("stuIde");
+        if (stuIde.value!=1){
+            $('input').attr("readonly",true);
+            $(':button').attr("disabled",true);
+            $('textarea').attr("readonly",true);
+
+        }
+    }
+    /*function saveStorage() {
+        //lStorage.mydata = t2.value;
+        lStorage.setItem("t1",t1.value);
+        lStorage.setItem("t2",t2.value);
+        lStorage.setItem("t3",t3.value);
+        lStorage.setItem("t4",t4.value);
+        lStorage.setItem("t5",t5.value);
+        lStorage.setItem("t6",t6.value);
+        lStorage.setItem("t7",t7.value);
+        //t1.value += "localStorage保存mydata:" + t2.value + "\n";
+    }*/
+    function submitHandler() {
+        swal({
+                title: "确定提交吗？",
+                text: "提交后您将无法修改！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定提交！",
+                cancelButtonText: "取消提交！",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    swal("提交！", "您的报名申请已提交！",
+                        "success");
+                    return true;
+                } else {
+                    swal("取消！", "您已取消提交报名申请)",
+                        "error");
+                    return false;
+                }
+            });
+    }
+
+    $(document).ready(function(){
+        $("#alarm1").click(function(){
+            swal("开始这个完美的弹出框旅程吧！")
+        });
+        $("#alarm2").click(function(){
+            swal("这是标题！","这是文本")
+        });
+        $("#alarm3").click(function(){
+            swal("保存成功","","success")
+        });
+        $("#alarm4").click(function(){
+            swal({
+                    title: "确定提交吗？",
+                    text: "提交后您将无法修改！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确定提交！",
+                    cancelButtonText: "取消提交！",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        swal("提交！", "您的报名申请已提交！",
+                            "success");
+                    } else {
+                        swal("取消！", "您已取消提交报名申请)",
+                            "error");
+                    }
+                });
+        });
+        $("#alarm5").click(function(){
+            swal({
+                title: "HTML <small>标题</small>!",
+                text: "自定义<span style='color:#0000FF'>这是蓝色的<span>。",
+                html: true
+            });
+        });
+    });
+
+    /*var editFlag = [[${@permission.hasPermi('student:notice:detail')}]];
+    var types = [[${@dict.getType('stu_notice_type')}]];
+    var datas = [[${@dict.getType('stu_notice_status')}]];
+    var prefix = ctx + "student/notice";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            detailUrl: prefix + "/detail/{id}",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            modalName: "公告",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'noticeId',
+                    title : '序号'
+                },
+                {
+                    field : 'noticeTitle',
+                    title : '公告标题'
+                },
+                {
+                    field : 'createBy',
+                    title : '发布者'
+                },
+                {
+                    field: 'createTime',
+                    title: '发布时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });*/
+</script>
+</body>
+</html>

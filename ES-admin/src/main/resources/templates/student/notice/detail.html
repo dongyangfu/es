@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('公告详细')" />
+	<th:block th:include="include :: jsonview-css" />
+
+	<style type="text/css">
+		.comments {
+			width:100%;/*自动适应父布局宽度*/
+			overflow:auto;
+			word-break:break-all;
+			/*在ie中解决断行问题(防止自动变为在一行显示，主要解决ie兼容问题，ie8中当设宽度为100%时，文本域类容超过一行时，
+            当我们双击文本内容就会自动变为一行显示，所以只能用ie的专有断行属性“word-break或word-wrap”控制其断行)*/
+		}
+	</style>
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m-t" id="signupForm" th:object="${notice}">
+	 	<input id="noticeId" name="noticeId" th:field="*{noticeId}"  type="hidden">
+		<div class="form-group">
+			<label class="col-sm-2 control-label is-required">公告标题：</label>
+			<div class="col-sm-10">
+				<input id="noticeTitle" name="noticeTitle" th:field="*{noticeTitle}" class="form-control" type="text" disabled="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label is-required">发布人：</label>
+			<div class="col-sm-10">
+				<input id="createBy" name="createBy" th:field="*{createBy}" class="form-control" type="text" disabled="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label is-required">发布时间：</label>
+			<div class="col-sm-10">
+				<input id="createTime" name="createTime" th:field="*{createTime}" class="form-control" type="text" disabled="true">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">公告内容：</label>
+			<div class="col-sm-10">
+				<!--<pre id="noticeContent" name="noticeContent" th:field="*{noticeContent}" class="form-control"  type="text" disabled="true"/>-->
+				<!--<div class="form-control-static"><pre id="noticeContent"></pre></div>-->
+				<textarea  th:field="*{noticeContent}" class="comments" style="height:expression((this.scrollHeight>950)?'950px':(this.scrollHeight+50)+'px');overflow:auto;" disabled="true"></textarea>
+			</div>
+		</div>
+	</form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: jsonview-js" />
+	<!--<script th:inline="javascript">
+		$(function() {
+			var noticeContent = [[${notice.noticeContent}]];
+			if ($.common.isNotEmpty(noticeContent) && noticeContent.length < 2000) {
+				$("#noticeContent").JSONView(noticeContent);
+			} else {
+				$("#noticeContent").text(noticeContent);
+			}
+		});
+	</script>-->
+</body>
+</html>
