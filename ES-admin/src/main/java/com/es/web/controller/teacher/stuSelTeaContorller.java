@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/teacher/choice")
@@ -85,11 +86,19 @@ public class stuSelTeaContorller extends BaseController {
         map.put("teaId", userId);
         map.put("status", status);
         int uFlag = teaStuService.updateStatus(map);
-
-        if (uFlag > 0 && StringUtils.equals("01", status)) {
-            return success("双选对接成功！此学生成为‘我的学生’");
+        Map<String, Object> teaMap = teaUserService.selectTeaUserById(userId);
+        int count = teaStuService.selectCountById(userId);
+        int maxStu = Integer.parseInt(teaMap.get("max_stu").toString());
+        if (uFlag > 0 && Objects.equals(count, maxStu)) {
+            int flag = teaStuService.updateRejectAll(userId);
+            if (flag >= 0) {
+                return success("您可选择的学生到达最大数，已驳回其余已申请的学生信息！");
+            }
+            return error("系统错误，请联系管理员！");
         } else if (uFlag > 0 && StringUtils.equals("02", status)) {
             return success("成功驳回学生的申请！");
+        } else if (uFlag > 0 && StringUtils.equals("01", status) && count < maxStu){
+            return success("双选对接成功！此学生成为‘我的学生’");
         }
             return error("保存失败，请联系管理员！");
     }
@@ -107,5 +116,22 @@ public class stuSelTeaContorller extends BaseController {
             return success("您可选择的学生到达最大数，已驳回其余已申请的学生信息！");
         }
         return error("系统错误，请联系管理员！");
+    }
+
+    /**
+     * 点击编辑时的教师可选学生人数的判断
+     */
+    @PostMapping("/contrastNumber")
+    @ResponseBody
+    public Boolean contrastNumber() {
+        Long userId = ShiroUtils.getUserId();
+        Map<String, Object> teaMap = teaUserService.selectTeaUserById(userId);
+        int count = teaStuService.selectCountById(userId);
+        int maxStu = Integer.parseInt(teaMap.get("max_stu").toString());
+        if(Objects.equals(count,maxStu)){
+            return false;
+        }else {
+            return count < maxStu;
+        }
     }
 }
