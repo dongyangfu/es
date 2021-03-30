@@ -13,12 +13,11 @@
     <!--通过教师ID查询此教师主要的担任课程-->
     <select id="selectTeaCourseById" parameterType="Long" resultMap="TeaCourseResult">
         SELECT
-            C.course_name,
-            C.course_type
+            C.course_name
         FROM
             tea_user T
             LEFT JOIN tea_user_course TUC ON T.tea_id = TUC.tea_id
-            LEFT JOIN tea_course C ON c.course_id = TUC.course_id
+            LEFT JOIN tea_course C ON C.course_id = TUC.course_id
         WHERE
             T.tea_id = #{userId}
             AND C.STATUS = '0'

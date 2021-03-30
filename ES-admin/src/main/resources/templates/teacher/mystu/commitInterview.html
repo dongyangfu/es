@@ -42,7 +42,7 @@
     function queryUserList() {
         var options = {
             url: prefix + "/selectList",
-            updateUrl: prefix + "/edit/{id}",
+            updateUrl: prefix + "/editInt/{id}",
             modalName: "学生成绩信息",
             columns: [{
                     checkbox: true
@@ -67,16 +67,16 @@
                     field: 'stuTel',
                     title: '联系方式'
                 },
-                {
-                    field: 'one_machine_score',
-                    title: '第一题机试成绩'
-                },
                 /*{
-                    field: 'interviewResult',
-                    title: '面试成绩'
+                    field: 'machineScore',
+                    title: '机试成绩'
                 },*/
                 {
-                    field: 'oneMsStatus',
+                    field: 'interviewResult',
+                    title: '面试成绩'
+                },
+                {
+                    field: 'irStatus',
                     title: '成绩状态'
                 },
                 {
@@ -84,7 +84,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTabSpe(\'' + row.stuId + '\',\'' + row.one_machine_score + '\',\'' + row.interviewResult + '\',\'' + row.oneMsStatus + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTabSpe(\'' + row.stuId + '\',\'' + row.machineScore + '\',\'' + row.interviewResult + '\',\'' + row.irStatus + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         return actions.join('');
                     }
                 }

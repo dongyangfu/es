@@ -20,6 +20,7 @@ import java.util.Map;
  *
  * @Author qishuaibin
  */
+
 @Controller
 @RequestMapping("/teacher/user")
 public class TeaUserController extends BaseController {
@@ -43,7 +44,7 @@ public class TeaUserController extends BaseController {
         if(iFlag<0){
             return error("保存失败！");
         }else {
-            return success();
+            return success("保存成功！");
         }
     }
 

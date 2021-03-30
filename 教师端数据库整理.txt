@@ -1,0 +1,17 @@
+tea_stu_rel         教师学生关系表（选拔阶段）
+
+tea_stu_select_rel  教师学生关系表（实践管理阶段）
+
+tea_course          担任课程信息表
+
+tea_profess         教师职称表
+
+stu_user            学生信息表
+
+tea_user_course     教师与课程的关系表
+
+tea_user            教师信息表
+
+
+
+

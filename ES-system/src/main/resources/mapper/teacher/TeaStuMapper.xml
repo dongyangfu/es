@@ -1,15 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.es.teacher.mapper.TeaStuMapper">
 
-	<resultMap type="StuUser" id="StuUserResult">
-		<id     property="stuId"         column="stu_id"        />
-		<result property="stuNum"       column="stu_num"      />
-	</resultMap>
-	<!--通过教师ID查询教师下的学生列表（实践管理）-->
-	<select id="selectStuUserListById" parameterType="Long" resultMap="StuUserResult">
+    <resultMap type="StuUser" id="StuUserResult">
+        <id property="stuId" column="stu_id"/>
+        <result property="stuNum" column="stu_num"/>
+    </resultMap>
+    <!--通过教师ID查询教师下的学生列表（实践管理-老师通过学生的选择）-->
+    <select id="selectStuUserListById" parameterType="TeaStuRelDTO" resultType="TeaStuRelDTO">
+		SELECT
+			s.stu_id stuId,
+			s.stu_num stuNum,
+			s.stu_period stuPeriod,
+			s.stu_name stuName,
+			s.stu_class stuClass,
+			spr.stu_practice_name stuPracticeName,
+			spr.score,
+			cp.practice_name practiceName,
+			cp.practice_number practiceNumber
+		FROM
+			stu_user s
+			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
+			LEFT JOIN stu_practice_rel spr ON s.stu_id = spr.stu_id
+			LEFT JOIN course_practice cp ON spr.practice_id = cp.practice_id
+		WHERE
+			ts.tea_id = #{teaId}
+			AND ts.STATUS = '01'
+		<if test="stuPeriod != null and stuPeriod != ''">
+			AND s.stu_period like concat('%', #{stuPeriod}, '%')
+		</if>
+		<if test="practiceName != null and practiceName != ''">
+			AND cp.practice_name like concat('%', #{practiceName}, '%')
+		</if>
+		<if test="stuName != null and stuName != ''">
+			AND s.stu_name like concat('%', #{stuName}, '%')
+		</if>
+		<if test="stuNum != null and stuNum != ''">
+			AND s.stu_num like concat('%', #{stuNum}, '%')
+		</if>
+		ORDER BY
+			s.stu_id
+	</select>
+
+    <!--通过教师ID查询教师下的学生列表（实践管理-学生选择老师阶段）-->
+    <select id="selectStuListById" parameterType="Long" resultMap="StuUserResult">
 		SELECT
 			s.stu_id,
 			s.stu_num
@@ -18,63 +54,198 @@
 			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
 		WHERE
 			ts.tea_id = #{teaId}
+			AND ts.status = '00'
 		ORDER BY
 			s.stu_id
 	</select>
-	<!--通过教师ID查询教师下的学生列表（选拔阶段）-->
-	<select id="selectStuSelectListById" parameterType="Long" resultType="map">
+    <!--查询去年新生，第二学期参与选拔的学生列表（选拔阶段）-->
+    <select id="selectStuSelectList" resultType="map">
 		SELECT
 			s.stu_id stuId,
 			s.stu_num stuNum,
-			COALESCE ( ts.machine_score, '' ) machineScore,
-			COALESCE ( ts.interview_result, '' ) interviewResult,
+			s.stu_name stuName,
+			s.stu_class stuClass,
+			s.stu_tel stuTel,
+			s.one_machine_score,
+			s.two_machine_score,
+			s.three_machine_score,
+			s.four_machine_score,
+			s.five_machine_score,
+			s.six_machine_score,
 		CASE
-				ts.STATUS
+				s.one_ms_STATUS
 				WHEN '00' THEN
 				'已提交'
 				WHEN '01' THEN
 				'暂存状态' ELSE '未录入'
-		END AS status
+		END AS oneMsStatus,
+		CASE
+				s.two_ms_STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS twoMsStatus,
+		CASE
+				s.three_ms_STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS threeMsStatus,
+		CASE
+				s.four_ms_STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS fourMsStatus,
+		CASE
+				s.five_ms_STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS fiveMsStatus,
+		CASE
+				s.six_ms_STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS sixMsStatus,
+		CASE
+				s.ir_STATUS
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+		END AS irStatus
 		FROM
 			stu_user s
-			LEFT JOIN tea_stu_select_rel ts ON s.stu_id = ts.stu_id
 		WHERE
-			ts.tea_id = #{teaId}
+			s.stu_period = (select year(now())-1)
 		ORDER BY
 			s.stu_id
 	</select>
-	<!--通过学生ID查询需要修改成绩的学生信息-->
-	<select id="selectStuByStuId" parameterType="Long" resultType="map">
+    <!--通过学生ID查询需要修改成绩的学生信息-->
+    <select id="selectStuByStuId" parameterType="Long" resultType="map">
 		SELECT
 			s.stu_id stuId,
 			s.stu_num stuNum,
-			COALESCE ( ts.machine_score, '' ) machineScore,
-			COALESCE ( ts.interview_result, '' ) interviewResult
+			s.stu_name stuName,
+			s.stu_class stuClass,
+			s.stu_tel stuTel,
+			COALESCE (s.one_machine_score,'') oneMachineScore,
+			COALESCE (s.two_machine_score,'') twoMachineScore,
+			COALESCE (s.three_machine_score,'') threeMachineScore,
+			COALESCE (s.four_machine_score,'') fourMachineScore,
+			COALESCE (s.five_machine_score,'') fiveMachineScore,
+			COALESCE (s.six_machine_score,'') sixMachineScore,
+			COALESCE (s.interview_result,'') interviewResult
 		FROM
 			stu_user s
-			LEFT JOIN tea_stu_select_rel ts ON s.stu_id = ts.stu_id
 		WHERE
 			s.stu_id = #{stuId}
 	</select>
-	<!--保存教师提交的学生成绩（提交状态）-->
-	<update id="updateStuScore" parameterType="map">
-		UPDATE tea_stu_select_rel
-		SET machine_score = #{machineScore},
-		interview_result = #{interviewResult},
-		STATUS = '00'
+    <!--保存教师提交的学生成绩（提交状态）-->
+    <update id="updateStuScore" parameterType="StuUser">
+		UPDATE stu_user
+		SET
+		<if test="oneMachineScore != null and oneMachineScore != ''">
+			one_machine_score = #{oneMachineScore},
+			one_ms_STATUS = '00'
+		</if>
+		<if test="twoMachineScore != null and twoMachineScore != ''">
+			two_machine_score = #{twoMachineScore},
+			two_ms_STATUS = '00'
+		</if>
+		<if test="threeMachineScore != null and threeMachineScore != ''">
+			three_machine_score = #{threeMachineScore},
+			three_ms_STATUS = '00'
+		</if>
+		<if test="fourMachineScore != null and fourMachineScore != ''">
+			four_machine_score = #{fourMachineScore},
+			four_ms_STATUS = '00'
+		</if>
+		<if test="fiveMachineScore != null and fiveMachineScore != ''">
+			five_machine_score = #{fiveMachineScore},
+			five_ms_STATUS = '00'
+		</if>
+		<if test="sixMachineScore != null and sixMachineScore != ''">
+			six_machine_score = #{sixMachineScore},
+			six_ms_STATUS = '00'
+		</if>
+		<if test="interviewResult != null and interviewResult != ''">
+			interview_result = #{interviewResult},
+			ir_STATUS = '00'
+		</if>
+		WHERE
+			stu_id = #{stuId}
+	</update>
+
+    <!--保存教师提交的学生成绩（暂存状态）-->
+    <update id="updateStuScoreTemp" parameterType="StuUser">
+		UPDATE stu_user
+		SET
+		<if test="oneMachineScore != null and oneMachineScore != ''">
+			one_machine_score = #{oneMachineScore},
+			one_ms_STATUS = '01'
+		</if>
+		<if test="twoMachineScore != null and twoMachineScore != ''">
+			two_machine_score = #{twoMachineScore},
+			two_ms_STATUS = '01'
+		</if>
+		<if test="threeMachineScore != null and threeMachineScore != ''">
+			three_machine_score = #{threeMachineScore},
+			three_ms_STATUS = '01'
+		</if>
+		<if test="fourMachineScore != null and fourMachineScore != ''">
+			four_machine_score = #{fourMachineScore},
+			four_ms_STATUS = '01'
+		</if>
+		<if test="fiveMachineScore != null and fiveMachineScore != ''">
+			five_machine_score = #{fiveMachineScore},
+			five_ms_STATUS = '01'
+		</if>
+		<if test="sixMachineScore != null and sixMachineScore != ''">
+			six_machine_score = #{sixMachineScore},
+			six_ms_STATUS = '01'
+		</if>
+		<if test="interviewResult != null and interviewResult != ''">
+			interview_result = #{interviewResult},
+			ir_STATUS = '01'
+		</if>
+		WHERE
+		stu_id = #{stuId}
+	</update>
+
+	<!--更新学生选择老师后的通过状态（实践管理阶段）-->
+	<update id="updateStatus" parameterType="map">
+		UPDATE tea_stu_rel
+		SET STATUS = #{status}
 		WHERE
 			stu_id = #{stuId}
 			AND tea_id = #{teaId};
 	</update>
 
-	<!--保存教师提交的学生成绩（暂存状态）-->
-	<update id="updateStuScoreTemp" parameterType="map">
-		UPDATE tea_stu_select_rel
-		SET machine_score = #{machineScore},
-		interview_result = #{interviewResult},
-		STATUS = '01'
+	<!--根据教师ID查询当前教师已经选择的学生数量-->
+	<select id="selectCountById" parameterType="Long" resultType="int">
+		SELECT
+			count( 1 )
+		FROM
+			tea_stu_rel
 		WHERE
-			stu_id = #{stuId}
-			AND tea_id = #{teaId};
+			tea_id = #{teaId}
+			AND status = '01'
+	</select>
+
+	<!--驳回已满教师的剩余已申请的学生请求-->
+	<update id="updateRejectAll" parameterType="Long">
+		UPDATE tea_stu_rel
+		SET STATUS = '02'
+		WHERE
+			tea_id = #{teaId}
+			AND status = '00'
 	</update>
 </mapper> 

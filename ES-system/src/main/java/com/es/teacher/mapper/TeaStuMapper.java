@@ -1,6 +1,8 @@
 package com.es.teacher.mapper;
 
 import com.es.student.domain.StuUser;
+import com.es.teacher.domain.TeaStuRelDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -13,19 +15,16 @@ public interface TeaStuMapper {
 
     /**
      * 通过教师id查询已选择学生列表
-     *
-     * @param teaId 教师ID
+     * @param teaStuRelDTO 查询参数
      * @return 学生信息列表
      */
-    List<StuUser>  selectStuUserListById(Long teaId);
+    List<TeaStuRelDTO>  selectStuUserListById(TeaStuRelDTO teaStuRelDTO);
 
     /**
-     * 通过教师id查询管理员分配的学生列表
-     *
-     * @param teaId 教师ID
+     * 查询去年新生，第二学期参与选拔的学生列表（选拔阶段）
      * @return 学生信息以及成绩列表
      */
-    List<Map<String,Object>>  selectStuSelectListById(Long teaId);
+    List<Map<String,Object>>  selectStuSelectList();
 
     /**
      * 通过学生ID查询学生成绩信息
@@ -37,15 +36,44 @@ public interface TeaStuMapper {
 
     /**
      * 保存教师提交的学生成绩（提交状态）
-     * @param map 学生成绩信息
+     * @param stuUser 学生信息实体类
      * @return int
      */
-    int updateStuScore(Map<String,Object> map);
+    int updateStuScore(StuUser stuUser);
 
     /**
      * 保存教师提交的学生成绩（暂存状态）
-     * @param map 学生成绩信息
+     * @param stuUser 学生信息实体类
      * @return int
      */
-    int updateStuScoreTemp(Map<String,Object> map);
+    int updateStuScoreTemp(StuUser stuUser);
+
+    /**
+     * 通过教师ID查询教师下的学生列表（实践管理-学生选择老师阶段）
+     *
+     * @param teaId 教师ID
+     * @return 学生信息列表
+     */
+    List<StuUser>  selectStuListById(Long teaId);
+
+    /**
+     * 更新学生选择老师后的通过状态（实践管理阶段）
+     * @param map 通过信息
+     * @return int
+     */
+    int updateStatus(Map<String,Object> map);
+
+    /**
+     * 根据教师ID查询当前教师已经选择的学生数量
+     * @param teaId 教师ID
+     * @return int 学生数量
+     */
+    int selectCountById(Long teaId);
+
+    /**
+     * 驳回已满教师的剩余已申请的学生请求
+     * @param teaId 教师ID
+     * @return int
+     */
+    int updateRejectAll(Long teaId);
 }

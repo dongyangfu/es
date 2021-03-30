@@ -25,50 +25,25 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">姓名：</label>
-                    <div class="col-sm-5">
-                        <input name="stuName" class="form-control" type="text" id="stuName" th:value="${stuMap.stuName}" readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">班级：</label>
-                    <div class="col-sm-5">
-                        <input class="form-control" type="text" name="stuClass" id="stuClass" th:value="${stuMap.stuClass}" readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">联系方式：</label>
-                    <div class="col-sm-5">
-                        <input name="stuTel" class="form-control" type="text" id="stuTel" th:value="${stuMap.stuTel}" readonly>
-                    </div>
-                </div>
-            </div>
-
         </div>
         <h4 class="form-header h4">成绩信息</h4>
         <div class="row">
-            <div class="col-sm-6">
+           <!--<div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label is-required">第一题机试成绩：</label>
+                    <label class="col-sm-4 control-label is-required">机试成绩：</label>
                     <div class="col-sm-5">
-                        <input class="form-control" type="text" placeholder="请输入0~100的数字" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" id="oneMachineScore" name="oneMachineScore" maxlength="2" th:value="${stuMap.oneMachineScore}" required>
+                        <input class="form-control" type="text" placeholder="请输入0~100的数字" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" id="machineScore" name="machineScore" maxlength="2" th:value="${stuMap.machineScore}" required>
                     </div>
                 </div>
-            </div>
-            <!--<div class="col-sm-6">
+            </div>-->
+            <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label is-required">面试成绩：</label>
                     <div class="col-sm-5">
                         <input class="form-control" type="text" name="interviewResult" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" placeholder="请输入0~100的数字" id="interviewResult" maxlength="2" th:value="${stuMap.interviewResult}" required>
                     </div>
                 </div>
-            </div>-->
+            </div>
         </div>
     </form>
 </div>

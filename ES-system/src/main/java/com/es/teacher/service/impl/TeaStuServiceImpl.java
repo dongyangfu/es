@@ -1,6 +1,7 @@
 package com.es.teacher.service.impl;
 
 import com.es.student.domain.StuUser;
+import com.es.teacher.domain.TeaStuRelDTO;
 import com.es.teacher.mapper.TeaStuMapper;
 import com.es.teacher.service.ITeaStuService;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,14 @@ public class TeaStuServiceImpl implements ITeaStuService {
     private TeaStuMapper teaStuMapper;
 
     @Override
-    public List<StuUser> selectStuUserListById(Long teaId) {
-        List<StuUser> stuUsers = teaStuMapper.selectStuUserListById(teaId);
+    public List<TeaStuRelDTO> selectStuUserListById(TeaStuRelDTO teaStuRelDTO) {
+        List<TeaStuRelDTO> stuUsers = teaStuMapper.selectStuUserListById(teaStuRelDTO);
         return stuUsers;
     }
 
     @Override
-    public List<Map<String, Object>> selectStuSelectListById(Long teaId) {
-        List<Map<String, Object>> stuUsers = teaStuMapper.selectStuSelectListById(teaId);
+    public List<Map<String, Object>> selectStuSelectList() {
+        List<Map<String, Object>> stuUsers = teaStuMapper.selectStuSelectList();
         return stuUsers;
     }
 
@@ -37,12 +38,33 @@ public class TeaStuServiceImpl implements ITeaStuService {
     }
 
     @Override
-    public int updateStuScore(Map<String, Object> map) {
-        return teaStuMapper.updateStuScore(map);
+    public int updateStuScore(StuUser stuUser) {
+        return teaStuMapper.updateStuScore(stuUser);
     }
 
     @Override
-    public int updateStuScoreTemp(Map<String, Object> map) {
-        return teaStuMapper.updateStuScoreTemp(map);
+    public int updateStuScoreTemp(StuUser stuUser) {
+        return teaStuMapper.updateStuScoreTemp(stuUser);
+    }
+
+    @Override
+    public List<StuUser> selectStuListById(Long teaId) {
+        List<StuUser> stuUsers = teaStuMapper.selectStuListById(teaId);
+        return stuUsers;
+    }
+
+    @Override
+    public int updateStatus(Map<String, Object> map) {
+        return teaStuMapper.updateStatus(map);
+    }
+
+    @Override
+    public int selectCountById(Long teaId) {
+        return teaStuMapper.selectCountById(teaId);
+    }
+
+    @Override
+    public int updateRejectAll(Long teaId) {
+        return teaStuMapper.updateRejectAll(teaId);
     }
 }
