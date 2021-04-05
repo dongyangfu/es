@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改教师信息')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content">
+    <form class="form-horizontal" id="form-stu-edit">
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">教师ID：</label>
+                    <div class="col-sm-5">
+                        <input name="teaId" class="form-control" type="text" id="teaId" th:value="${teacherInfo.teaId}"
+                               readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">教师编号：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="teaJobNumber" id="teaJobNumber"
+                               th:value="${teacherInfo.teaJobNumber}"
+                               readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">status：</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="status" id="status"
+                               th:value="${teacherInfo.status}"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">职称：</label>
+                    <div class="col-sm-5">
+                        <select name="teaProfess" class="form-control m-b"
+                                th:with="type=${@dict.getType('sys_user_sex')}">
+                            <option th:each="teaProfess:${teacherProfess}" th:value="${teaProfess.code}"
+                                    th:text="${teaProfess.message}"
+                                    th:selected="${teacherInfo.teaProfess  eq teaProfess.code}"></option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">&nbsp;
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>提 交
+        </button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "manager/teacher";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $("#form-stu-edit").serializeArray();
+            $.operate.saveTab(prefix + "/edit", data);
+        }
+    }
+
+</script>
+</body>
+</html>

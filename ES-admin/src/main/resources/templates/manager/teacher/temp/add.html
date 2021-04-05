@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增教师')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content">
+    <form id="form-user-add" class="form-horizontal">
+        <input name="deptId" type="hidden" id="treeId"/>
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">教师编号：</label>
+                    <div class="col-sm-8">
+                        <input id="teaJobNumber" name="teaJobNumber" placeholder="请输入教师编号" class="form-control" type="text" maxlength="30" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">用户状态：</label>
+                    <div class="col-sm-8">
+                        <label class="toggle-switch switch-solid">
+                            <input type="checkbox" id="status" checked>
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">职称：</label>
+                <div class="col-sm-8">
+                    <select name="teaProfess" class="form-control m-b">
+                        <option th:each="teaProfess:${teacherProfess}" th:value="${teaProfess.code}"
+                                th:text="${teaProfess.message}"
+                        ></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script>
+    var prefix = ctx + "manager/teacher";
+
+    function submitHandler() {
+            var data = $("#form-user-add").serializeArray();
+            var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+            var teaProfess = $.form.selectCheckeds("teaProfess");
+            var teaJobNumber = $.form.selectCheckeds("teaJobNumber");
+
+            data.push({"name": "status", "value": status});
+            data.push({"name": "teaProfess", "value": teaProfess});
+            data.push({"name": "teaJobNumber", "value": teaJobNumber});
+            $.operate.saveTab(prefix + "/add", data);
+    }
+
+</script>
+</body>
+</html>

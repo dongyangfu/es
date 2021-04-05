@@ -43,4 +43,7 @@ public interface ITeaCourseService {
      * @return int
      */
     int deleteTeaCourse(Long userId);
+
+
+
 }
