@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.manager.mapper.ManagerTeacherMapper">
+
+    <resultMap id="result" type="TeacherVO">
+        <id     property="userId"        column="user_id"         />
+        <result property="deptId"        column="dept_id"         />
+        <result property="loginName"     column="login_name"      />
+        <result property="userName"      column="user_name"       />
+        <result property="userType"      column="user_type"       />
+        <result property="email"         column="email"           />
+        <result property="phonenumber"   column="phonenumber"     />
+        <result property="sex"           column="sex"             />
+        <result property="avatar"        column="avatar"          />
+        <result property="password"      column="password"        />
+        <result property="salt"          column="salt"            />
+        <result property="status"        column="status"          />
+        <result property="delFlag"       column="del_flag"        />
+        <result property="loginIp"       column="login_ip"        />
+        <result property="loginDate"     column="login_date"      />
+        <result property="pwdUpdateDate" column="pwd_update_date" />
+        <result property="createBy"      column="create_by"       />
+        <result property="createTime"    column="create_time"     />
+        <result property="updateBy"      column="update_by"       />
+        <result property="updateTime"    column="update_time"     />
+        <result property="remark"        column="remark"          />
+        <result property="teaProfess" column="tea_profess"/>
+        <result property="teaJobNumber" column="tea_job_number"/>
+        <result property="status" column="status"/>
+        <result property="teaId" column="tea_id"/>
+        <association property="dept"     column="dept_id" javaType="SysDept" resultMap="deptResult" />
+        <collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
+        <collection  property="courses"   javaType="java.util.List"        resultMap="courseResult" />
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id     property="deptId"   column="dept_id"     />
+        <result property="parentId" column="parent_id"   />
+        <result property="deptName" column="dept_name"   />
+        <result property="orderNum" column="order_num"   />
+        <result property="leader"   column="leader"      />
+        <result property="status"   column="dept_status" />
+    </resultMap>
+
+    <resultMap id="RoleResult" type="SysRole">
+        <id     property="roleId"       column="role_id"        />
+        <result property="roleName"     column="role_name"      />
+        <result property="roleKey"      column="role_key"       />
+        <result property="roleSort"     column="role_sort"      />
+        <result property="dataScope"    column="data_scope"     />
+        <result property="status"       column="role_status"    />
+    </resultMap>
+
+    <resultMap id="courseResult" type="TeaCourse">
+        <id     property="courseId"       column="course_id"        />
+        <result property="courseName"     column="course_name"      />
+    </resultMap>
+
+
+    <select id="getTeacherList" parameterType="TeacherDTO" resultMap="result">
+        select
+        tc.course_id,tc.course_name,
+        t.tea_id,t.tea_profess,t.tea_job_number,t.status,
+          u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date, u.create_time, u.remark,
+        r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
+        from sys_user u
+        inner join tea_user t on t.tea_id = u.user_id
+        inner join tea_user_course tuc on tuc.tea_id = u.user_id
+        left join tea_course tc on tuc.course_id = tc.course_id
+        left join sys_user_role ur on u.user_id = ur.user_id
+        left join sys_role r on r.role_id = ur.role_id
+        <where>
+            <if test="teaId != null">
+                AND tea_id = #{teaId}
+            </if>
+            <if test="teaProfess != null">
+                AND tea_profess = #{teaProfess}
+            </if>
+            <if test="teaJobNumber != null and teaJobNumber != ''">
+                AND tea_job_number like concat('%', #{teaJobNumber}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        order by
+        t.tea_id desc
+    </select>
+    <select id="getTeacher" parameterType="TeaUser" resultMap="result">
+        select
+        t.tea_id,t.tea_profess,t.tea_job_number,t.status
+        FROM
+        tea_user t
+        <where>
+            <if test="teaId != null">
+                AND tea_id = #{teaId}
+            </if>
+            <if test="teaProfess != null">
+                AND tea_profess = #{teaProfess}
+            </if>
+            <if test="teaJobNumber != null and teaJobNumber != ''">
+                AND tea_job_number like concat('%', #{teaJobNumber}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        limit 1
+    </select>
+    <insert id="insertTeacher" parameterType="TeacherDTO">
+        insert into tea_user (
+        tea_id,
+        tea_profess,
+        tea_job_number,
+        status
+        )values(
+        <trim prefix="" suffixOverrides=",">
+            <if test="userId != null and userId != '' ">#{userId},</if>
+            <if test="teaProfess != null and teaProfess != '' ">#{teaProfess},</if>
+            <if test="teaJobNumber != null and teaJobNumber != '' ">#{teaJobNumber},</if>
+            <if test="status != null and status != '' ">#{status},</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateTeacherById" parameterType="TeacherDTO">
+        update tea_user
+        <set>
+            <if test="teaProfess != null and teaProfess != '' ">tea_profess = #{teaProfess},</if>
+            <if test="teaJobNumber != null and teaJobNumber != '' ">tea_job_number = #{teaJobNumber},</if>
+            <if test="status != null and status != '' ">status = #{status},</if>
+        </set>
+        where tea_id = #{teaId}
+    </update>
+
+    <delete id="deleteTeacherByIds" parameterType="Long">
+        delete from tea_user where tea_id in
+        <foreach item="teaId" collection="array" open="(" separator="," close=")">
+            #{teaId}
+        </foreach>
+    </delete>
+    <delete id="deleteTeacherById" parameterType="Long">
+        delete from tea_user where tea_id = #{teaId}
+    </delete>
+
+</mapper>

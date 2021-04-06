@@ -54,4 +54,12 @@
             tea_id = #{userId}
     </delete>
 
+    <insert id="batchTeaCourse">
+        insert into tea_user_course(tea_id, course_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.teaId},#{item.courseId})
+        </foreach>
+    </insert>
+
+
 </mapper> 

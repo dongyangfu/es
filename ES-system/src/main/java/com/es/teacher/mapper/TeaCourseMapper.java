@@ -1,6 +1,8 @@
 package com.es.teacher.mapper;
 
+import com.es.system.domain.SysUserRole;
 import com.es.teacher.domain.TeaCourse;
+import com.es.teacher.domain.TeaUserCourse;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,14 @@ public interface TeaCourseMapper {
     int insertTeaCourse(Map<String,Object> map);
 
     /**
+     * 批量新增教师课程信息
+     *
+     * @param teaCourseList 教师课程信息
+     * @return 结果
+     */
+     int batchTeaCourse(List<TeaUserCourse> teaCourseList);
+
+    /**
      * 修改教师的主要担任课程
      * @param map 教师和课程信息
      * @return int
@@ -43,4 +53,8 @@ public interface TeaCourseMapper {
      * @return int
      */
     int deleteTeaCourse(Long userId);
+
+
+
+
 }

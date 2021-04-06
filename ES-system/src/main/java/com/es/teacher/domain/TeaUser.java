@@ -1,5 +1,6 @@
 package com.es.teacher.domain;
 
+import com.es.common.annotation.Excel;
 import com.es.common.core.domain.BaseEntity;
 
 /**
@@ -13,12 +14,16 @@ public class TeaUser extends BaseEntity {
     /**
      * 教师id
      */
+    @Excel(name = "教师id")
     private Long teaId;
-
+    /**
+     * 1教授2副教授3讲师4助教
+     */
+    @Excel(name = "教师职称编号")
     private Long teaProfess;
-
+    @Excel(name = "教师工号")
     private String teaJobNumber;
-
+    @Excel(name = "教师状态", readConverterExp = "0=启用,1=禁用,2=未知")
     private String status;
 
 
