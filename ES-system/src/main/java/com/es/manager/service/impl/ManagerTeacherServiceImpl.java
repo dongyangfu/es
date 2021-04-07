@@ -3,10 +3,13 @@ package com.es.manager.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.core.domain.entity.SysRole;
+import com.es.common.core.page.PageDomain;
+import com.es.common.core.page.TableSupport;
 import com.es.common.core.text.Convert;
 import com.es.common.exception.BusinessException;
 import com.es.common.utils.StringUtils;
 import com.es.common.utils.bean.BeanUtils;
+import com.es.common.utils.sql.SqlUtil;
 import com.es.manager.domain.dto.TeacherDTO;
 import com.es.manager.domain.vo.TeacherVO;
 import com.es.manager.mapper.ManagerTeacherMapper;
@@ -15,9 +18,11 @@ import com.es.system.domain.SysUserRole;
 import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysRoleService;
+import com.es.teacher.domain.TeaCourse;
 import com.es.teacher.domain.TeaUser;
 import com.es.teacher.domain.TeaUserCourse;
 import com.es.teacher.mapper.TeaCourseMapper;
+import com.github.pagehelper.PageHelper;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +66,9 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
             if (Objects.nonNull(t.getTeaProfess())) {
                 t.setTeacherProfessName(TeacherProfessTypeEnum.convertOrderChannelEnum(t.getTeaProfess().intValue()).getMessage());
             }
+            // 存入教师特长
+            List<TeaCourse> teaCourses = teaCourseMapper.selectTeaCourseById(t.getTeaId());
+            t.setCourses(teaCourses);
         });
         return teacherList;
     }
@@ -73,17 +81,22 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
         // 增加教师特长
         insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
+        teacherDTO.setCharge(0);
+        teacherDTO.setComputer(0);
+        teacherDTO.setInterview(0);
         Long[] roleIds = teacherDTO.getRoleIds();
         for (int i = 0; i < roleIds.length; i++) {
             SysRole sysRole = roleService.selectRoleById(roleIds[i]);
             if (sysRole.getRoleName().contains("卓越班班主任")){
-                teacherDTO.setCharge(true);
+                teacherDTO.setCharge(1);
+                continue;
             }
             if (sysRole.getRoleName().contains("机试批改教师")){
-                teacherDTO.setComputer(true);
+                teacherDTO.setComputer(1);
+                continue;
             }
             if (sysRole.getRoleName().contains("面试教师")){
-                teacherDTO.setInterview(true);
+                teacherDTO.setInterview(1);
             }
         }
         // 新增教师信息

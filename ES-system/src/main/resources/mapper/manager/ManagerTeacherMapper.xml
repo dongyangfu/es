@@ -61,14 +61,11 @@
 
     <select id="getTeacherList" parameterType="TeacherDTO" resultMap="result">
         select
-        tc.course_id,tc.course_name,
-        t.tea_id,t.tea_profess,t.tea_job_number,t.status,
-          u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date, u.create_time, u.remark,
+        t.tea_profess,t.tea_job_number,
+        u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date, u.create_time, u.remark,
         r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
         from sys_user u
         inner join tea_user t on t.tea_id = u.user_id
-        inner join tea_user_course tuc on tuc.tea_id = u.user_id
-        left join tea_course tc on tuc.course_id = tc.course_id
         left join sys_user_role ur on u.user_id = ur.user_id
         left join sys_role r on r.role_id = ur.role_id
         <where>
@@ -85,8 +82,6 @@
                 AND status = #{status}
             </if>
         </where>
-        order by
-        t.tea_id desc
     </select>
     <select id="getTeacher" parameterType="TeaUser" resultMap="result">
         select
@@ -114,13 +109,19 @@
         tea_id,
         tea_profess,
         tea_job_number,
-        status
+        status,
+        is_charge,
+        is_computer,
+        is_interview
         )values(
         <trim prefix="" suffixOverrides=",">
             <if test="userId != null and userId != '' ">#{userId},</if>
             <if test="teaProfess != null and teaProfess != '' ">#{teaProfess},</if>
             <if test="teaJobNumber != null and teaJobNumber != '' ">#{teaJobNumber},</if>
             <if test="status != null and status != '' ">#{status},</if>
+            #{charge},
+            #{computer},
+            #{interview},
         </trim>
         )
     </insert>
