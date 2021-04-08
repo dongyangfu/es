@@ -5,6 +5,7 @@ import com.es.common.annotation.Log;
 import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.core.controller.BaseController;
 import com.es.common.core.domain.AjaxResult;
+import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.page.TableDataInfo;
 import com.es.common.enums.BusinessType;
 import com.es.common.utils.ShiroUtils;
@@ -164,6 +165,15 @@ public class ManagerTeacherController extends BaseController {
             return success("删除老师信息成功！");
         }
         return error("删除老师信息失败");
+    }
+
+    /**
+     * 校验用户名
+     */
+    @PostMapping("/checkTeaJobNumberUnique")
+    @ResponseBody
+    public String checkLoginNameUnique(String  teaJobNumber) {
+        return managerTeacherService.checkTeaJobNumberUnique(teaJobNumber);
     }
 
 }

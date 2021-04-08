@@ -2,6 +2,7 @@ package com.es.manager.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.es.common.constant.TeacherProfessTypeEnum;
+import com.es.common.constant.UserConstants;
 import com.es.common.core.domain.entity.SysRole;
 import com.es.common.core.page.PageDomain;
 import com.es.common.core.page.TableSupport;
@@ -165,6 +166,15 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+    @Override
+    public String checkTeaJobNumberUnique(String teaJobNumber) {
+        int count = managerTeacherMapper.checkTeaJobNumberUnique(teaJobNumber);
+        if (count > 0) {
+            return UserConstants.USER_NAME_NOT_UNIQUE;
+        }
+        return UserConstants.USER_NAME_UNIQUE;
     }
 
     /**

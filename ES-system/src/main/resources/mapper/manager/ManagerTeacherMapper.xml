@@ -145,5 +145,9 @@
     <delete id="deleteTeacherById" parameterType="Long">
         delete from tea_user where tea_id = #{teaId}
     </delete>
+    <select id="checkTeaJobNumberUnique" parameterType="String" resultType="int">
+		select count(1) from tea_user where tea_job_number=#{teaJobNumber} limit 1
+	</select>
+
 
 </mapper>

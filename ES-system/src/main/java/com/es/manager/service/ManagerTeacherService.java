@@ -1,6 +1,5 @@
 package com.es.manager.service;
 
-import com.es.common.core.domain.entity.SysUser;
 import com.es.manager.domain.dto.TeacherDTO;
 import com.es.manager.domain.vo.TeacherVO;
 import com.es.teacher.domain.TeaUser;
@@ -51,6 +50,15 @@ public interface ManagerTeacherService {
      * @param operName        操作用户
      * @return 结果
      */
-     String importUser(List<TeaUser> userList, Boolean isUpdateSupport, String operName);
+    String importUser(List<TeaUser> userList, Boolean isUpdateSupport, String operName);
+
+
+    /**
+     * 校验教师工号是否唯一
+     *
+     * @param teaJobNumber 教师工号
+     * @return 结果
+     */
+    String checkTeaJobNumberUnique(String teaJobNumber);
 
 }
