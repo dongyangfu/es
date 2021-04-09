@@ -4,14 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.constant.UserConstants;
 import com.es.common.core.domain.entity.SysRole;
-import com.es.common.core.page.PageDomain;
-import com.es.common.core.page.TableSupport;
 import com.es.common.core.text.Convert;
 import com.es.common.exception.BusinessException;
 import com.es.common.utils.StringUtils;
 import com.es.common.utils.bean.BeanUtils;
-import com.es.common.utils.sql.SqlUtil;
 import com.es.manager.domain.dto.TeacherDTO;
+import com.es.manager.domain.vo.TeaCourseVO;
 import com.es.manager.domain.vo.TeacherVO;
 import com.es.manager.mapper.ManagerTeacherMapper;
 import com.es.manager.service.ManagerTeacherService;
@@ -23,17 +21,14 @@ import com.es.teacher.domain.TeaCourse;
 import com.es.teacher.domain.TeaUser;
 import com.es.teacher.domain.TeaUserCourse;
 import com.es.teacher.mapper.TeaCourseMapper;
-import com.github.pagehelper.PageHelper;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.es.teacher.service.ITeaCourseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author: fudy
@@ -58,6 +53,9 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
 
     @Autowired
     private ISysRoleService roleService;
+
+    @Autowired
+    private ITeaCourseService teaCourseService;
 
 
     @Override
@@ -88,15 +86,15 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         Long[] roleIds = teacherDTO.getRoleIds();
         for (int i = 0; i < roleIds.length; i++) {
             SysRole sysRole = roleService.selectRoleById(roleIds[i]);
-            if (sysRole.getRoleName().contains("卓越班班主任")){
+            if (sysRole.getRoleName().contains("卓越班班主任")) {
                 teacherDTO.setCharge(1);
                 continue;
             }
-            if (sysRole.getRoleName().contains("机试批改教师")){
+            if (sysRole.getRoleName().contains("机试批改教师")) {
                 teacherDTO.setComputer(1);
                 continue;
             }
-            if (sysRole.getRoleName().contains("面试教师")){
+            if (sysRole.getRoleName().contains("面试教师")) {
                 teacherDTO.setInterview(1);
             }
         }
@@ -175,6 +173,23 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
             return UserConstants.USER_NAME_NOT_UNIQUE;
         }
         return UserConstants.USER_NAME_UNIQUE;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllCourseOfTeaFlag(Long teaId) {
+        List<Map<String, Object>> maps = teaCourseService.selectTeaCourseName();
+        List<TeaCourseVO> teaCourseVOS = teaCourseService.selectAllTeaCourseById(teaId);
+        HashSet<String> set = new HashSet<>();
+        teaCourseVOS.forEach(x->set.add(x.getCourseName()));
+
+        for (Map<String, Object> map : maps) {
+            if (set.contains(map.get("course_name"))){
+                map.put("flag",true);
+            }else {
+                map.put("flag",false);
+            }
+        }
+        return maps;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.es.teacher.service.impl;
 
+import com.es.manager.domain.vo.TeaCourseVO;
 import com.es.teacher.domain.TeaCourse;
 import com.es.teacher.mapper.TeaCourseMapper;
 import com.es.teacher.service.ITeaCourseService;
@@ -27,6 +28,11 @@ public class TeaCourseServiceImpl implements ITeaCourseService {
     @Override
     public List<Map<String, Object>> selectTeaCourseName() {
         return teaCourseMapper.selectTeaCourseName();
+    }
+
+    @Override
+    public List<TeaCourseVO> selectAllTeaCourseById(Long teaId) {
+        return teaCourseMapper.selectAllTeaCourseById(teaId);
     }
 
     @Override
