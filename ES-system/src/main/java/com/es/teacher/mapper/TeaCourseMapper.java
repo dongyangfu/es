@@ -1,5 +1,6 @@
 package com.es.teacher.mapper;
 
+import com.es.manager.domain.vo.TeaCourseVO;
 import com.es.system.domain.SysUserRole;
 import com.es.teacher.domain.TeaCourse;
 import com.es.teacher.domain.TeaUserCourse;
@@ -18,6 +19,13 @@ public interface TeaCourseMapper {
      * @return list
      */
     List<TeaCourse> selectTeaCourseById(Long teaId);
+
+    /**
+     * 通过教师ID查询教师担任课程所有信息
+     * @param teaId 教师ID
+     * @return list
+     */
+    List<TeaCourseVO> selectAllTeaCourseById(Long teaId);
 
     /**
      * 查询所有课程

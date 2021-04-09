@@ -32,7 +32,7 @@ public interface ManagerTeacherMapper {
     /**
      * 增加老师信息
      *
-     * @param teacherDTO  老师信息
+     * @param teacherDTO 老师信息
      */
     int insertTeacher(TeacherDTO teacherDTO);
 
@@ -56,4 +56,12 @@ public interface ManagerTeacherMapper {
      * @param longs 老师id
      */
     int deleteTeacherById(Long longs);
+
+    /**
+     * 判断教师工号是否存在
+     *
+     * @param teaJobNumber 教师工号
+     * @return 结果
+     */
+    int checkTeaJobNumberUnique(String teaJobNumber);
 }

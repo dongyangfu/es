@@ -1,5 +1,6 @@
 package com.es.teacher.service;
 
+import com.es.manager.domain.vo.TeaCourseVO;
 import com.es.teacher.domain.TeaCourse;
 
 import java.util.List;
@@ -22,6 +23,14 @@ public interface ITeaCourseService {
      * @return list
      */
     List<Map<String,Object>> selectTeaCourseName();
+
+    /**
+     * 通过教师ID查询教师担任课程所有信息
+     * @param teaId 教师ID
+     * @return list
+     */
+    List<TeaCourseVO> selectAllTeaCourseById(Long teaId);
+
 
     /**
      * 保存教师的主要担任课程

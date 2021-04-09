@@ -5,6 +5,8 @@ import com.es.common.annotation.Log;
 import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.core.controller.BaseController;
 import com.es.common.core.domain.AjaxResult;
+import com.es.common.core.domain.entity.SysRole;
+import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.page.TableDataInfo;
 import com.es.common.enums.BusinessType;
 import com.es.common.utils.ShiroUtils;
@@ -74,15 +76,32 @@ public class ManagerTeacherController extends BaseController {
     /**
      * 修改学生成绩信息
      */
-    @GetMapping("/edit/{teaId}")
-    public String edit(@PathVariable("teaId") Long teaId, ModelMap mmap) {
+    @GetMapping("/edit/{userId}")
+    public String edit(@PathVariable("userId") Long userId, ModelMap mmap) {
         //通过stuId查询学生信息，用于前端修改页面的展示
         TeacherDTO dto = new TeacherDTO();
-        dto.setTeaId(teaId);
+        dto.setTeaId(userId);
+        List<SysRole> roles = roleService.selectRolesByUserId(userId);
         List<TeacherVO> teacherList = managerTeacherService.getTeacherList(dto);
-        mmap.put("teacherInfo", teacherList.get(0));
+        mmap.put("user", teacherList.get(0));
         mmap.put("teacherProfess", TeacherProfessTypeEnum.values());
+        mmap.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin() && !r.getRoleName().contains("机试教师")).collect(Collectors.toList()));
+        mmap.put("courses",managerTeacherService.getAllCourseOfTeaFlag(userId));
         return prefix + "/edit";
+    }
+
+    /**
+     * 修改老师信息
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editTeacher(TeacherDTO teacherDTO) {
+        int uFlag = managerTeacherService.updateTeacherById(teacherDTO);
+        if (uFlag > 0) {
+            return success("修改老师信息成功！");
+        }
+        return error("修改老师信息失败");
     }
 
     @Log(title = "教师管理", businessType = BusinessType.EXPORT)
@@ -109,20 +128,6 @@ public class ManagerTeacherController extends BaseController {
     public AjaxResult importTemplate() {
         ExcelUtil<TeacherDTO> util = new ExcelUtil<>(TeacherDTO.class);
         return util.importTemplateExcel("教师信息数据");
-    }
-
-    /**
-     * 修改老师信息
-     */
-    @Transactional(rollbackFor = Exception.class)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editTeacher(TeacherDTO teacherDTO) {
-        int uFlag = managerTeacherService.updateTeacherById(teacherDTO);
-        if (uFlag > 0) {
-            return success("修改老师信息成功！");
-        }
-        return error("修改老师信息失败");
     }
 
     /**
@@ -164,6 +169,15 @@ public class ManagerTeacherController extends BaseController {
             return success("删除老师信息成功！");
         }
         return error("删除老师信息失败");
+    }
+
+    /**
+     * 校验用户名
+     */
+    @PostMapping("/checkTeaJobNumberUnique")
+    @ResponseBody
+    public String checkLoginNameUnique(String  teaJobNumber) {
+        return managerTeacherService.checkTeaJobNumberUnique(teaJobNumber);
     }
 
 }

@@ -40,38 +40,38 @@ public class TeacherDTO extends SysUser implements Serializable {
     /**
      * 是否卓越班主任
      */
-    private Boolean isCharge;
+    private Integer charge = 0;
     /**
      * 是否机试批改教师
      */
-    private Boolean isComputer;
+    private Integer computer = 0;
     /**
      * 是否面试教师
      */
-    private Boolean isInterview;
+    private Integer interview = 0;
 
-    public Boolean getCharge() {
-        return isCharge;
+    public Integer getCharge() {
+        return charge;
     }
 
-    public void setCharge(Boolean charge) {
-        isCharge = charge;
+    public void setCharge(Integer charge) {
+        this.charge = charge;
     }
 
-    public Boolean getComputer() {
-        return isComputer;
+    public Integer getComputer() {
+        return computer;
     }
 
-    public void setComputer(Boolean computer) {
-        isComputer = computer;
+    public void setComputer(Integer computer) {
+        this.computer = computer;
     }
 
-    public Boolean getInterview() {
-        return isInterview;
+    public Integer getInterview() {
+        return interview;
     }
 
-    public void setInterview(Boolean interview) {
-        isInterview = interview;
+    public void setInterview(Integer interview) {
+        this.interview = interview;
     }
 
     public Long getTeaId() {

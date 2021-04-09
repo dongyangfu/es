@@ -10,10 +10,27 @@
         <result property="courseType" column="course_type"/>
         <result property="status" column="status"/>
     </resultMap>
+    <resultMap type="TeaCourseVO" id="TeaCourseResultVO">
+        <id property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseType" column="course_type"/>
+        <result property="status" column="status"/>
+    </resultMap>
     <!--通过教师ID查询此教师主要的担任课程-->
     <select id="selectTeaCourseById" parameterType="Long" resultMap="TeaCourseResult">
         SELECT
             C.course_name
+        FROM
+            tea_user T
+            LEFT JOIN tea_user_course TUC ON T.tea_id = TUC.tea_id
+            LEFT JOIN tea_course C ON C.course_id = TUC.course_id
+        WHERE
+            T.tea_id = #{userId}
+            AND C.STATUS = '0'
+	</select>
+    <select id="selectAllTeaCourseById" parameterType="Long" resultMap="TeaCourseResultVO">
+        SELECT
+            C.course_name,C.course_id
         FROM
             tea_user T
             LEFT JOIN tea_user_course TUC ON T.tea_id = TUC.tea_id
