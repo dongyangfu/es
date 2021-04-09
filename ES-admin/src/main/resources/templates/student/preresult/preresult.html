@@ -1,9 +1,50 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <th:block th:include="include :: header('初审结果')" />
-    <link rel="stylesheet" type="text/css" href="https://www.huangwx.cn/css/sweetalert.css">
-    <script type="text/javascript" src="https://www.huangwx.cn/js/sweetalert-dev.js"></script>
+    <th:block th:include="include :: select2-css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        div {
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        table, tr, td, th {
+            text-align: center;
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        tr:nth-child(2n) {
+            background-color: rgba(88, 73, 65, 0.18);
+        }
+
+        tr:hover {
+            background-color: rgb(255, 235, 149);
+        }
+
+        #tt {
+            text-align: right;
+            padding-right: 20px;
+        }
+
+
+    </style>
 </head>
 <body class="gray-bg" onload="init()">
 <div  class="main-content"><!--class="container-div"-->
@@ -11,26 +52,40 @@
     <h4 class="form-header h4">初审结果查看</h4>
         <input name="userId"  type="hidden"  th:field="*{StuId}" />
         <input id="stuIde" name="stuIde"  type="hidden"  th:field="*{stuIde}" />
-    <div id="div">
-        亲爱的<span name="stuName" id="stuName" th:text="*{stuName}"></span>同学，
-
-    </div>
+        <table>
+            <tr>
+                <th>班级</th>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>初审状态</th>
+            </tr>
+            <tr>
+                <td th:text="*{stuClass}"></td>
+                <td th:text="*{stuNum}"></td>
+                <td th:text="*{stuName}"></td>
+                <td th:text="*{stuSex}"></td>
+                <td id="tvalue"></td>
+            </tr>
+        </table>
     </form>
 </div>
 
 <th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
 <script th:inline="javascript">
-    var stuIde;
+    var stuIde,tvalue;
     function init() {
         stuIde = document.getElementById("stuIde");
+        tvalue = document.getElementById("tvalue");
         if (stuIde.value==1){
-            $("#div").after("<span>您还未进行申请</span>");
+            tvalue.innerText="未申请";
         }else if(stuIde.value==2){
-            $("#div").after("<span>您已经进行申请，正在审核中...</span>");
+            tvalue.innerText="待审核";
         }else if(stuIde.value==3){
-            $("#div").after("<span>恭喜您，您已经通过初审！</span>");
+            tvalue.innerText="通过";;
         }else if(stuIde.value==4){
-            $("#div").after("<span>很抱歉，您未通过初审</span>");
+            tvalue.innerText="未通过";
         }
     }
 </script>

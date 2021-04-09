@@ -7,7 +7,7 @@
 </head>
 <body class="gray-bg" onload="init()">
 <div  class="main-content"><!--class="container-div"-->
-    <form th:action="@{/student/apply/submit}" method="post" class="form-horizontal" id="form-user-edit" th:object="${stuUser}"><!--th:object="${user}"-->
+    <!--th:action="@{/student/apply/submit}"--> <form method="post" class="form-horizontal" id="form-user-edit" th:object="${stuUser}"><!--th:object="${user}"-->
     <h4 class="form-header h4">完善个人信息</h4>
         <input name="userId"  type="hidden"  th:field="*{StuId}" />
         <input id="stuIde" name="stuIde"  type="hidden"  th:field="*{stuIde}" />
@@ -123,8 +123,8 @@
     </div>
         <div class="row">
             <div class="col-sm-offset-5 col-sm-10">
-                <button id="alarm3" type="button" class="btn btn-sm btn-primary" onclick="saveStorage()"><i  class="fa fa-check"></i>暂时保存</button>&nbsp;
-                <button id="alarm4" type="submit" class="btn btn-sm btn-danger"  ><i class="fa fa-check">提交申请</i></button>
+                <button id="alarm3" type="button" class="btn btn-sm btn-primary" onclick="submitSaveHandler()"><i  class="fa fa-check"></i>暂时保存</button>&nbsp;
+                <button id="alarm4" type="button" class="btn btn-sm btn-danger"  onclick="submitHandler()"><i class="fa fa-check">提交申请</i></button>
             </div><!--onclick="submitHandler()"-->
         </div>
     </form>
@@ -137,6 +137,22 @@
     var t1,t2,t3,t4,t5,t6,t7,stuIde,alarm3,alarm4;
     var oStorage;
     var oStorage;
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("提交后就不可再更改，是否确定提交？", function() {
+                var data = $("#form-user-edit").serializeArray();
+                $.operate.saveTab(prefix + "/submit", data);
+            })
+        }
+    }
+    function submitSaveHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("保存后还可以更改，是否确定保存？", function() {
+                var data = $("#form-user-edit").serializeArray();
+                $.operate.saveTab(prefix + "/tempsubmit", data);
+            })
+        }
+    }
     function init() {
         t1 = document.getElementById("t1");
         t2 = document.getElementById("t2");
@@ -164,128 +180,9 @@
 
         }
     }
-    /*function saveStorage() {
-        //lStorage.mydata = t2.value;
-        lStorage.setItem("t1",t1.value);
-        lStorage.setItem("t2",t2.value);
-        lStorage.setItem("t3",t3.value);
-        lStorage.setItem("t4",t4.value);
-        lStorage.setItem("t5",t5.value);
-        lStorage.setItem("t6",t6.value);
-        lStorage.setItem("t7",t7.value);
-        //t1.value += "localStorage保存mydata:" + t2.value + "\n";
-    }*/
-    function submitHandler() {
-        swal({
-                title: "确定提交吗？",
-                text: "提交后您将无法修改！",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "确定提交！",
-                cancelButtonText: "取消提交！",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function(isConfirm){
-                if (isConfirm) {
-                    swal("提交！", "您的报名申请已提交！",
-                        "success");
-                    return true;
-                } else {
-                    swal("取消！", "您已取消提交报名申请)",
-                        "error");
-                    return false;
-                }
-            });
-    }
 
-    $(document).ready(function(){
-        $("#alarm1").click(function(){
-            swal("开始这个完美的弹出框旅程吧！")
-        });
-        $("#alarm2").click(function(){
-            swal("这是标题！","这是文本")
-        });
-        $("#alarm3").click(function(){
-            swal("保存成功","","success")
-        });
-        $("#alarm4").click(function(){
-            swal({
-                    title: "确定提交吗？",
-                    text: "提交后您将无法修改！",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "确定提交！",
-                    cancelButtonText: "取消提交！",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
-                        swal("提交！", "您的报名申请已提交！",
-                            "success");
-                    } else {
-                        swal("取消！", "您已取消提交报名申请)",
-                            "error");
-                    }
-                });
-        });
-        $("#alarm5").click(function(){
-            swal({
-                title: "HTML <small>标题</small>!",
-                text: "自定义<span style='color:#0000FF'>这是蓝色的<span>。",
-                html: true
-            });
-        });
-    });
 
-    /*var editFlag = [[${@permission.hasPermi('student:notice:detail')}]];
-    var types = [[${@dict.getType('stu_notice_type')}]];
-    var datas = [[${@dict.getType('stu_notice_status')}]];
-    var prefix = ctx + "student/notice";
 
-    $(function() {
-        var options = {
-            url: prefix + "/list",
-            detailUrl: prefix + "/detail/{id}",
-            createUrl: prefix + "/add",
-            updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
-            modalName: "公告",
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field : 'noticeId',
-                    title : '序号'
-                },
-                {
-                    field : 'noticeTitle',
-                    title : '公告标题'
-                },
-                {
-                    field : 'createBy',
-                    title : '发布者'
-                },
-                {
-                    field: 'createTime',
-                    title: '发布时间',
-                    sortable: true
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>查看</a> ');
-                        return actions.join('');
-                    }
-                }]
-        };
-        $.table.init(options);
-    });*/
 </script>
 </body>
 </html>

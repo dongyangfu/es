@@ -1,29 +1,120 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>404-对不起！您访问的页面不存在</title>
-    <style type="text/css">
-        .head404{ width:580px; height:234px; margin:50px auto 0 auto; background:url(https://www.daixiaorui.com/Public/images/head404.png) no-repeat; }
-        .txtbg404{ width:499px; height:169px; margin:10px auto 0 auto; background:url(https://www.daixiaorui.com/Public/images/txtbg404.png) no-repeat;}
-        .txtbg404 .txtbox{ width:390px; position:relative; top:30px; left:60px;color:#eee; font-size:13px;}
-        .txtbg404 .txtbox p {margin:5px 0; line-height:18px;}
-        .txtbg404 .txtbox .paddingbox { padding-top:15px;}
-        .txtbg404 .txtbox p a { color:#eee; text-decoration:none;}
-        .txtbg404 .txtbox p a:hover { color:#FC9D1D; text-decoration:underline;}
+    <th:block th:include="include :: header('机试成绩信息')" />
+    <th:block th:include="include :: select2-css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        div {
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        table, tr, td, th {
+            text-align: center;
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        tr:nth-child(2n) {
+            background-color: rgba(88, 73, 65, 0.18);
+        }
+
+        tr:hover {
+            background-color: rgb(255, 235, 149);
+        }
+
+        #tt {
+            text-align: right;
+            padding-right: 20px;
+        }
+
+
     </style>
 </head>
-
-<body bgcolor="#494949">
-<div class="head404"></div>
-<div class="txtbg404">
-    <div class="txtbox">
-        <p>对不起，您请求的页面不存在、或已被删除、或暂时不可用</p>
-        <p class="paddingbox">请点击以下链接继续浏览网页</p>
-        <p>》<a style="cursor:pointer" onclick="history.back()">返回上一页面</a></p>
-        <p>》<a href="https://www.daixiaorui.com">返回网站首页</a></p>
-    </div>
+<body onload="init()">
+<div class="main-content">
+    <form class="form-horizontal" id="form-stu-edit" th:object="${stuUser}">
+        <h4 class="form-header h4">机试成绩查询</h4>
+        <input name="userId"  type="hidden"  th:value="*{StuId}" />
+        <input id="stuIde" name="stuIde"  type="hidden"  th:value="*{stuPro}" />
+        <table>
+            <tr>
+                <th>机试顺序</th>
+                <th>机试成绩</th>
+            </tr>
+            <tr>
+                <td>机试成绩一</td>
+                <td th:text="*{oneMachineScore}"></td>
+            </tr>
+            <tr>
+                <td>机试成绩二</td>
+                <td th:text="*{twoMachineScore}"></td>
+            </tr>
+            <tr>
+                <td>机试成绩三</td>
+                <td th:text="*{threeMachineScore}"></td>
+            </tr>
+            <tr>
+                <td>机试成绩四</td>
+                <td th:text="*{fourMachineScore}"></td>
+            </tr>
+            <tr>
+                <td>机试成绩五</td>
+                <td th:text="*{fiveMachineScore}"></td>
+            </tr>
+            <tr>
+                <td>机试成绩六</td>
+                <td th:text="*{sixMachineScore}"></td>
+            </tr>
+            <tr>
+                <td>总成绩</td>
+                <td th:text="*{machineScore}"></td>
+            </tr>
+        </table>
+    </form>
 </div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script type="text/javascript">
+    var prefix = ctx + "teacher/commit";
+    var stuIde = document.getElementById("stuIde");
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("提交后就不可再更改，是否确定提交？", function() {
+                var data = $("#form-stu-edit").serializeArray();
+                $.operate.saveTab(prefix + "/edit", data);
+            })
+        }
+    }
+
+    function submitSaveHandler() {
+        if ($.validate.form()) {
+            $.modal.confirm("保存后还可以更改，是否确定保存？", function() {
+                var data = $("#form-stu-edit").serializeArray();
+                $.operate.saveTab(prefix + "/editTemp", data);
+            })
+        }
+    }
+    function init() {
+        if (stuIde.value=="0"){
+            $.modal.confirm("您还未进行笔试");
+        }
+    }
+</script>
 </body>
 </html>
-

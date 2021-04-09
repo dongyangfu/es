@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/student/achievement")
 public class StuComputerTestController extends BaseController {
-    private String prefix = "/student/achievement";
+    private String prefix = "student/achievement";
 
     @Autowired
     private IStuUserService iStuUserService;
