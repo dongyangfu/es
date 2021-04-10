@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.constant.UserConstants;
 import com.es.common.core.domain.entity.SysRole;
+import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.text.Convert;
 import com.es.common.exception.BusinessException;
 import com.es.common.utils.StringUtils;
@@ -17,6 +18,8 @@ import com.es.system.domain.SysUserRole;
 import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysRoleService;
+import com.es.system.service.ISysUserService;
+import com.es.system.service.impl.SysUserServiceImpl;
 import com.es.teacher.domain.TeaCourse;
 import com.es.teacher.domain.TeaUser;
 import com.es.teacher.domain.TeaUserCourse;
@@ -56,6 +59,9 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
 
     @Autowired
     private ITeaCourseService teaCourseService;
+
+    @Autowired
+    private ISysUserService sysUserService;
 
 
     @Override
@@ -106,12 +112,33 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
 
     @Override
     public int updateTeacherById(TeacherDTO teacherDTO) {
-        return managerTeacherMapper.updateTeacherById(teacherDTO);
+        // 删除用户与角色关联
+        userRoleMapper.deleteUserRoleByUserId(teacherDTO.getUserId());
+        // 新增用户与角色管理
+        insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
+        // 删除教师特长
+        teaCourseMapper.deleteTeaCourse(teacherDTO.getTeaId());
+        // 增加教师特长
+        insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
+        // 修改用户信息
+        int i = userMapper.updateUser(teacherDTO);
+        // 修改教师信息
+        return i+managerTeacherMapper.updateTeacherById(teacherDTO);
     }
 
     @Override
     public int deleteTeacherByIds(String ids) {
         Long[] userIds = Convert.toLongArray(ids);
+        for (Long userId : userIds) {
+            sysUserService.checkUserAllowed(new SysUser(userId));
+        }
+        // 删除用户与角色关联
+        userRoleMapper.deleteUserRole(userIds);
+        // 删除教师特长
+        teaCourseMapper.deleteCourseByIds(userIds);
+        // 删除用户信息
+        userMapper.deleteUserByIds(userIds);
+        // 删除教师信息
         return managerTeacherMapper.deleteTeacherByIds(userIds);
     }
 

@@ -76,7 +76,7 @@
 		var removeFlag = true;
 		var resetPwdFlag = true;
 		var prefix = ctx + "manager/teacher";
-
+		var prefix2 = ctx + "system/user";
 		$(function() {
 		    var panehHidden = false;
 		    if ($(this).width() < 769) {
@@ -152,7 +152,6 @@
 		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                var more = [];
 		                more.push("<a class='btn btn-default btn-xs " + resetPwdFlag + "' href='javascript:void(0)' onclick='resetPwd(" + row.userId + ")'><i class='fa fa-key'></i>重置密码</a> ");
-		                more.push("<a class='btn btn-default btn-xs " + editFlag + "' href='javascript:void(0)' onclick='authRole(" + row.userId + ")'><i class='fa fa-check-square-o'></i>分配角色</a>");
 		                actions.push('<a tabindex="0" class="btn btn-info btn-xs" role="button" data-container="body" data-placement="left" data-toggle="popover" data-html="true" data-trigger="hover" data-content="' + more.join('') + '"><i class="fa fa-chevron-circle-right"></i>更多操作</a>');
 		                return actions.join('');
 		            }
@@ -185,15 +184,10 @@
 
 		/* 用户管理-重置密码 */
 		function resetPwd(userId) {
-		    var url = prefix + '/resetPwd/' + userId;
+		    var url = prefix2 + '/resetPwd/' + userId;
 		    $.modal.open("重置密码", url, '800', '300');
 		}
 
-		/* 用户管理-分配角色 */
-		function authRole(userId) {
-		    var url = prefix + '/authRole/' + userId;
-		    $.modal.openTab("用户分配角色", url);
-		}
 
 		/* 用户状态显示 */
 		function statusTools(row) {

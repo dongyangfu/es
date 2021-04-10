@@ -62,7 +62,10 @@ public interface TeaCourseMapper {
      */
     int deleteTeaCourse(Long userId);
 
-
-
-
+    /**
+     * 批量删除教师的主要担任课程
+     * @param ids 用户ids
+     * @return int
+     */
+    int deleteCourseByIds(Long [] ids);
 }

@@ -97,11 +97,10 @@ public class ManagerTeacherController extends BaseController {
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editTeacher(TeacherDTO teacherDTO) {
-        int uFlag = managerTeacherService.updateTeacherById(teacherDTO);
-        if (uFlag > 0) {
-            return success("修改老师信息成功！");
-        }
-        return error("修改老师信息失败");
+        log.info(JSON.toJSONString(teacherDTO));
+        teacherDTO.setTeaId(teacherDTO.getUserId());
+        teacherDTO.setUpdateBy(ShiroUtils.getLoginName());
+        return toAjax(managerTeacherService.updateTeacherById(teacherDTO));
     }
 
     @Log(title = "教师管理", businessType = BusinessType.EXPORT)
@@ -131,7 +130,7 @@ public class ManagerTeacherController extends BaseController {
     }
 
     /**
-     * 删除老师信息
+     * 增加老师信息
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/add")
@@ -164,11 +163,7 @@ public class ManagerTeacherController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult delTeacherList(String ids) {
-        int uFlag = managerTeacherService.deleteTeacherByIds(ids);
-        if (uFlag > 0) {
-            return success("删除老师信息成功！");
-        }
-        return error("删除老师信息失败");
+        return toAjax(managerTeacherService.deleteTeacherByIds(ids));
     }
 
     /**

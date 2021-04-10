@@ -78,5 +78,16 @@
         </foreach>
     </insert>
 
+    <delete id="deleteCourseByIds" parameterType="Long">
+        DELETE
+        FROM
+        tea_user_course
+        WHERE
+        tea_id in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
 
 </mapper> 
