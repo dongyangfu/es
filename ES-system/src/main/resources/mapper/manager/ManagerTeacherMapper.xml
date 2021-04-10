@@ -28,6 +28,9 @@
         <result property="remark"        column="remark"          />
         <result property="teaProfess" column="tea_profess"/>
         <result property="teaJobNumber" column="tea_job_number"/>
+        <result property="isCharge" column="is_charge"/>
+        <result property="isComputer" column="is_computer"/>
+        <result property="isInterview" column="is_interview"/>
         <result property="status" column="status"/>
         <result property="teaId" column="tea_id"/>
         <association property="dept"     column="dept_id" javaType="SysDept" resultMap="deptResult" />
@@ -61,7 +64,7 @@
 
     <select id="getTeacherList" parameterType="TeacherDTO" resultMap="result">
         select
-        t.tea_profess,t.tea_job_number,
+        t.tea_profess,t.tea_job_number,t.is_charge,t.is_computer,t.is_interview,
         u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date, u.create_time, u.remark,
         r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
         from sys_user u
@@ -132,6 +135,9 @@
             <if test="teaProfess != null and teaProfess != '' ">tea_profess = #{teaProfess},</if>
             <if test="teaJobNumber != null and teaJobNumber != '' ">tea_job_number = #{teaJobNumber},</if>
             <if test="status != null and status != '' ">status = #{status},</if>
+            is_charge = #{charge},
+            is_computer = #{computer},
+            is_interview = #{interview}
         </set>
         where tea_id = #{teaId}
     </update>

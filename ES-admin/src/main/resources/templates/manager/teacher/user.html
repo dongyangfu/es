@@ -126,6 +126,27 @@
 						field: 'teacherProfessName',
 						title: '教师职称'
 					},
+					{
+						title: '机试教师',
+						align: 'center',
+						formatter: function (value, row) {
+							return isComputer(row);
+						}
+					},
+					{
+						title: '面试教师',
+						align: 'center',
+						formatter: function (value, row) {
+							return isInterview(row);
+						}
+					},
+					{
+						title: '卓越班主任',
+						align: 'center',
+						formatter: function (value, row) {
+							return isCharge(row);
+						}
+					},
 		        {
 		            field: 'phonenumber',
 		            title: '联系电话'
@@ -196,6 +217,31 @@
     		} else {
     			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
     		}
+		}
+
+		/* 教师职位判断显示 */
+		function isCharge(row) {
+			if (row.isCharge == 1) {
+				return '是';
+			} else {
+				return '否';
+			}
+		}
+		/* 教师职位判断显示 */
+		function isComputer(row) {
+			if (row.isComputer == 1) {
+				return '是';
+			} else {
+				return '否';
+			}
+		}
+		/* 教师职位判断显示 */
+		function isInterview(row) {
+			if (row.isInterview == 1) {
+				return '是';
+			} else {
+				return '否';
+			}
 		}
 
 		/* 用户管理-停用 */

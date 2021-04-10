@@ -94,24 +94,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         teacherDTO.setComputer(0);
         teacherDTO.setInterview(0);
         // 新增用户与角色管理
-        if (teacherDTO.getRoleIds()!=null){
-            insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
-            Long[] roleIds = teacherDTO.getRoleIds();
-            for (int i = 0; i < roleIds.length; i++) {
-                SysRole sysRole = roleService.selectRoleById(roleIds[i]);
-                if (sysRole.getRoleName().contains("卓越班班主任")) {
-                    teacherDTO.setCharge(1);
-                    continue;
-                }
-                if (sysRole.getRoleName().contains("机试批改教师")) {
-                    teacherDTO.setComputer(1);
-                    continue;
-                }
-                if (sysRole.getRoleName().contains("面试教师")) {
-                    teacherDTO.setInterview(1);
-                }
-            }
-        }
+        isTeacherRole(teacherDTO);
         if (teacherDTO.getCourses() != null){
             // 增加教师特长
             insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
@@ -126,16 +109,16 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     public int updateTeacherById(TeacherDTO teacherDTO) {
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(teacherDTO.getUserId());
-        // 新增用户与角色管理
-        insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
         // 删除教师特长
         teaCourseMapper.deleteTeaCourse(teacherDTO.getTeaId());
         // 增加教师特长
         insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
         // 修改用户信息
-        int i = userMapper.updateUser(teacherDTO);
+        int sum = userMapper.updateUser(teacherDTO);
+        // 新增用户与角色管理
+        isTeacherRole(teacherDTO);
         // 修改教师信息
-        return i+managerTeacherMapper.updateTeacherById(teacherDTO);
+        return sum+managerTeacherMapper.updateTeacherById(teacherDTO);
     }
 
     @Override
@@ -267,6 +250,27 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
             }
             if (list.size() > 0) {
                 teaCourseMapper.batchTeaCourse(list);
+            }
+        }
+    }
+
+    private void isTeacherRole(TeacherDTO teacherDTO){
+        if (teacherDTO.getRoleIds()!=null){
+            insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
+            Long[] roleIds = teacherDTO.getRoleIds();
+            for (int i = 0; i < roleIds.length; i++) {
+                SysRole sysRole = roleService.selectRoleById(roleIds[i]);
+                if (sysRole.getRoleName().contains("卓越班班主任")) {
+                    teacherDTO.setCharge(1);
+                    continue;
+                }
+                if (sysRole.getRoleName().contains("机试批改教师")) {
+                    teacherDTO.setComputer(1);
+                    continue;
+                }
+                if (sysRole.getRoleName().contains("面试教师")) {
+                    teacherDTO.setInterview(1);
+                }
             }
         }
     }

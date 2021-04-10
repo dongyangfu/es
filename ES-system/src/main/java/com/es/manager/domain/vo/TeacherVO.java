@@ -39,15 +39,15 @@ public class TeacherVO extends SysUser implements Serializable {
     /**
      * 是否卓越班主任
      */
-    private Boolean isCharge;
+    private Integer isCharge = 0;
     /**
      * 是否机试批改教师
      */
-    private Boolean isComputer;
+    private Integer isComputer=0;
     /**
      * 是否面试教师
      */
-    private Boolean isInterview;
+    private Integer isInterview=0;
 
     private List<TeaCourse> courses;
 
@@ -59,28 +59,28 @@ public class TeacherVO extends SysUser implements Serializable {
         this.courses = courses;
     }
 
-    public Boolean getCharge() {
+    public Integer getIsCharge() {
         return isCharge;
     }
 
-    public void setCharge(Boolean charge) {
-        isCharge = charge;
+    public void setIsCharge(Integer isCharge) {
+        this.isCharge = isCharge;
     }
 
-    public Boolean getComputer() {
+    public Integer getIsComputer() {
         return isComputer;
     }
 
-    public void setComputer(Boolean computer) {
-        isComputer = computer;
+    public void setIsComputer(Integer isComputer) {
+        this.isComputer = isComputer;
     }
 
-    public Boolean getInterview() {
+    public Integer getIsInterview() {
         return isInterview;
     }
 
-    public void setInterview(Boolean interview) {
-        isInterview = interview;
+    public void setIsInterview(Integer isInterview) {
+        this.isInterview = isInterview;
     }
 
     public static long getSerialVersionUID() {
