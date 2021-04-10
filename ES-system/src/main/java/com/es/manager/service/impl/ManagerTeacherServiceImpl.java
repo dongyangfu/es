@@ -9,7 +9,9 @@ import com.es.common.core.text.Convert;
 import com.es.common.exception.BusinessException;
 import com.es.common.utils.StringUtils;
 import com.es.common.utils.bean.BeanUtils;
+import com.es.common.utils.security.Md5Utils;
 import com.es.manager.domain.dto.TeacherDTO;
+import com.es.manager.domain.dto.TeacherDTOSuper;
 import com.es.manager.domain.vo.TeaCourseVO;
 import com.es.manager.domain.vo.TeacherVO;
 import com.es.manager.mapper.ManagerTeacherMapper;
@@ -17,6 +19,7 @@ import com.es.manager.service.ManagerTeacherService;
 import com.es.system.domain.SysUserRole;
 import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
+import com.es.system.service.ISysConfigService;
 import com.es.system.service.ISysRoleService;
 import com.es.system.service.ISysUserService;
 import com.es.system.service.impl.SysUserServiceImpl;
@@ -29,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -63,6 +67,9 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     @Autowired
     private ISysUserService sysUserService;
 
+    @Autowired
+    private ISysConfigService configService;
+
 
     @Override
     public List<TeacherVO> getTeacherList(TeacherDTO teacherDTO) {
@@ -78,31 +85,36 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         return teacherList;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertTeacher(TeacherDTO teacherDTO) {
         // 新增用户信息
         int rows = userMapper.insertUser(teacherDTO);
-        // 新增用户与角色管理
-        insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
-        // 增加教师特长
-        insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
         teacherDTO.setCharge(0);
         teacherDTO.setComputer(0);
         teacherDTO.setInterview(0);
-        Long[] roleIds = teacherDTO.getRoleIds();
-        for (int i = 0; i < roleIds.length; i++) {
-            SysRole sysRole = roleService.selectRoleById(roleIds[i]);
-            if (sysRole.getRoleName().contains("卓越班班主任")) {
-                teacherDTO.setCharge(1);
-                continue;
+        // 新增用户与角色管理
+        if (teacherDTO.getRoleIds()!=null){
+            insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
+            Long[] roleIds = teacherDTO.getRoleIds();
+            for (int i = 0; i < roleIds.length; i++) {
+                SysRole sysRole = roleService.selectRoleById(roleIds[i]);
+                if (sysRole.getRoleName().contains("卓越班班主任")) {
+                    teacherDTO.setCharge(1);
+                    continue;
+                }
+                if (sysRole.getRoleName().contains("机试批改教师")) {
+                    teacherDTO.setComputer(1);
+                    continue;
+                }
+                if (sysRole.getRoleName().contains("面试教师")) {
+                    teacherDTO.setInterview(1);
+                }
             }
-            if (sysRole.getRoleName().contains("机试批改教师")) {
-                teacherDTO.setComputer(1);
-                continue;
-            }
-            if (sysRole.getRoleName().contains("面试教师")) {
-                teacherDTO.setInterview(1);
-            }
+        }
+        if (teacherDTO.getCourses() != null){
+            // 增加教师特长
+            insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
         }
         // 新增教师信息
         int i = managerTeacherMapper.insertTeacher(teacherDTO);
@@ -143,7 +155,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     }
 
     @Override
-    public String importUser(List<TeaUser> userList, Boolean isUpdateSupport, String operName) {
+    public String importUser(List<TeacherDTOSuper> userList, Boolean isUpdateSupport, String operName) {
         if (StringUtils.isNull(userList) || userList.size() == 0) {
             throw new BusinessException("导入用户数据不能为空！");
         }
@@ -151,26 +163,24 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
-        for (TeaUser user : userList) {
+        String password = configService.selectConfigByKey("sys.user.initPassword");
+        for (TeacherDTOSuper user1 : userList) {
             try {
+                TeacherDTO user = new TeacherDTO();
+                BeanUtils.copyProperties(user1,user);
+                user.setTeaId(user.getUserId());
+                user.setTeaProfess((long) TeacherProfessTypeEnum.convertOrderChannelEnum(user.getTeacherProfessName()).getCode());
                 // 验证是否存在这个用户
-                log.info("入参{}", JSON.toJSONString(user));
-                TeaUser u = managerTeacherMapper.getTeacher(user);
-                log.info("出参{}", JSON.toJSONString(u));
+                SysUser u = userMapper.selectUserByLoginName(user.getLoginName());
                 if (StringUtils.isNull(u)) {
-                    TeacherDTO teacherDTO = new TeacherDTO();
-//                    teacherDTO.setTeaJobNumber(user.getTeaJobNumber());
-//                    teacherDTO.setTeaId(user.getTeaId());
-//                    teacherDTO.setTeaProfess(user.getTeaProfess());
-//                    teacherDTO.setStatus(user.getStatus());
-                    BeanUtils.copyProperties(user, teacherDTO);
-                    managerTeacherMapper.insertTeacher(teacherDTO);
+                    user.setPassword(Md5Utils.hash(user.getLoginName() + password));
+                    user.setCreateBy(operName);
+                    this.insertTeacher(user);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getTeaId() + " 导入成功");
                 } else if (isUpdateSupport) {
-                    TeacherDTO teacherDTO = new TeacherDTO();
-                    BeanUtils.copyProperties(u, teacherDTO);
-                    managerTeacherMapper.updateTeacherById(teacherDTO);
+                    user.setUpdateBy(operName);
+                    this.updateTeacherById(user);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getTeaId() + " 更新成功");
                 } else {
@@ -179,7 +189,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
                 }
             } catch (Exception e) {
                 failureNum++;
-                String msg = "<br/>" + failureNum + "、账号 " + user.getTeaId() + " 导入失败：";
+                String msg = "<br/>" + failureNum + "、账号 " + user1.getTeaId() + " 导入失败：";
                 failureMsg.append(msg + e.getMessage());
                 log.error(msg, e);
             }

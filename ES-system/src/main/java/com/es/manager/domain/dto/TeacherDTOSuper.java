@@ -1,28 +1,63 @@
-package com.es.common.core.domain.entity;
+package com.es.manager.domain.dto;
 
+import com.es.common.annotation.Excel;
+import com.es.common.core.domain.BaseEntity;
+import com.es.common.core.domain.entity.SysDept;
+import com.es.common.core.domain.entity.SysRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.*;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.es.common.annotation.Excel;
-import com.es.common.annotation.Excel.ColumnType;
-import com.es.common.annotation.Excel.Type;
-import com.es.common.annotation.Excels;
-import com.es.common.core.domain.BaseEntity;
 
 /**
- * 用户对象 sys_user
- */
-public class SysUser extends BaseEntity {
-    private static final long serialVersionUID = 1L;
+ * @author: fudy
+ * @date: 2021/4/10 下午 12:23
+ * @Decription:
+ **/
+public class TeacherDTOSuper extends BaseEntity implements Serializable {
+    private static final long serialVersionUID = 6955844286692092065L;
+    /**
+     * 教师职称
+     */
+    @Excel(name = "教师职称")
+    private String teacherProfessName;
+    /**
+     * 专业特长
+     */
+    private Long[] courses;
+    /**
+     * 教师id
+     */
+    private Long teaId;
+    /**
+     * 1教授2副教授3讲师4助教
+     */
+    private Long teaProfess;
+    @Excel(name = "教师工号")
+    private String teaJobNumber;
+
+    /**
+     * 是否卓越班主任
+     */
+    private Integer charge = 0;
+    /**
+     * 是否机试批改教师
+     */
+    private Integer computer = 0;
+    /**
+     * 是否面试教师
+     */
+    private Integer interview = 0;
 
     /**
      * 用户ID
      */
-    @Excel(name = "用户序号", cellType = ColumnType.NUMERIC, prompt = "用户编号")
+    @Excel(name = "用户序号", cellType = Excel.ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
     /**
@@ -104,13 +139,13 @@ public class SysUser extends BaseEntity {
     /**
      * 最后登录IP
      */
-    @Excel(name = "最后登录IP", type = Type.EXPORT)
+    @Excel(name = "最后登录IP", type = Excel.Type.EXPORT)
     private String loginIp;
 
     /**
      * 最后登录时间
      */
-    @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Type.EXPORT)
+    @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     private Date loginDate;
 
     /**
@@ -118,13 +153,6 @@ public class SysUser extends BaseEntity {
      */
     private Date pwdUpdateDate;
 
-    /**
-     * 部门对象
-     */
-    @Excels({
-            @Excel(name = "部门名称", targetAttr = "deptName", type = Type.EXPORT),
-            @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
-    })
     private SysDept dept;
 
     private List<SysRole> roles;
@@ -138,14 +166,6 @@ public class SysUser extends BaseEntity {
      * 岗位组
      */
     private Long[] postIds;
-
-    public SysUser() {
-
-    }
-
-    public SysUser(Long userId) {
-        this.userId = userId;
-    }
 
     public Long getUserId() {
         return userId;
@@ -341,31 +361,107 @@ public class SysUser extends BaseEntity {
         this.postIds = postIds;
     }
 
+    public Integer getCharge() {
+        return charge;
+    }
+
+    public void setCharge(Integer charge) {
+        this.charge = charge;
+    }
+
+    public Integer getComputer() {
+        return computer;
+    }
+
+    public void setComputer(Integer computer) {
+        this.computer = computer;
+    }
+
+    public Integer getInterview() {
+        return interview;
+    }
+
+    public void setInterview(Integer interview) {
+        this.interview = interview;
+    }
+
+    public Long getTeaId() {
+        return teaId;
+    }
+
+    public void setTeaId(Long teaId) {
+        this.teaId = teaId;
+    }
+
+    public Long getTeaProfess() {
+        return teaProfess;
+    }
+
+    public void setTeaProfess(Long teaProfess) {
+        this.teaProfess = teaProfess;
+    }
+
+    public String getTeaJobNumber() {
+        return teaJobNumber;
+    }
+
+    public void setTeaJobNumber(String teaJobNumber) {
+        this.teaJobNumber = teaJobNumber;
+    }
+
+    public String getTeacherProfessName() {
+        return teacherProfessName;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long[] getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Long[] courses) {
+        this.courses = courses;
+    }
+
+    public void setTeacherProfessName(String teacherProfessName) {
+        this.teacherProfessName = teacherProfessName;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("userId", getUserId())
-                .append("deptId", getDeptId())
-                .append("loginName", getLoginName())
-                .append("userName", getUserName())
-                .append("userType", getUserType())
-                .append("email", getEmail())
-                .append("phonenumber", getPhonenumber())
-                .append("sex", getSex())
-                .append("avatar", getAvatar())
-                .append("password", getPassword())
-                .append("salt", getSalt())
-                .append("status", getStatus())
-                .append("delFlag", getDelFlag())
-                .append("loginIp", getLoginIp())
-                .append("loginDate", getLoginDate())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .append("remark", getRemark())
-                .append("dept", getDept())
-                .append("roles", getRoles())
-                .toString();
+        return "TeacherDTOSuper{" +
+                "teacherProfessName='" + teacherProfessName + '\'' +
+                ", courses=" + Arrays.toString(courses) +
+                ", teaId=" + teaId +
+                ", teaProfess=" + teaProfess +
+                ", teaJobNumber='" + teaJobNumber + '\'' +
+                ", charge=" + charge +
+                ", computer=" + computer +
+                ", interview=" + interview +
+                ", userId=" + userId +
+                ", deptId=" + deptId +
+                ", parentId=" + parentId +
+                ", roleId=" + roleId +
+                ", loginName='" + loginName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userType='" + userType + '\'' +
+                ", email='" + email + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
+                ", sex='" + sex + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", status='" + status + '\'' +
+                ", delFlag='" + delFlag + '\'' +
+                ", loginIp='" + loginIp + '\'' +
+                ", loginDate=" + loginDate +
+                ", pwdUpdateDate=" + pwdUpdateDate +
+                ", dept=" + dept +
+                ", roles=" + roles +
+                ", roleIds=" + Arrays.toString(roleIds) +
+                ", postIds=" + Arrays.toString(postIds) +
+                '}';
     }
 }

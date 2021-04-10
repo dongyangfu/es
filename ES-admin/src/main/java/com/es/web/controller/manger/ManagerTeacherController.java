@@ -13,6 +13,7 @@ import com.es.common.utils.ShiroUtils;
 import com.es.common.utils.poi.ExcelUtil;
 import com.es.framework.shiro.service.SysPasswordService;
 import com.es.manager.domain.dto.TeacherDTO;
+import com.es.manager.domain.dto.TeacherDTOSuper;
 import com.es.manager.domain.vo.TeacherVO;
 import com.es.manager.service.ManagerTeacherService;
 import com.es.system.service.ISysRoleService;
@@ -103,32 +104,6 @@ public class ManagerTeacherController extends BaseController {
         return toAjax(managerTeacherService.updateTeacherById(teacherDTO));
     }
 
-    @Log(title = "教师管理", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(TeacherDTO dto) {
-        List<TeacherVO> teacherList = managerTeacherService.getTeacherList(dto);
-        ExcelUtil<TeacherVO> util = new ExcelUtil<>(TeacherVO.class);
-        return util.exportExcel(teacherList, "教师信息数据");
-    }
-
-    @Log(title = "教师管理", businessType = BusinessType.IMPORT)
-    @PostMapping("/importData")
-    @ResponseBody
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
-        ExcelUtil<TeaUser> util = new ExcelUtil<>(TeaUser.class);
-        List<TeaUser> userList = util.importExcel(file.getInputStream());
-        String message = managerTeacherService.importUser(userList, updateSupport, "operName");
-        return AjaxResult.success(message);
-    }
-
-    @GetMapping("/importTemplate")
-    @ResponseBody
-    public AjaxResult importTemplate() {
-        ExcelUtil<TeacherDTO> util = new ExcelUtil<>(TeacherDTO.class);
-        return util.importTemplateExcel("教师信息数据");
-    }
-
     /**
      * 增加老师信息
      */
@@ -166,6 +141,33 @@ public class ManagerTeacherController extends BaseController {
         return toAjax(managerTeacherService.deleteTeacherByIds(ids));
     }
 
+
+    @Log(title = "教师管理", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(TeacherDTO dto) {
+        List<TeacherVO> teacherList = managerTeacherService.getTeacherList(dto);
+        ExcelUtil<TeacherVO> util = new ExcelUtil<>(TeacherVO.class);
+        return util.exportExcel(teacherList, "教师信息数据");
+    }
+
+    @Log(title = "教师管理", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+        ExcelUtil<TeacherDTOSuper> util = new ExcelUtil<>(TeacherDTOSuper.class);
+        List<TeacherDTOSuper> userList = util.importExcel(file.getInputStream());
+        String operName = ShiroUtils.getSysUser().getLoginName();
+        String message = managerTeacherService.importUser(userList, updateSupport, operName);
+        return AjaxResult.success(message);
+    }
+
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate() {
+        ExcelUtil<TeacherDTO> util = new ExcelUtil<>(TeacherDTO.class);
+        return util.importTemplateExcel("教师信息数据");
+    }
     /**
      * 校验用户名
      */

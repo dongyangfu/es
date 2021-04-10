@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @date: 2021/3/27 下午 12:21
  * @Decription: 教师信息表入参
  **/
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeacherDTO extends SysUser implements Serializable {
 
     private static final long serialVersionUID = -5104602571101842975L;
@@ -27,12 +27,10 @@ public class TeacherDTO extends SysUser implements Serializable {
     /**
      * 教师id
      */
-    @Excel(name = "教师id")
     private Long teaId;
     /**
      * 1教授2副教授3讲师4助教
      */
-    @Excel(name = "教师职称编号")
     private Long teaProfess;
     @Excel(name = "教师工号")
     private String teaJobNumber;

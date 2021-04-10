@@ -69,4 +69,26 @@ public enum TeacherProfessTypeEnum {
         }
         return orderChannel;
     }
+
+    public static TeacherProfessTypeEnum convertOrderChannelEnum(String message) {
+        TeacherProfessTypeEnum orderChannel;
+        switch (message) {
+            case "教授":
+                orderChannel = PROFESSOR;
+                break;
+            case "副教授":
+                orderChannel = ASSOCIATE_PROFESSOR;
+                break;
+            case "讲师":
+                orderChannel = LECTURER;
+                break;
+            case "助教":
+                orderChannel = TEACHING_ASSISTANT;
+                break;
+            default:
+                orderChannel = UN_KNOWN;
+                break;
+        }
+        return orderChannel;
+    }
 }
