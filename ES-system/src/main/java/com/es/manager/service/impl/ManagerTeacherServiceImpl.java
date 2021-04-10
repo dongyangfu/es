@@ -90,9 +90,6 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     public int insertTeacher(TeacherDTO teacherDTO) {
         // 新增用户信息
         int rows = userMapper.insertUser(teacherDTO);
-        teacherDTO.setCharge(0);
-        teacherDTO.setComputer(0);
-        teacherDTO.setInterview(0);
         // 新增用户与角色管理
         isTeacherRole(teacherDTO);
         if (teacherDTO.getCourses() != null){

@@ -165,7 +165,7 @@ public class ManagerTeacherController extends BaseController {
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate() {
-        ExcelUtil<TeacherDTO> util = new ExcelUtil<>(TeacherDTO.class);
+        ExcelUtil<TeacherDTOSuper> util = new ExcelUtil<>(TeacherDTOSuper.class);
         return util.importTemplateExcel("教师信息数据");
     }
     /**

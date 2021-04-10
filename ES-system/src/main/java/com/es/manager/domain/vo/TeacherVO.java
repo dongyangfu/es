@@ -39,14 +39,17 @@ public class TeacherVO extends SysUser implements Serializable {
     /**
      * 是否卓越班主任
      */
+    @Excel(name = "是否卓越班主任", readConverterExp = "0=否,1=是")
     private Integer isCharge = 0;
     /**
      * 是否机试批改教师
      */
+    @Excel(name = "是否机试批改教师", readConverterExp = "0=否,1=是")
     private Integer isComputer=0;
     /**
      * 是否面试教师
      */
+    @Excel(name = "是否面试教师", readConverterExp = "0=否,1=是")
     private Integer isInterview=0;
 
     private List<TeaCourse> courses;

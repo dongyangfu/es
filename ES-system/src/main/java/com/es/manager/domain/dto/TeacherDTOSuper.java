@@ -21,38 +21,6 @@ import java.util.List;
  **/
 public class TeacherDTOSuper extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 6955844286692092065L;
-    /**
-     * 教师职称
-     */
-    @Excel(name = "教师职称")
-    private String teacherProfessName;
-    /**
-     * 专业特长
-     */
-    private Long[] courses;
-    /**
-     * 教师id
-     */
-    private Long teaId;
-    /**
-     * 1教授2副教授3讲师4助教
-     */
-    private Long teaProfess;
-    @Excel(name = "教师工号")
-    private String teaJobNumber;
-
-    /**
-     * 是否卓越班主任
-     */
-    private Integer charge = 0;
-    /**
-     * 是否机试批改教师
-     */
-    private Integer computer = 0;
-    /**
-     * 是否面试教师
-     */
-    private Integer interview = 0;
 
     /**
      * 用户ID
@@ -166,6 +134,42 @@ public class TeacherDTOSuper extends BaseEntity implements Serializable {
      * 岗位组
      */
     private Long[] postIds;
+    /**
+     * 教师职称
+     */
+    @Excel(name = "教师职称")
+    private String teacherProfessName;
+    /**
+     * 专业特长
+     */
+    private Long[] courses;
+    /**
+     * 教师id
+     */
+    private Long teaId;
+    /**
+     * 1教授2副教授3讲师4助教
+     */
+    private Long teaProfess;
+    @Excel(name = "教师工号")
+    private String teaJobNumber;
+
+    /**
+     * 是否卓越班主任
+     */
+    @Excel(name = "是否卓越班主任", readConverterExp = "0=否,1=是")
+    private Integer charge = 0;
+    /**
+     * 是否机试批改教师
+     */
+    @Excel(name = "是否机试批改教师", readConverterExp = "0=否,1=是")
+    private Integer computer = 0;
+    /**
+     * 是否面试教师
+     */
+    @Excel(name = "是否面试教师", readConverterExp = "0=否,1=是")
+    private Integer interview = 0;
+
 
     public Long getUserId() {
         return userId;
