@@ -22,4 +22,11 @@ public interface IStuUserService {
      * @return 结果
      */
     public int updateStuUser(StuUser stuUser);
+    /**
+     * 暂时保存学生信息
+     *
+     * @param stuId 学生ID
+     * @return 结果
+     */
+    public int updateStuUser1(StuUser stuUser);
 }

@@ -37,4 +37,14 @@ public class StuUserServiceImpl implements IStuUserService {
     public int updateStuUser(StuUser stuUser){
         return stuUserMapper.updateStuUser(stuUser);
     }
+    /**
+     * 暂时保存学生信息
+     *
+     * @param stuId 学生ID
+     * @return 结果
+     */
+    @Override
+    public int updateStuUser1(StuUser stuUser){
+        return stuUserMapper.updateStuUser1(stuUser);
+    }
 }

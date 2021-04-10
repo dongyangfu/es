@@ -15,15 +15,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="stuWx"       column="stu_wx"       />
         <result property="stuQq"     column="stu_qq"     />
         <result property="stuMail"     column="stu_mail"     />
+        <result property="stuPeriod"     column="stu_period"     />
         <result property="stuSpe"         column="stu_spe"          />
         <result property="stuIde"         column="stu_ide"          />
         <result property="stuPro"         column="stu_pro"          />
-        <result property="stuMt"         column="stu_mt"          />
-        <result property="stuInt"         column="stu_int"          />
+        <result property="machineScore"     column="machine_score"     />
+        <result property="interviewResult"     column="interview_result"     />
+        <result property="irStatus"     column=" ir_status"     />
+        <result property="oneMachineScore"     column="one_machine_score"     />
+        <result property="oneMsStatus"     column="one_ms_status"     />
+        <result property="twoMachineScore"     column="two_machine_score"     />
+        <result property="twoMsStatus"     column="two_ms_status"     />
+        <result property="threeMachineScore"     column="three_machine_score"     />
+        <result property="threeMsStatus"     column="three_ms_status"     />
+        <result property="fourMachineScore"     column="four_machine_score"     />
+        <result property="fourMsStatus"     column="four_ms_status"     />
+        <result property="fiveMachineScore"     column="five_machine_score"     />
+        <result property="fiveMsStatus"     column="five_ms_status"     />
+        <result property="sixMachineScore"     column="six_machine_score"     />
+        <result property="sixMsStatus"     column="six_ms_status"     />
     </resultMap>
 
     <sql id="selectUserVo">
-        select stu_id, stu_num, stu_name, stu_sex, stu_age, stu_class, stu_tel, stu_wx, stu_qq, stu_mail, stu_spe, stu_ide, stu_pro, stu_mt, stu_int
+        select stu_id, stu_num, stu_name, stu_sex, stu_age, stu_class, stu_tel, stu_wx, stu_qq, stu_mail, stu_spe, stu_ide, stu_pro, machine_score,
+        interview_result, ir_status,one_machine_score,one_ms_status,two_machine_score,two_ms_status,three_machine_score,three_ms_status,four_machine_score,four_ms_status,
+        five_machine_score,five_ms_status,six_machine_score,six_ms_status
 		from stu_user
     </sql>
     
@@ -43,6 +59,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="stuMail != null and stuMail != ''">stu_mail = #{stuMail},</if>
             <if test="stuSpe != null and stuSpe != ''">stu_spe = #{stuSpe},</if>
             stu_ide = 2
+        </set>
+
+        where stu_id = #{stuId}
+    </update>
+    <!--暂时保存-->
+    <update id="updateStuUser1" parameterType="StuUser">
+        update stu_user
+        <set>
+            <if test="stuSex != null and stuSex != ''">stu_sex = #{stuSex}, </if>
+            <if test="stuAge != null and stuAge != ''">stu_age = #{stuAge}, </if>
+            <if test="stuTel != null">stu_tel = #{stuTel}, </if>
+            <if test="stuWx != null and stuWx != ''">stu_wx = #{stuWx}, </if>
+            <if test="stuQq != null and stuQq != ''">stu_qq = #{stuQq},</if>
+            <if test="stuMail != null and stuMail != ''">stu_mail = #{stuMail},</if>
+            <if test="stuSpe != null and stuSpe != ''">stu_spe = #{stuSpe},</if>
         </set>
 
         where stu_id = #{stuId}

@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,14 +42,33 @@ public class StuUserController extends BaseController {
         return prefix + "/apply";
     }
 
+
+    /**
+     * 暂时保存提交申请
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/tempsubmit")
+    @ResponseBody
+    public AjaxResult  tempsubmit(StuUser stuUser) {
+        int uFlag = iStuUserService.updateStuUser1(stuUser);
+        if(uFlag>0){
+            return success("保存成功！");
+        }
+        return error("保存失败，请联系管理员！");
+    }
     /**
      * 完善提交申请
      */
+    @Transactional(rollbackFor = Exception.class)
     @RequiresPermissions("student:apply:submit")
     @PostMapping("/submit")
-    public String  submit(StuUser stuUser) {
-       iStuUserService.updateStuUser(stuUser);
-       return "redirect:";
+    @ResponseBody
+    public AjaxResult  submit(StuUser stuUser) {
+        int uFlag = iStuUserService.updateStuUser(stuUser);
+        if(uFlag>0){
+            return success("提交成功！");
+        }
+        return error("提交失败，请联系管理员！");
     }
 
 

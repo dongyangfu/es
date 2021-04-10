@@ -50,6 +50,10 @@ public class StuUser extends BaseEntity {
      */
     private String stuMail;
     /**
+     * 学生属于哪一年级
+     */
+    private String stuPeriod;
+    /**
      * 学生特长
      */
     private String stuSpe;
@@ -61,14 +65,6 @@ public class StuUser extends BaseEntity {
      * 申请流程状态，0为未进行面试，1为进行面试未通过，3笔试通过，4为未参加面试，5为参加面试未通过，6面试通过
      */
     private int stuPro;
-    /**
-     * 机试成绩
-     */
-    private String stuMt;
-    /**
-     * 面试成绩
-     */
-    private String stuInt;
 
     /**
      * 机试总成绩
@@ -135,7 +131,7 @@ public class StuUser extends BaseEntity {
     public StuUser() {
     }
 
-    public StuUser(long stuId, String stuNum, String stuName, String stuSex, String stuAge, String stuClass, String stuTel, String stuWx, String stuQq, String stuMail, String stuSpe, int stuIde, int stuPro, String stuMt, String stuInt, int machineScore, int interviewResult, String irStatus, int oneMachineScore, String oneMsStatus, int twoMachineScore, String twoMsStatus, int threeMachineScore, String threeMsStatus, int fourMachineScore, String fourMsStatus, int fiveMachineScore, String fiveMsStatus, int sixMachineScore, String sixMsStatus) {
+    public StuUser(long stuId, String stuNum, String stuName, String stuSex, String stuAge, String stuClass, String stuTel, String stuWx, String stuQq, String stuMail, String stuPeriod, String stuSpe, int stuIde, int stuPro, int machineScore, int interviewResult, String irStatus, int oneMachineScore, String oneMsStatus, int twoMachineScore, String twoMsStatus, int threeMachineScore, String threeMsStatus, int fourMachineScore, String fourMsStatus, int fiveMachineScore, String fiveMsStatus, int sixMachineScore, String sixMsStatus) {
         this.stuId = stuId;
         this.stuNum = stuNum;
         this.stuName = stuName;
@@ -146,11 +142,10 @@ public class StuUser extends BaseEntity {
         this.stuWx = stuWx;
         this.stuQq = stuQq;
         this.stuMail = stuMail;
+        this.stuPeriod = stuPeriod;
         this.stuSpe = stuSpe;
         this.stuIde = stuIde;
         this.stuPro = stuPro;
-        this.stuMt = stuMt;
-        this.stuInt = stuInt;
         this.machineScore = machineScore;
         this.interviewResult = interviewResult;
         this.irStatus = irStatus;
@@ -252,6 +247,14 @@ public class StuUser extends BaseEntity {
         this.stuMail = stuMail;
     }
 
+    public String getStuPeriod() {
+        return stuPeriod;
+    }
+
+    public void setStuPeriod(String stuPeriod) {
+        this.stuPeriod = stuPeriod;
+    }
+
     public String getStuSpe() {
         return stuSpe;
     }
@@ -274,22 +277,6 @@ public class StuUser extends BaseEntity {
 
     public void setStuPro(int stuPro) {
         this.stuPro = stuPro;
-    }
-
-    public String getStuMt() {
-        return stuMt;
-    }
-
-    public void setStuMt(String stuMt) {
-        this.stuMt = stuMt;
-    }
-
-    public String getStuInt() {
-        return stuInt;
-    }
-
-    public void setStuInt(String stuInt) {
-        this.stuInt = stuInt;
     }
 
     public int getOneMachineScore() {
@@ -425,11 +412,10 @@ public class StuUser extends BaseEntity {
                 ", stuWx='" + stuWx + '\'' +
                 ", stuQq='" + stuQq + '\'' +
                 ", stuMail='" + stuMail + '\'' +
+                ", stuPeriod='" + stuPeriod + '\'' +
                 ", stuSpe='" + stuSpe + '\'' +
                 ", stuIde=" + stuIde +
                 ", stuPro=" + stuPro +
-                ", stuMt='" + stuMt + '\'' +
-                ", stuInt='" + stuInt + '\'' +
                 ", machineScore=" + machineScore +
                 ", interviewResult=" + interviewResult +
                 ", irStatus='" + irStatus + '\'' +
