@@ -12,19 +12,19 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label is-required">用户名称：</label>
+                    <label class="col-sm-4 control-label is-required">学生学号：</label>
                     <div class="col-sm-8">
-                        <input name="userName" placeholder="请输入用户名称" class="form-control" type="text" maxlength="30" th:field="*{userName}" required>
+                        <input id="stuNum" name="stuNum" placeholder="请输入学生学号" class="form-control" type="text" maxlength="30" th:field="*{stuNum}" required>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label is-required">教师工号：</label>
-                        <div class="col-sm-8">
-                            <input id="teaJobNumber" readonly="true" name="teaJobNumber" placeholder="请输入教师工号" class="form-control" type="text" maxlength="30" th:field="*{teaJobNumber}" required>
-                        </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">姓名：</label>
+                    <div class="col-sm-8">
+                        <input id = "userName" name="userName" placeholder="请输入学生名称" class="form-control" type="text" maxlength="30" th:field="*{userName}" required>
                     </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -41,17 +41,40 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">邮箱：</label>
+                    <label class="col-sm-4 control-label is-required">原班级：</label>
                     <div class="col-sm-8">
-                        <div class="input-group">
-                            <input name="email" class="form-control email" type="text" maxlength="50" placeholder="请输入邮箱" th:field="*{email}">
-                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                        </div>
+                        <input name="stuClass" placeholder="请输入原班级" class="form-control" type="text" maxlength="30" th:field="*{stuClass}" required>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">c语言成绩：</label>
+                    <div class="col-sm-8">
+                        <input name="cScore" placeholder="请输入c语言成绩" class="form-control" type="text" maxlength="30" th:field="*{cScore}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">数学成绩：</label>
+                    <div class="col-sm-8">
+                        <input name="mathScore" placeholder="请输入数学成绩" class="form-control" type="text" maxlength="30" th:field="*{mathScore}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">英语成绩：</label>
+                    <div class="col-sm-8">
+                        <input name="englishScore" placeholder="请输入英语成绩" class="form-control" type="text" maxlength="30" th:field="*{englishScore}" required>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label is-required">登录账号：</label>
@@ -60,6 +83,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">用户状态：</label>
@@ -68,20 +93,6 @@
                             <input type="checkbox" id="status" th:checked="${user.status == '0' ? true : false}">
                             <span></span>
                         </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">职称：</label>
-                    <div class="col-sm-5">
-                        <select name="teaProfess" class="form-control m-b">
-                            <option th:each="teaProfess:${teacherProfess}" th:value="${teaProfess.code}"
-                                    th:text="${teaProfess.message}"
-                                    th:selected="${user.teaProfess  eq teaProfess.code}"></option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -103,18 +114,6 @@
                     <div class="col-xs-10">
                         <label th:each="role:${roles}" class="check-box">
                             <input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:checked="${role.flag}" th:disabled="${role.status == '1'}">
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">专业特长：</label>
-                    <div class="col-xs-10">
-                        <label th:each="course:${courses}" class="check-box">
-                            <input name="course" type="checkbox" th:value="${course.course_id}" th:text="${course.course_name}" th:checked="${course.flag}" >
                         </label>
                     </div>
                 </div>
@@ -143,7 +142,7 @@
 <th:block th:include="include :: select2-js" />
 <script type="text/javascript">
     var prefix2 = ctx + "system/user";
-    var prefix = ctx + "manager/teacher";
+    var prefix = ctx + "manager/student";
 
     $("#form-user-edit").validate({
         onkeyup: false,
@@ -167,23 +166,26 @@
                     }
                 }
             },
-            // teaJobNumber:{
-            //     minlength: 2,
-            //     maxlength: 20,
-            //     remote: {
-            //         url: prefix + "/checkTeaJobNumberUnique",
-            //         type: "post",
-            //         dataType: "json",
-            //         data: {
-            //             "teaJobNumber": function() {
-            //                 return $.common.trim($("#teaJobNumber").val());
-            //             }
-            //         },
-            //         dataFilter: function(data, type) {
-            //             return $.validate.unique(data);
-            //         }
-            //     }
-            // },
+            stuNum:{
+                minlength: 2,
+                maxlength: 20,
+                remote: {
+                    url: prefix + "/checkStuNumUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "userId": function() {
+                            return $("#userId").val();
+                        },
+                        "stuNum": function() {
+                            return $.common.trim($("#stuNum").val());
+                        }
+                    },
+                    dataFilter: function(data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
             phonenumber:{
                 isPhone:true,
                 remote: {
@@ -210,11 +212,10 @@
             },
             "phonenumber":{
                 remote: "手机号码已经存在"
+            },
+            "stuNum": {
+                remote: "该学生已经存在"
             }
-            // ,
-            // "teaJobNumber": {
-            //     remote: "该教师已经存在"
-            // }
         },
         focusCleanup: true
     });

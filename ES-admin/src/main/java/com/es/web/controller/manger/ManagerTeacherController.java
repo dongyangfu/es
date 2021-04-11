@@ -67,19 +67,18 @@ public class ManagerTeacherController extends BaseController {
     @RequiresPermissions("manager:teacher:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(TeacherDTO teacherDTO) {
         startPage();
-        List<TeacherVO> teacherList = managerTeacherService.getTeacherList(new TeacherDTO());
+        List<TeacherVO> teacherList = managerTeacherService.getTeacherList(teacherDTO);
         log.info("ManagerTeacherController#list: {}", JSON.toJSONString(teacherList));
         return getDataTable(teacherList);
     }
 
     /**
-     * 修改学生成绩信息
+     * 修改教师信息
      */
     @GetMapping("/edit/{userId}")
     public String edit(@PathVariable("userId") Long userId, ModelMap mmap) {
-        //通过stuId查询学生信息，用于前端修改页面的展示
         TeacherDTO dto = new TeacherDTO();
         dto.setTeaId(userId);
         List<SysRole> roles = roleService.selectRolesByUserId(userId);

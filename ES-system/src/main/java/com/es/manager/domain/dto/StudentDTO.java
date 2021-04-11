@@ -1,14 +1,19 @@
-package com.es.student.domain;
+package com.es.manager.domain.dto;
 
-import com.es.common.core.domain.BaseEntity;
+import com.es.common.core.domain.entity.SysUser;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.io.Serializable;
 
 /**
- * 学生信息表 stu_user
- *
- * @Author hujunhao
- */
-public class StuUser extends BaseEntity {
-    private static final long serialVersionUID = 1L;
+ * @author: fudy
+ * @date: 2021/4/10 下午 03:42
+ * @Decription: 学生信息表入参
+ **/
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class StudentDTO extends SysUser implements Serializable {
+    private static final long serialVersionUID = -1748414653212999827L;
+
     /**
      * 学生id
      */
@@ -130,53 +135,16 @@ public class StuUser extends BaseEntity {
     /**
      * 第一学期英语成绩
      */
-    private String englishScore;
+    private Integer englishScore = 0;
     /**
      * 第一学期数学成绩
      */
-    private String mathScore;
+    private Integer mathScore = 0;
     /**
      * 第一学期c语言成绩
      */
-    private String cScore;
+    private Integer cScore = 0;
 
-    public StuUser() {
-    }
-
-    public StuUser(long stuId, String stuNum, String stuName, String stuSex, String stuAge, String stuClass, String stuTel, String stuWx, String stuQq, String stuMail, String stuPeriod, String stuSpe, int stuIde, int stuPro, int machineScore, int interviewResult, String irStatus, int oneMachineScore, String oneMsStatus, int twoMachineScore, String twoMsStatus, int threeMachineScore, String threeMsStatus, int fourMachineScore, String fourMsStatus, int fiveMachineScore, String fiveMsStatus, int sixMachineScore, String sixMsStatus, String englishScore, String mathScore, String cScore) {
-        this.stuId = stuId;
-        this.stuNum = stuNum;
-        this.stuName = stuName;
-        this.stuSex = stuSex;
-        this.stuAge = stuAge;
-        this.stuClass = stuClass;
-        this.stuTel = stuTel;
-        this.stuWx = stuWx;
-        this.stuQq = stuQq;
-        this.stuMail = stuMail;
-        this.stuPeriod = stuPeriod;
-        this.stuSpe = stuSpe;
-        this.stuIde = stuIde;
-        this.stuPro = stuPro;
-        this.machineScore = machineScore;
-        this.interviewResult = interviewResult;
-        this.irStatus = irStatus;
-        this.oneMachineScore = oneMachineScore;
-        this.oneMsStatus = oneMsStatus;
-        this.twoMachineScore = twoMachineScore;
-        this.twoMsStatus = twoMsStatus;
-        this.threeMachineScore = threeMachineScore;
-        this.threeMsStatus = threeMsStatus;
-        this.fourMachineScore = fourMachineScore;
-        this.fourMsStatus = fourMsStatus;
-        this.fiveMachineScore = fiveMachineScore;
-        this.fiveMsStatus = fiveMsStatus;
-        this.sixMachineScore = sixMachineScore;
-        this.sixMsStatus = sixMsStatus;
-        this.englishScore = englishScore;
-        this.mathScore = mathScore;
-        this.cScore = cScore;
-    }
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -293,6 +261,30 @@ public class StuUser extends BaseEntity {
         this.stuPro = stuPro;
     }
 
+    public int getMachineScore() {
+        return machineScore;
+    }
+
+    public void setMachineScore(int machineScore) {
+        this.machineScore = machineScore;
+    }
+
+    public int getInterviewResult() {
+        return interviewResult;
+    }
+
+    public void setInterviewResult(int interviewResult) {
+        this.interviewResult = interviewResult;
+    }
+
+    public String getIrStatus() {
+        return irStatus;
+    }
+
+    public void setIrStatus(String irStatus) {
+        this.irStatus = irStatus;
+    }
+
     public int getOneMachineScore() {
         return oneMachineScore;
     }
@@ -389,57 +381,33 @@ public class StuUser extends BaseEntity {
         this.sixMsStatus = sixMsStatus;
     }
 
-    public int getMachineScore() {
-        return machineScore;
-    }
-
-    public void setMachineScore(int machineScore) {
-        this.machineScore = machineScore;
-    }
-
-    public int getInterviewResult() {
-        return interviewResult;
-    }
-
-    public void setInterviewResult(int interviewResult) {
-        this.interviewResult = interviewResult;
-    }
-
-    public String getIrStatus() {
-        return irStatus;
-    }
-
-    public void setIrStatus(String irStatus) {
-        this.irStatus = irStatus;
-    }
-
-    public String getEnglishScore() {
+    public Integer getEnglishScore() {
         return englishScore;
     }
 
-    public void setEnglishScore(String englishScore) {
+    public void setEnglishScore(Integer englishScore) {
         this.englishScore = englishScore;
     }
 
-    public String getMathScore() {
+    public Integer getMathScore() {
         return mathScore;
     }
 
-    public void setMathScore(String mathScore) {
+    public void setMathScore(Integer mathScore) {
         this.mathScore = mathScore;
     }
 
-    public String getcScore() {
+    public Integer getcScore() {
         return cScore;
     }
 
-    public void setcScore(String cScore) {
+    public void setcScore(Integer cScore) {
         this.cScore = cScore;
     }
 
     @Override
     public String toString() {
-        return "StuUser{" +
+        return "StudentDTO{" +
                 "stuId=" + stuId +
                 ", stuNum='" + stuNum + '\'' +
                 ", stuName='" + stuName + '\'' +

@@ -1,14 +1,21 @@
-package com.es.student.domain;
+package com.es.manager.domain.vo;
 
-import com.es.common.core.domain.BaseEntity;
+import com.es.common.annotation.Excel;
+import com.es.common.core.domain.entity.SysUser;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.io.Serializable;
 
 /**
- * 学生信息表 stu_user
- *
- * @Author hujunhao
- */
-public class StuUser extends BaseEntity {
-    private static final long serialVersionUID = 1L;
+ * @author: fudy
+ * @date: 2021/4/10 下午 03:45
+ * @Decription: 学生信息表出参
+ **/
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class StudentVO extends SysUser implements Serializable {
+
+    private static final long serialVersionUID = -1748414653212999827L;
+
     /**
      * 学生id
      */
@@ -16,6 +23,7 @@ public class StuUser extends BaseEntity {
     /**
      * 学生学号
      */
+    @Excel(name = "学生学号")
     private String stuNum;
     /**
      * 学生姓名
@@ -32,6 +40,7 @@ public class StuUser extends BaseEntity {
     /**
      * 学生班级
      */
+    @Excel(name = "学生原班级")
     private String stuClass;
     /**
      * 学生电话
@@ -130,53 +139,19 @@ public class StuUser extends BaseEntity {
     /**
      * 第一学期英语成绩
      */
+    @Excel(name = "英语成绩")
     private String englishScore;
     /**
      * 第一学期数学成绩
      */
+    @Excel(name = "数学成绩")
     private String mathScore;
     /**
      * 第一学期c语言成绩
      */
+    @Excel(name = "c语言成绩")
     private String cScore;
 
-    public StuUser() {
-    }
-
-    public StuUser(long stuId, String stuNum, String stuName, String stuSex, String stuAge, String stuClass, String stuTel, String stuWx, String stuQq, String stuMail, String stuPeriod, String stuSpe, int stuIde, int stuPro, int machineScore, int interviewResult, String irStatus, int oneMachineScore, String oneMsStatus, int twoMachineScore, String twoMsStatus, int threeMachineScore, String threeMsStatus, int fourMachineScore, String fourMsStatus, int fiveMachineScore, String fiveMsStatus, int sixMachineScore, String sixMsStatus, String englishScore, String mathScore, String cScore) {
-        this.stuId = stuId;
-        this.stuNum = stuNum;
-        this.stuName = stuName;
-        this.stuSex = stuSex;
-        this.stuAge = stuAge;
-        this.stuClass = stuClass;
-        this.stuTel = stuTel;
-        this.stuWx = stuWx;
-        this.stuQq = stuQq;
-        this.stuMail = stuMail;
-        this.stuPeriod = stuPeriod;
-        this.stuSpe = stuSpe;
-        this.stuIde = stuIde;
-        this.stuPro = stuPro;
-        this.machineScore = machineScore;
-        this.interviewResult = interviewResult;
-        this.irStatus = irStatus;
-        this.oneMachineScore = oneMachineScore;
-        this.oneMsStatus = oneMsStatus;
-        this.twoMachineScore = twoMachineScore;
-        this.twoMsStatus = twoMsStatus;
-        this.threeMachineScore = threeMachineScore;
-        this.threeMsStatus = threeMsStatus;
-        this.fourMachineScore = fourMachineScore;
-        this.fourMsStatus = fourMsStatus;
-        this.fiveMachineScore = fiveMachineScore;
-        this.fiveMsStatus = fiveMsStatus;
-        this.sixMachineScore = sixMachineScore;
-        this.sixMsStatus = sixMsStatus;
-        this.englishScore = englishScore;
-        this.mathScore = mathScore;
-        this.cScore = cScore;
-    }
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -293,6 +268,30 @@ public class StuUser extends BaseEntity {
         this.stuPro = stuPro;
     }
 
+    public int getMachineScore() {
+        return machineScore;
+    }
+
+    public void setMachineScore(int machineScore) {
+        this.machineScore = machineScore;
+    }
+
+    public int getInterviewResult() {
+        return interviewResult;
+    }
+
+    public void setInterviewResult(int interviewResult) {
+        this.interviewResult = interviewResult;
+    }
+
+    public String getIrStatus() {
+        return irStatus;
+    }
+
+    public void setIrStatus(String irStatus) {
+        this.irStatus = irStatus;
+    }
+
     public int getOneMachineScore() {
         return oneMachineScore;
     }
@@ -389,30 +388,6 @@ public class StuUser extends BaseEntity {
         this.sixMsStatus = sixMsStatus;
     }
 
-    public int getMachineScore() {
-        return machineScore;
-    }
-
-    public void setMachineScore(int machineScore) {
-        this.machineScore = machineScore;
-    }
-
-    public int getInterviewResult() {
-        return interviewResult;
-    }
-
-    public void setInterviewResult(int interviewResult) {
-        this.interviewResult = interviewResult;
-    }
-
-    public String getIrStatus() {
-        return irStatus;
-    }
-
-    public void setIrStatus(String irStatus) {
-        this.irStatus = irStatus;
-    }
-
     public String getEnglishScore() {
         return englishScore;
     }
@@ -439,7 +414,7 @@ public class StuUser extends BaseEntity {
 
     @Override
     public String toString() {
-        return "StuUser{" +
+        return "StudentVO{" +
                 "stuId=" + stuId +
                 ", stuNum='" + stuNum + '\'' +
                 ", stuName='" + stuName + '\'' +

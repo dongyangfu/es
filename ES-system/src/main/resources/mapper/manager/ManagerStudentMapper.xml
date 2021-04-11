@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.manager.mapper.ManagerStudentMapper">
+
+
+    <resultMap id="result" type="StudentVO">
+        <id     property="userId"        column="user_id"         />
+        <result property="deptId"        column="dept_id"         />
+        <result property="loginName"     column="login_name"      />
+        <result property="userName"      column="user_name"       />
+        <result property="userType"      column="user_type"       />
+        <result property="email"         column="email"           />
+        <result property="phonenumber"   column="phonenumber"     />
+        <result property="sex"           column="sex"             />
+        <result property="avatar"        column="avatar"          />
+        <result property="password"      column="password"        />
+        <result property="salt"          column="salt"            />
+        <result property="status"        column="status"          />
+        <result property="delFlag"       column="del_flag"        />
+        <result property="loginIp"       column="login_ip"        />
+        <result property="loginDate"     column="login_date"      />
+        <result property="pwdUpdateDate" column="pwd_update_date" />
+        <result property="createBy"      column="create_by"       />
+        <result property="createTime"    column="create_time"     />
+        <result property="updateBy"      column="update_by"       />
+        <result property="updateTime"    column="update_time"     />
+        <result property="remark"        column="remark"          />
+        <result property="stuId"       column="stu_id"       />
+        <result property="stuNum"    column="stu_num"    />
+        <result property="stuName"     column="stu_name"     />
+        <result property="stuSex"  column="stu_sex"  />
+        <result property="stuAge"         column="stu_age"          />
+        <result property="stuClass"       column="stu_class"       />
+        <result property="stuTel"     column="stu_tel"     />
+        <result property="stuWx"       column="stu_wx"       />
+        <result property="stuQq"     column="stu_qq"     />
+        <result property="stuMail"     column="stu_mail"     />
+        <result property="stuPeriod"     column="stu_period"     />
+        <result property="stuSpe"         column="stu_spe"          />
+        <result property="stuIde"         column="stu_ide"          />
+        <result property="stuPro"         column="stu_pro"          />
+        <result property="machineScore"     column="machine_score"     />
+        <result property="interviewResult"     column="interview_result"     />
+        <result property="irStatus"     column=" ir_status"     />
+        <result property="oneMachineScore"     column="one_machine_score"     />
+        <result property="oneMsStatus"     column="one_ms_status"     />
+        <result property="twoMachineScore"     column="two_machine_score"     />
+        <result property="twoMsStatus"     column="two_ms_status"     />
+        <result property="threeMachineScore"     column="three_machine_score"     />
+        <result property="threeMsStatus"     column="three_ms_status"     />
+        <result property="fourMachineScore"     column="four_machine_score"     />
+        <result property="fourMsStatus"     column="four_ms_status"     />
+        <result property="fiveMachineScore"     column="five_machine_score"     />
+        <result property="fiveMsStatus"     column="five_ms_status"     />
+        <result property="sixMachineScore"     column="six_machine_score"     />
+        <result property="sixMsStatus"     column="six_ms_status"     />
+        <result property="englishScore"     column="english_score"     />
+        <result property="mathScore"     column="math_score"     />
+        <result property="cScore"     column="c_score"     />
+
+        <association property="dept"     column="dept_id" javaType="SysDept" resultMap="deptResult" />
+        <collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id     property="deptId"   column="dept_id"     />
+        <result property="parentId" column="parent_id"   />
+        <result property="deptName" column="dept_name"   />
+        <result property="orderNum" column="order_num"   />
+        <result property="leader"   column="leader"      />
+        <result property="status"   column="dept_status" />
+    </resultMap>
+
+    <resultMap id="RoleResult" type="SysRole">
+        <id     property="roleId"       column="role_id"        />
+        <result property="roleName"     column="role_name"      />
+        <result property="roleKey"      column="role_key"       />
+        <result property="roleSort"     column="role_sort"      />
+        <result property="dataScope"    column="data_scope"     />
+        <result property="status"       column="role_status"    />
+    </resultMap>
+
+
+    <select id="getStudentList" parameterType="StudentDTO" resultMap="result">
+        select
+        t.stu_id,t.stu_num,t.stu_name,t.stu_class,t.stu_tel,t.english_score,t.math_score,t.c_score,
+        u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber, u.sex, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.pwd_update_date, u.create_time, u.remark,
+        r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
+        from sys_user u
+        inner join stu_user t on t.stu_id = u.user_id
+        left join sys_user_role ur on u.user_id = ur.user_id
+        left join sys_role r on r.role_id = ur.role_id
+        <where>
+            <if test="stuId != null and  stuId != ''">
+                AND stu_id = #{stuId}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND stu_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="stuNum != null and stuNum != ''">
+                AND stu_num like concat('%', #{stuNum}, '%')
+            </if>
+            <if test="stuClass != null and stuClass != ''">
+                AND stu_class = #{stuClass}
+            </if>
+        </where>
+    </select>
+    <select id="getStudent" parameterType="TeaUser" resultMap="result">
+        select
+        t.stu_id,t.tea_profess,t.stu_num,t.status
+        FROM
+        stu_user t
+        <where>
+            <if test="stuId != null">
+                AND stu_id = #{stuId}
+            </if>
+            <if test="teaProfess != null">
+                AND tea_profess = #{teaProfess}
+            </if>
+            <if test="stuNum != null and stuNum != ''">
+                AND stu_num like concat('%', #{stuNum}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        limit 1
+    </select>
+    <insert id="insertStudent" parameterType="StudentDTO">
+        insert into stu_user (
+        stu_id,
+        stu_num,
+        stu_name,
+        stu_class,
+        stu_tel,
+        c_score,
+        english_score,
+        math_score
+        )values(
+        <trim prefix="" suffixOverrides=",">
+            <if test="userId != null and userId != '' ">#{userId},</if>
+            <if test="stuNum != null and stuNum != '' ">#{stuNum},</if>
+            <if test="userName != null and userName != '' ">#{userName},</if>
+            <if test="stuClass != null and stuClass != '' ">#{stuClass},</if>
+            <if test="phonenumber != null and phonenumber != '' ">#{phonenumber},</if>
+            <if test="cScore != null and cScore != '' ">#{cScore},</if>
+            <if test="englishScore != null and englishScore != '' ">#{englishScore},</if>
+            <if test="mathScore != null and mathScore != '' ">#{mathScore},</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateStudentById" parameterType="StudentDTO">
+        update stu_user
+        <set>
+            <if test="stuTel != null and stuTel != '' ">stu_tel = #{stuTel},</if>
+            <if test="stuNum != null and stuNum != '' ">stu_num = #{stuNum},</if>
+            <if test="stuName != null and stuName != '' ">stu_name = #{stuName},</if>
+            <if test="stuClass != null and stuClass != '' ">stu_class = #{stuClass},</if>
+            <if test="cScore != null and cScore != '' ">c_score = #{cScore},</if>
+            <if test="englishScore != null and englishScore != '' ">english_score = #{englishScore},</if>
+            <if test="mathScore != null and mathScore != '' ">math_score = #{mathScore},</if>
+        </set>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteStudentByIds" parameterType="Long">
+        delete from stu_user where stu_id in
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+    <delete id="deleteStudentById" parameterType="Long">
+        delete from stu_user where stu_id = #{stuId}
+    </delete>
+    <select id="checkStuNumUnique" parameterType="StudentDTO" resultMap="result">
+		select stu_id, stu_num from stu_user where stu_num=#{stuNum} limit 1
+	</select>
+
+
+</mapper>

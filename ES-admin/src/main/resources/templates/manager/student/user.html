@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('教师列表')" />
+	<th:block th:include="include :: header('学生列表')" />
 	<th:block th:include="include :: layout-latest-css" />
 	<th:block th:include="include :: ztree-css" />
 </head>
@@ -17,10 +17,10 @@
 						<div class="select-list">
 							<ul>
 								<li>
-									登录名称：<input type="text" name="userName"/>
+									学生姓名：<input type="text" name="userName"/>
 								</li>
 								<li>
-									教师工号：<input type="text" name="teaJobNumber"/>
+									学生学号：<input type="text" name="stuNum"/>
 								</li>
 								<li>
 									用户状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
@@ -75,7 +75,7 @@
 		var editFlag = true;
 		var removeFlag = true;
 		var resetPwdFlag = true;
-		var prefix = ctx + "manager/teacher";
+		var prefix = ctx + "manager/student";
 		var prefix2 = ctx + "system/user";
 		$(function() {
 		    var panehHidden = false;
@@ -103,9 +103,9 @@
 		        exportUrl: prefix + "/export",
 		        importUrl: prefix + "/importData",
 		        importTemplateUrl: prefix + "/importTemplate",
-				sortName: "createTime",
-				sortOrder: "desc",
-		        modalName: "教师",
+		        sortName: "createTime",
+		        sortOrder: "desc",
+		        modalName: "用户",
 		        columns: [{
 		            checkbox: true
 		        },
@@ -119,38 +119,29 @@
 		            title: '用户名称'
 		        },
 					{
-						field: 'teaJobNumber',
-						title: '教工号'
+						field: 'stuNum',
+						title: '学生学号'
 					},
 					{
-						field: 'teacherProfessName',
-						title: '教师职称'
+						field: 'stuClass',
+						title: '学生原班级'
 					},
 					{
-						title: '机试教师',
-						align: 'center',
-						formatter: function (value, row) {
-							return isComputer(row);
-						}
+						field: 'phonenumber',
+						title: '联系电话'
 					},
 					{
-						title: '面试教师',
-						align: 'center',
-						formatter: function (value, row) {
-							return isInterview(row);
-						}
+						field: 'englishScore',
+						title: '英语成绩',
 					},
 					{
-						title: '卓越班主任',
-						align: 'center',
-						formatter: function (value, row) {
-							return isCharge(row);
-						}
+						field: 'mathScore',
+						title: '数学成绩',
 					},
-		        {
-		            field: 'phonenumber',
-		            title: '联系电话'
-		        },
+					{
+						field: 'cScore',
+						title: 'c语言成绩',
+					},
 		        {
 		        	visible: editFlag == 'hidden' ? false : true,
 		        	title: '用户状态',
@@ -159,11 +150,11 @@
 		        		return statusTools(row);
 		        	}
 		        },
-					{
-						field: 'createTime',
-						title: '创建时间',
-						sortable: true
-					},
+		        {
+		            field: 'createTime',
+		            title: '创建时间',
+		            sortable: true
+		        },
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -217,31 +208,6 @@
     		} else {
     			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
     		}
-		}
-
-		/* 教师职位判断显示 */
-		function isCharge(row) {
-			if (row.isCharge == 1) {
-				return '是';
-			} else {
-				return '否';
-			}
-		}
-		/* 教师职位判断显示 */
-		function isComputer(row) {
-			if (row.isComputer == 1) {
-				return '是';
-			} else {
-				return '否';
-			}
-		}
-		/* 教师职位判断显示 */
-		function isInterview(row) {
-			if (row.isInterview == 1) {
-				return '是';
-			} else {
-				return '否';
-			}
 		}
 
 		/* 用户管理-停用 */

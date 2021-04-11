@@ -1,6 +1,5 @@
 package com.es.manager.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.constant.UserConstants;
 import com.es.common.core.domain.entity.SysRole;
@@ -22,9 +21,7 @@ import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysConfigService;
 import com.es.system.service.ISysRoleService;
 import com.es.system.service.ISysUserService;
-import com.es.system.service.impl.SysUserServiceImpl;
 import com.es.teacher.domain.TeaCourse;
-import com.es.teacher.domain.TeaUser;
 import com.es.teacher.domain.TeaUserCourse;
 import com.es.teacher.mapper.TeaCourseMapper;
 import com.es.teacher.service.ITeaCourseService;
@@ -50,10 +47,10 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     @Resource
     private ManagerTeacherMapper managerTeacherMapper;
 
-    @Autowired
+    @Resource
     private SysUserMapper userMapper;
 
-    @Autowired
+    @Resource
     private SysUserRoleMapper userRoleMapper;
     @Resource
     private TeaCourseMapper teaCourseMapper;
@@ -92,7 +89,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         int rows = userMapper.insertUser(teacherDTO);
         // 新增用户与角色管理
         isTeacherRole(teacherDTO);
-        if (teacherDTO.getCourses() != null){
+        if (teacherDTO.getCourses() != null) {
             // 增加教师特长
             insertTeaCourse(teacherDTO.getUserId(), teacherDTO.getCourses());
         }
@@ -103,6 +100,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateTeacherById(TeacherDTO teacherDTO) {
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(teacherDTO.getUserId());
@@ -115,10 +113,11 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         // 新增用户与角色管理
         isTeacherRole(teacherDTO);
         // 修改教师信息
-        return sum+managerTeacherMapper.updateTeacherById(teacherDTO);
+        return sum + managerTeacherMapper.updateTeacherById(teacherDTO);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteTeacherByIds(String ids) {
         Long[] userIds = Convert.toLongArray(ids);
         for (Long userId : userIds) {
@@ -135,6 +134,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String importUser(List<TeacherDTOSuper> userList, Boolean isUpdateSupport, String operName) {
         if (StringUtils.isNull(userList) || userList.size() == 0) {
             throw new BusinessException("导入用户数据不能为空！");
@@ -147,7 +147,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         for (TeacherDTOSuper user1 : userList) {
             try {
                 TeacherDTO user = new TeacherDTO();
-                BeanUtils.copyProperties(user1,user);
+                BeanUtils.copyProperties(user1, user);
                 user.setTeaId(user.getUserId());
                 user.setTeaProfess((long) TeacherProfessTypeEnum.convertOrderChannelEnum(user.getTeacherProfessName()).getCode());
                 // 验证是否存在这个用户
@@ -197,13 +197,13 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         List<Map<String, Object>> maps = teaCourseService.selectTeaCourseName();
         List<TeaCourseVO> teaCourseVOS = teaCourseService.selectAllTeaCourseById(teaId);
         HashSet<String> set = new HashSet<>();
-        teaCourseVOS.forEach(x->set.add(x.getCourseName()));
+        teaCourseVOS.forEach(x -> set.add(x.getCourseName()));
 
         for (Map<String, Object> map : maps) {
-            if (set.contains(map.get("course_name"))){
-                map.put("flag",true);
-            }else {
-                map.put("flag",false);
+            if (set.contains(map.get("course_name"))) {
+                map.put("flag", true);
+            } else {
+                map.put("flag", false);
             }
         }
         return maps;
@@ -251,8 +251,8 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
         }
     }
 
-    private void isTeacherRole(TeacherDTO teacherDTO){
-        if (teacherDTO.getRoleIds()!=null){
+    private void isTeacherRole(TeacherDTO teacherDTO) {
+        if (teacherDTO.getRoleIds() != null) {
             insertUserRole(teacherDTO.getUserId(), teacherDTO.getRoleIds());
             Long[] roleIds = teacherDTO.getRoleIds();
             for (int i = 0; i < roleIds.length; i++) {
