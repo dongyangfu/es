@@ -85,7 +85,8 @@ public class ManagerTeacherController extends BaseController {
         List<TeacherVO> teacherList = managerTeacherService.getTeacherList(dto);
         mmap.put("user", teacherList.get(0));
         mmap.put("teacherProfess", TeacherProfessTypeEnum.values());
-        mmap.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin() && !r.getRoleName().contains("机试教师")).collect(Collectors.toList()));
+        mmap.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
+//        mmap.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin() && !r.getRoleName().contains("机试教师")).collect(Collectors.toList()));
         mmap.put("courses",managerTeacherService.getAllCourseOfTeaFlag(userId));
         return prefix + "/edit";
     }
@@ -124,7 +125,7 @@ public class ManagerTeacherController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        mmap.put("roles", roleService.selectRoleAll().stream().filter(r -> !r.isAdmin() && !r.getRoleName().contains("机试教师")).collect(Collectors.toList()));
+        mmap.put("roles", roleService.selectRoleAll().stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         mmap.put("teacherProfess", TeacherProfessTypeEnum.values());
         mmap.put("courses",iTeaCourseService.selectTeaCourseName());
         return prefix + "/add";

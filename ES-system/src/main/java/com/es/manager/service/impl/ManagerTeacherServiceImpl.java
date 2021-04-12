@@ -261,7 +261,7 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
                     teacherDTO.setCharge(1);
                     continue;
                 }
-                if (sysRole.getRoleName().contains("机试批改教师")) {
+                if (sysRole.getRoleName().contains("机试教师")) {
                     teacherDTO.setComputer(1);
                     continue;
                 }

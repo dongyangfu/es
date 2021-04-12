@@ -163,7 +163,7 @@
         delete from tea_user where tea_id = #{teaId}
     </delete>
     <select id="checkTeaJobNumberUnique" parameterType="String" resultType="int">
-		select tea_id, tea_job_number from tea_user where tea_job_number=#{teaJobNumber} limit 1
+		select count(1) from tea_user where tea_job_number=#{teaJobNumber} limit 1
 	</select>
 
 
