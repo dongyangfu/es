@@ -13,6 +13,9 @@
                     <div class="select-list">
                         <ul>
                             <li>
+                                导师姓名：<input type="text" name="teaName"/>
+                            </li>
+                            <li>
                                 年级：<input type="text" name="stuPeriod"/>
                             </li>
                             <li>
@@ -50,7 +53,7 @@
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: layout-latest-js" />
 <script th:inline="javascript">
-    var prefix = ctx + "teacher/mystu";
+    var prefix = ctx + "teacher/export";
     var editFlag = true;
     $(function() {
         var panehHidden = false;
@@ -73,9 +76,7 @@
         var options = {
             url: prefix + "/list",
             exportUrl: prefix + "/export",
-            updateUrl: prefix + "/edit/{id}/{practiceId}",
-            auditUrl: prefix + "/audit/{id}/{practiceId}",
-            modalName: "我的学生",
+            modalName: "实践环节信息",
             columns: [{
                 checkbox: true
             },
@@ -85,7 +86,11 @@
                 },
                 {
                     field: 'stuName',
-                    title: '姓名'
+                    title: '学生姓名'
+                },
+                {
+                    field: 'teaName',
+                    title: '学生的导师姓名'
                 },
                 {
                     field: 'stuNum',
@@ -119,17 +124,6 @@
                 {
                     field: 'score',
                     title: '成绩'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTabSpec(\'' + row.stuId + '\',\'' + row.score + '\',\'' + row.practiceId + '\')"><i class="fa fa-edit"></i>提交成绩</a> ');
-                        actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTabAudit(\'' + row.stuId + '\',\'' + row.status + '\',\'' + row.practiceId + '\')"><i class="fa fa-check"></i>题目提交审核</a> ');
-                        actions.push('<a class="btn btn-default btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTabSpecial(\'' + row.stuId + '\',\'' + row.status + '\',\'' + row.practiceId + '\')"><i class="fa fa-check"></i>查看周报</a> ');
-                        return actions.join('');
-                    }
                 }
                 ]
         };

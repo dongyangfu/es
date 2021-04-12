@@ -52,7 +52,7 @@ public interface ITeaStuService {
      * @param teaId 教师ID
      * @return 学生信息列表
      */
-    List<StuUser>  selectStuListById(Long teaId);
+    List<Map<String,Object>>  selectStuListById(Long teaId);
 
     /**
      * 更新学生选择老师后的通过状态（实践管理阶段）
@@ -74,4 +74,18 @@ public interface ITeaStuService {
      * @return int
      */
     int updateRejectAll(Long teaId);
+
+    /**
+     * 更新学生课题的成绩信息（实践管理阶段）
+     * @param map 通过信息
+     * @return int
+     */
+    int updateCourseStatus(Map<String,Object> map);
+
+    /**
+     * 更新学生课题的课题信息（实践管理阶段）
+     * @param map 通过信息
+     * @return int
+     */
+    int auditCourseStatus(Map<String,Object> map);
 }

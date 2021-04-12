@@ -48,7 +48,7 @@ public class stuSelTeaContorller extends BaseController {
     public TableDataInfo listStu() {
         Long userId = ShiroUtils.getUserId();
         startPage();
-        List<StuUser> list = teaStuService.selectStuListById(userId);
+        List<Map<String,Object>> list = teaStuService.selectStuListById(userId);
         return getDataTable(list);
     }
 

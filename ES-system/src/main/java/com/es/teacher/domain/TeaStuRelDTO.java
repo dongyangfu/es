@@ -10,23 +10,12 @@ import com.es.common.core.domain.BaseEntity;
  */
 public class TeaStuRelDTO extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    /**
-     * 年级
-     */
-    @Excel(name = "年级")
-    private String stuPeriod;
 
     /**
-     * 实践环节
+     * 学生ID
      */
-    @Excel(name = "实践环节")
-    private String practiceName;
-
-    /**
-     * 姓名
-     */
-    @Excel(name = "姓名")
-    private String stuName;
+    //@Excel(name = "学生ID")
+    private Long stuId;
 
     /**
      * 学号
@@ -35,15 +24,16 @@ public class TeaStuRelDTO extends BaseEntity {
     private String stuNum;
 
     /**
-     * 教师ID
+     * 姓名
      */
-    private Long teaId;
+    @Excel(name = "姓名")
+    private String stuName;
 
     /**
-     * 学生ID
+     * 年级
      */
-    @Excel(name = "学生ID")
-    private Long stuId;
+    @Excel(name = "年级")
+    private String stuPeriod;
 
     /**
      * 班级
@@ -54,7 +44,7 @@ public class TeaStuRelDTO extends BaseEntity {
     /**
      * 课题名称
      */
-    @Excel(name = "课题名称")
+    @Excel(name = "课题名称",width = 25)
     private String stuPracticeName;
 
     /**
@@ -64,15 +54,49 @@ public class TeaStuRelDTO extends BaseEntity {
     private String score;
 
     /**
+     * 教师姓名
+     */
+    @Excel(name = "指导教师")
+    private String teaName;
+
+    /**
+     * 实践环节
+     */
+    @Excel(name = "实践环节",width = 20)
+    private String practiceName;
+
+    /**
+     * 教师ID
+     */
+    private Long teaId;
+
+
+    /**
      * 课题编号
      */
     //@Excel(name = "课题编号")
     private String practiceNumber;
 
+    /**
+     * 学生可以通过状态
+     */
+    private String status;
+
+    /**
+     * 学生联系方式
+     */
+    private String stuTel;
+
+    /**
+     * 学生实践环节ID
+     */
+    private String practiceId;
+
+
     public TeaStuRelDTO() {
     }
 
-    public TeaStuRelDTO(String stuPeriod, String practiceName, String stuName, String stuNum, Long teaId, Long stuId, String stuClass, String stuPracticeName, String score, String practiceNumber) {
+    public TeaStuRelDTO(String stuPeriod, String practiceName, String stuName, String stuNum, Long teaId, Long stuId, String stuClass, String stuPracticeName, String score, String practiceNumber, String status, String stuTel, String practiceId, String teaName) {
         this.stuPeriod = stuPeriod;
         this.practiceName = practiceName;
         this.stuName = stuName;
@@ -83,6 +107,26 @@ public class TeaStuRelDTO extends BaseEntity {
         this.stuPracticeName = stuPracticeName;
         this.score = score;
         this.practiceNumber = practiceNumber;
+        this.status = status;
+        this.stuTel = stuTel;
+        this.practiceId = practiceId;
+        this.teaName = teaName;
+    }
+
+    public String getTeaName() {
+        return teaName;
+    }
+
+    public void setTeaName(String teaName) {
+        this.teaName = teaName;
+    }
+
+    public String getPracticeId() {
+        return practiceId;
+    }
+
+    public void setPracticeId(String practiceId) {
+        this.practiceId = practiceId;
     }
 
     public String getStuPeriod() {
@@ -165,6 +209,22 @@ public class TeaStuRelDTO extends BaseEntity {
         this.practiceNumber = practiceNumber;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStuTel() {
+        return stuTel;
+    }
+
+    public void setStuTel(String stuTel) {
+        this.stuTel = stuTel;
+    }
+
     @Override
     public String toString() {
         return "TeaStuRelDTO{" +
@@ -178,6 +238,10 @@ public class TeaStuRelDTO extends BaseEntity {
                 ", stuPracticeName='" + stuPracticeName + '\'' +
                 ", score='" + score + '\'' +
                 ", practiceNumber='" + practiceNumber + '\'' +
+                ", status='" + status + '\'' +
+                ", stuTel='" + stuTel + '\'' +
+                ", practiceId='" + practiceId + '\'' +
+                ", teaName='" + teaName + '\'' +
                 '}';
     }
 }
