@@ -48,8 +48,8 @@ public class TeaStuServiceImpl implements ITeaStuService {
     }
 
     @Override
-    public List<StuUser> selectStuListById(Long teaId) {
-        List<StuUser> stuUsers = teaStuMapper.selectStuListById(teaId);
+    public List<Map<String,Object>> selectStuListById(Long teaId) {
+        List<Map<String,Object>> stuUsers = teaStuMapper.selectStuListById(teaId);
         return stuUsers;
     }
 
@@ -66,5 +66,15 @@ public class TeaStuServiceImpl implements ITeaStuService {
     @Override
     public int updateRejectAll(Long teaId) {
         return teaStuMapper.updateRejectAll(teaId);
+    }
+
+    @Override
+    public int updateCourseStatus(Map<String, Object> map) {
+        return teaStuMapper.updateCourseStatus(map);
+    }
+
+    @Override
+    public int auditCourseStatus(Map<String, Object> map) {
+        return teaStuMapper.auditCourseStatus(map);
     }
 }

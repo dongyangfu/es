@@ -1083,6 +1083,30 @@ var table = {
                 table.set();
                 $.modal.openTab("修改" + table.options.modalName, $.operate.editUrl(id));
             },
+            editTabSpec: function(id,score,practiceId) {
+                if($.common.isNotEmpty(score)){
+                    $.modal.msgWarning("成绩已提交，不可编辑");
+                    return;
+                }
+                table.set();
+                $.modal.openTab("修改" + table.options.modalName, $.operate.editUrlSpec(id,practiceId));
+            },
+            editTabAudit: function(id,status,practiceId) {
+                if($.common.equals(status,"已通过")){
+                    $.modal.msgWarning("课题已通过，不可编辑");
+                    return;
+                }
+                table.set();
+                $.modal.openTab("审核" + table.options.modalName, $.operate.auditUrl(id,practiceId));
+            },
+            editTabSpecial: function(id,status,practiceId) {
+                if($.common.equals(status,"未录入") || $.common.equals(status,"未通过")){
+                    $.modal.msgWarning("学生课题还未录入或者审核！不可操作！");
+                    return;
+                }
+                table.set();
+                $.modal.openTab("修改" + table.options.modalName, $.operate.editUrlSpec(id,practiceId));
+            },
             // 修改信息 全屏
             editFull: function(id) {
             	table.set();
@@ -1106,17 +1130,51 @@ var table = {
             },
             // 修改访问地址
             editUrl: function(id) {
-            	var url = "/404.html";
-            	if ($.common.isNotEmpty(id)) {
-            	    url = table.options.updateUrl.replace("{id}", id);
-            	} else {
-            	    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
-            	    if (id.length == 0) {
-            	        $.modal.alertWarning("请至少选择一条记录");
-            	        return;
-            	    }
-            	    url = table.options.updateUrl.replace("{id}", id);
-            	}
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.updateUrl.replace("{id}", id);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.updateUrl.replace("{id}", id);
+                }
+                return url;
+            },
+            // 修改访问地址
+            editUrlSpec: function(id,practiceId) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.updateUrl.replace("{id}", id);
+                    url = url.replace("{practiceId}",practiceId);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.updateUrl.replace("{id}", id);
+                    url = url.replace("{practiceId}",practiceId);
+                }
+                return url;
+            },
+            // 修改访问地址
+            auditUrl: function(id,practiceId) {
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = table.options.auditUrl.replace("{id}", id);
+                    url = url.replace("{practiceId}",practiceId);
+                } else {
+                    var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                    if (id.length == 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    url = table.options.auditUrl.replace("{id}", id);
+                    url = url.replace("{practiceId}",practiceId);
+                }
                 return url;
             },
             // 保存信息 刷新表格

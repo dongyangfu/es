@@ -16,18 +16,43 @@
 			s.stu_period stuPeriod,
 			s.stu_name stuName,
 			s.stu_class stuClass,
+			s.stu_tel stuTel,
 			spr.stu_practice_name stuPracticeName,
-			spr.score,
+			COALESCE (spr.score,'') score,
+			spr.practice_id practiceId,
+			su.user_name teaName,
+			CASE
+				spr.status
+				WHEN '00' THEN
+				'已通过'
+				WHEN '01' THEN
+				'未通过' ELSE '未录入'
+			END AS status,
 			cp.practice_name practiceName,
 			cp.practice_number practiceNumber
 		FROM
 			stu_user s
-			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
 			LEFT JOIN stu_practice_rel spr ON s.stu_id = spr.stu_id
+			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id and ts.practice_id = spr.practice_id
 			LEFT JOIN course_practice cp ON spr.practice_id = cp.practice_id
+			LEFT JOIN sys_user su ON su.user_id = ts.tea_id
 		WHERE
-			ts.tea_id = #{teaId}
-			AND ts.STATUS = '01'
+			ts.STATUS = '01'
+		<if test="teaId != null and teaId != ''">
+			AND ts.tea_id = #{teaId}
+		</if>
+
+		<if test="teaName != null and teaName != ''">
+			AND su.user_name like concat('%', #{teaName}, '%')
+		</if>
+
+		<if test="practiceId != null and practiceId != ''">
+			AND ts.practice_id = #{practiceId}
+		</if>
+
+		<if test="stuId != null and stuId != ''">
+			AND ts.stu_id = #{stuId}
+		</if>
 		<if test="stuPeriod != null and stuPeriod != ''">
 			AND s.stu_period like concat('%', #{stuPeriod}, '%')
 		</if>
@@ -45,10 +70,14 @@
 	</select>
 
     <!--通过教师ID查询教师下的学生列表（实践管理-学生选择老师阶段）-->
-    <select id="selectStuListById" parameterType="Long" resultMap="StuUserResult">
+    <select id="selectStuListById" parameterType="Long" resultType="map">
 		SELECT
-			s.stu_id,
-			s.stu_num
+			s.stu_id stuId,
+			s.stu_num stuNum,
+			s.stu_id stuId,
+			s.stu_period stuPeriod,
+			s.stu_name stuName,
+			s.stu_class stuClass
 		FROM
 			stu_user s
 			LEFT JOIN tea_stu_rel ts ON s.stu_id = ts.stu_id
@@ -142,7 +171,8 @@
 			COALESCE (s.four_machine_score,'') fourMachineScore,
 			COALESCE (s.five_machine_score,'') fiveMachineScore,
 			COALESCE (s.six_machine_score,'') sixMachineScore,
-			COALESCE (s.interview_result,'') interviewResult
+			COALESCE (s.interview_result,'') interviewResult,
+			COALESCE (s.machine_score,'') machineScore
 		FROM
 			stu_user s
 		WHERE
@@ -247,5 +277,24 @@
 		WHERE
 			tea_id = #{teaId}
 			AND status = '00'
+	</update>
+
+	<!--更新学生课题的成绩信息（实践管理阶段）-->
+	<update id="updateCourseStatus" parameterType="map">
+		UPDATE stu_practice_rel
+		SET score = #{score}
+		WHERE
+			stu_id = #{stuId}
+			AND practice_id = #{practiceId}
+	</update>
+
+	<!--更新学生课题的课题信息（实践管理阶段）-->
+	<update id="auditCourseStatus" parameterType="map">
+		UPDATE stu_practice_rel
+		SET stu_practice_name = #{stuPracticeName},
+			status = #{status}
+		WHERE
+			stu_id = #{stuId}
+			AND practice_id = #{practiceId}
 	</update>
 </mapper> 
