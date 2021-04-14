@@ -87,6 +87,21 @@
             <if test="status != null and status != ''">
                 AND status = #{status}
             </if>
+            <if test="searchCondition != null and searchCondition != ''">
+                <choose>
+                    <when test="searchCondition == 'isComputer' ">
+                        AND t.is_computer = 1
+                    </when>
+                    <when test="searchCondition == 'isInterview' ">
+                        AND t.is_interview = 1
+                    </when>
+                    <when test="searchCondition == 'isCharge' ">
+                        AND t.is_charge = 1
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
                 AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>

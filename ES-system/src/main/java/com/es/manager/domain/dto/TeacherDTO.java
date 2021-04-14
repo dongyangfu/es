@@ -48,6 +48,16 @@ public class TeacherDTO extends SysUser implements Serializable {
      */
     private Integer interview = 0;
 
+    private String searchCondition;
+
+    public String getSearchCondition() {
+        return searchCondition;
+    }
+
+    public void setSearchCondition(String searchCondition) {
+        this.searchCondition = searchCondition;
+    }
+
     public Integer getCharge() {
         return charge;
     }
