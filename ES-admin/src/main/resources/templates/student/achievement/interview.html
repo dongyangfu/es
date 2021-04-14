@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('面试结果')" />
+    <th:block th:include="include :: select2-css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        div {
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        table, tr, td, th {
+            text-align: center;
+            border: 1px solid gray;
+            border-collapse: collapse;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        tr:nth-child(2n) {
+            background-color: rgba(88, 73, 65, 0.18);
+        }
+
+        tr:hover {
+            background-color: rgb(255, 235, 149);
+        }
+
+        #tt {
+            text-align: right;
+            padding-right: 20px;
+        }
+
+
+    </style>
+</head>
+<body class="gray-bg" onload="init()">
+<div  class="main-content"><!--class="container-div"-->
+    <form method="post" class="form-horizontal" id="form-user-edit" th:object="${stuUser}"><!--th:object="${user}"-->
+    <h4 class="form-header h4">面试结果查看</h4>
+        <input name="userId"  type="hidden"  th:field="*{StuId}" />
+        <input id="stuIde" name="stuIde"  type="hidden"  th:field="*{stuPro}" />
+        <table>
+            <tr>
+                <th>班级</th>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>面试结果</th>
+            </tr>
+            <tr>
+                <td th:text="*{stuClass}"></td>
+                <td th:text="*{stuNum}"></td>
+                <td th:text="*{stuName}"></td>
+                <td th:text="*{stuSex}"></td>
+                <td id="tvalue"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js" />
+<script th:inline="javascript">
+    var stuPro,tvalue;
+    function init() {
+        if (stuPro.value=="0" || stuPro.value=="1"){
+            $.modal.confirm("您没有权限查看！");
+        }
+        if (stupro.value==4){
+            tvalue.innerText="未参加";
+        }else if(stupro.value==5){
+            tvalue.innerText="请等待";
+        }else if(stupro.value==6){
+            tvalue.innerText="未通过";;
+        }else if(stupro.value==7){
+            tvalue.innerText="通过";
+        }
+    }
+</script>
+</body>
+</html>

@@ -50,7 +50,8 @@
     <form class="form-horizontal" id="form-stu-edit" th:object="${stuUser}">
         <h4 class="form-header h4">机试成绩查询</h4>
         <input name="userId"  type="hidden"  th:value="*{StuId}" />
-        <input id="stuIde" name="stuIde"  type="hidden"  th:value="*{stuPro}" />
+        <input id="stuPro" name="stuIde"  type="hidden"  th:value="*{stuPro}" />
+        姓名：<h th:text="*{stuName}"></h> &nbsp&nbsp&nbsp&nbsp 学号：<h th:text="*{stuNum}"></h> &nbsp&nbsp&nbsp&nbsp 班级：<h th:text="*{stuClass}"></h>
         <table>
             <tr>
                 <th>机试顺序</th>
@@ -91,28 +92,12 @@
 <th:block th:include="include :: select2-js" />
 <script type="text/javascript">
     var prefix = ctx + "teacher/commit";
-    var stuIde = document.getElementById("stuIde");
-
-    function submitHandler() {
-        if ($.validate.form()) {
-            $.modal.confirm("提交后就不可再更改，是否确定提交？", function() {
-                var data = $("#form-stu-edit").serializeArray();
-                $.operate.saveTab(prefix + "/edit", data);
-            })
-        }
-    }
-
-    function submitSaveHandler() {
-        if ($.validate.form()) {
-            $.modal.confirm("保存后还可以更改，是否确定保存？", function() {
-                var data = $("#form-stu-edit").serializeArray();
-                $.operate.saveTab(prefix + "/editTemp", data);
-            })
-        }
-    }
+    var stuPro = document.getElementById("stuPro");
     function init() {
-        if (stuIde.value=="0"){
+        if (stuPro.value=="0"){
             $.modal.confirm("您还未进行笔试");
+        }else if(stuPro.value=="1"){
+            $.modal.confirm("请耐心等待笔试成绩");
         }
     }
 </script>
