@@ -75,6 +75,8 @@
 <th:block th:include="include :: select2-js" />
 <script th:inline="javascript">
     var stuPro,tvalue;
+    stuPro = document.getElementById("stuPro");
+    tvalue = document.getElementById("tvalue");
     function init() {
         if (stuPro.value=="0" || stuPro.value=="1"){
             $.modal.confirm("您没有权限查看！");

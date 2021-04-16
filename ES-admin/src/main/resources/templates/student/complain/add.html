@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增申诉')" />
+	<th:block th:include="include :: jsonview-css" />
+
+	<style type="text/css">
+		.comments {
+			width:100%;/*自动适应父布局宽度*/
+			overflow:auto;
+			word-break:break-all;
+			/*在ie中解决断行问题(防止自动变为在一行显示，主要解决ie兼容问题，ie8中当设宽度为100%时，文本域类容超过一行时，
+            当我们双击文本内容就会自动变为一行显示，所以只能用ie的专有断行属性“word-break或word-wrap”控制其断行)*/
+		}
+	</style>
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m-t" id="form-notice-add">
+		<div class="form-group">
+			<label class="col-sm-2 control-label is-required">申诉标题：</label>
+			<div class="col-sm-10">
+				<input id="complainTitle" name="complainTitle"  class="form-control" type="text">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label is-required">申诉内容：</label>
+			<div class="col-sm-10">
+				<!--<pre id="noticeContent" name="noticeContent" th:field="*{noticeContent}" class="form-control"  type="text" disabled="true"/>-->
+				<!--<div class="form-control-static"><pre id="noticeContent"></pre></div>-->
+				<textarea  id="complainContent" name="complainContent" class="comments" style="height:expression((this.scrollHeight>950)?'950px':(this.scrollHeight+50)+'px');overflow:auto;" ></textarea>
+			</div>
+		</div>
+	</form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: summernote-js" />
+	<script type="text/javascript">
+		var prefix = ctx + "student/complain";
+
+
+		$("#form-notice-add").validate({
+			focusCleanup: true
+		});
+
+		function submitHandler() {
+			if ($.validate.form()) {
+				var sHTML = $('.comments').summernote('code');
+				$("#complainContent").val(sHTML);
+				$.operate.save(prefix + "/add", $('#form-notice-add').serialize());
+			}
+		}
+	</script>
+</body>
+</html>

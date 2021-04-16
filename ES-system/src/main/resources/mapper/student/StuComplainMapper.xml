@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.student.mapper.StuComplainMapper">
+    
+    <resultMap type="StuComplain" id="StuComplainResult">
+        <result property="complainId"       column="stu_complain_id"       />
+        <result property="complainTitle"    column="stu_complain_title"    />
+        <result property="complainType"     column="stu_complain_type"     />
+        <result property="complainContent"  column="stu_complain_content"  />
+        <result property="feedbackContent"         column="stu_feedback"          />
+        <result property="status"         column="stu_status"          />
+        <result property="createBy"       column="stu_create_by"       />
+        <result property="createTime"     column="stu_create_time"     />
+        <result property="updateBy"       column="stu_update_by"       />
+        <result property="updateTime"     column="stu_update_time"     />
+        <result property="Satisfaction"         column="stu_satisfaction"          />
+    </resultMap>
+    
+    <sql id="selectComplainVo">
+        select stu_complain_id, stu_complain_title, stu_complain_type, stu_complain_content, stu_feedback, stu_status, stu_create_by, stu_create_time, stu_update_by, stu_update_time, stu_satisfaction
+		from stu_complain
+    </sql>
+    
+    <select id="selectcomplainById" parameterType="Long" resultMap="StuComplainResult">
+        <include refid="selectComplainVo"/>
+        where stu_complain_id = #{complainId}
+    </select>
+    
+    <!--<select id="selectStuComplainList" parameterType="StuComplain" resultMap="StuComplainResult">
+        <include refid="selectComplainVo"/>
+        <where>
+			<if test="complainTitle != null and complainTitle != ''">
+				AND stu_complain_title like concat('%', #{complainTitle}, '%')
+			</if>
+			<if test="noticeType != null and noticeType != ''">
+				AND stu_complain_type = #{complainType}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND stu_create_by like concat('%', #{createBy}, '%')
+			</if>
+		</where>
+    </select>-->
+    <select id="selectStuComplainList" parameterType="long" resultMap="StuComplainResult">
+        <include refid="selectComplainVo"/> a join stu_complain_ref b on a.stu_complain_id = b.complain_id and b.stu_id=#{stuId}
+    </select>
+    <insert id="insertStuComplain" parameterType="StuComplain">
+        insert into stu_complain (
+        <if test="complainTitle != null and complainTitle != '' ">stu_complain_title, </if>
+        <if test="complainType != null and complainType != '' ">stu_complain_type, </if>
+        <if test="complainContent != null and complainContent != '' ">stu_complain_content, </if>
+        <if test="feedbackContent != null and feedbackContent != '' ">stu_feedback, </if>
+        <if test="status != null and status != '' ">stu_status, </if>
+        <if test="Satisfaction != null and Satisfaction != ''">stu_satisfaction,</if>
+        <if test="createBy != null and createBy != ''">stu_create_by,</if>
+        stu_create_time
+        )values(
+        <if test="complainTitle != null and complainTitle != ''">#{complainTitle}, </if>
+        <if test="complainType != null and complainType != ''">#{complainType}, </if>
+        <if test="complainContent != null and complainContent != ''">#{complainContent}, </if>
+        <if test="feedbackContent != null and feedbackContent != ''">#{feedbackContent}, </if>
+        <if test="status != null and status != ''">#{status}, </if>
+        <if test="Satisfaction != null and Satisfaction != ''">#{Satisfaction},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+    <update id="updateStuComplain" parameterType="StuComplain">
+        update stu_complain
+        <set>
+            <if test="complainTitle != null and complainTitle != ''">stu_complain_title = #{complainTitle}, </if>
+            <if test="complainType != null and complainType != ''">stu_complain_type = #{complainType}, </if>
+            <if test="complainContent != null">stu_complain_content = #{complainContent}, </if>
+            <if test="feedbackContent != null">stu_feedback = #{feedbackContent}, </if>
+            <if test="status != null and status != ''">stu_status = #{status}, </if>
+            <if test="Satisfaction != null and Satisfaction != ''">stu_satisfaction = #{Satisfaction}, </if>
+            <if test="updateBy != null and updateBy != ''">stu_update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where stu_complain_id = #{complainId}
+    </update>
+
+    <select id="selectIds" parameterType="long" resultType="java.util.Arrays">
+        select complain_id from stu_complain_ref where stu_id = #{stuId}
+    </select>
+
+
+    <insert id="insertStuCom">
+        insert into stu_complain_ref(stu_id,complain_id) values (#{stuId},#{stuComplainId})
+    </insert>
+
+    <select id="selectIdBycomplainTitle" parameterType="String" resultType="long">
+        select stu_complain_id from stu_complain where stu_complain_title = #{complainTitle}
+    </select>
+    
+</mapper>

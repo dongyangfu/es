@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('申诉列表')" />
+</head>
+<body class="gray-bg" onload="init()">
+<div class="container-div">
+	<form th:object="${stuUser}">
+		<input id="stuPro" name="stuPro"  type="hidden"  th:value="*{stuPro}" />
+	</form>
+	<div class="row">
+		<div class="btn-group-sm" id="toolbar" role="group">
+			<a class="btn btn-warning" onclick="$.operate.add()" shiro:hasPermission="student:complain:add">
+				<i class="fa fa-download"></i> 点击申诉
+			</a>
+		</div>
+
+
+		<div class="col-sm-12 select-table table-striped">
+			<table id="bootstrap-table"></table>
+		</div>
+	</div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+	var editFlag = [[${@permission.hasPermi('student:complain:detail')}]];
+	var types = [[${@dict.getType('stu_complain_type')}]];
+	var datas = [[${@dict.getType('stu_notice_status')}]];
+	var prefix = ctx + "student/complain";
+	var  stuPro;
+	stuPro = document.getElementById("stuPro");
+	function init(){
+		if(stuPro.value=="0"){
+			$.modal.confirm("您还没有权限进行操作！");
+		}
+	}
+
+	$(function() {
+		var options = {
+			url: prefix + "/list",
+			detailUrl: prefix + "/detail/{id}",
+			createUrl: prefix + "/add",
+			updateUrl: prefix + "/edit/{id}",
+			removeUrl: prefix + "/remove",
+			modalName: "申诉",
+			columns: [{
+				checkbox: true
+			},
+				{
+					field : 'complainId',
+					title : '序号'
+				},
+				{
+					field : 'complainTitle',
+					title : '申诉标题'
+				},
+				{
+					field : 'createBy',
+					title : '申诉者'
+				},
+				{
+					field: 'createTime',
+					title: '申诉时间',
+					sortable: true
+				},
+				{
+					title: '操作',
+					align: 'center',
+					formatter: function(value, row, index) {
+						var actions = [];
+						actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.complainId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+						return actions.join('');
+					}
+				}]
+		};
+		$.table.init(options);
+	});
+</script>
+</body>
+</html>
