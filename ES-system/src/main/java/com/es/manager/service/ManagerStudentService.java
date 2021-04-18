@@ -22,6 +22,13 @@ public interface ManagerStudentService {
     List<StudentVO> getStudentList(StudentDTO studentDTO);
 
     /**
+     * 获取学生成绩
+     * @param studentDTO 获取学生成绩
+     * @return  List<StudentVO>
+     */
+    List<StudentVO> getStudentScoreList(StudentDTO studentDTO);
+
+    /**
      * 增加学生信息
      *
      * @param studentDTO 学生信息
@@ -34,6 +41,13 @@ public interface ManagerStudentService {
      * @param studentDTO 学生信息
      */
     int updateStudentById(StudentDTO studentDTO);
+
+    /**
+     * 修改学生分数信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudentScoreById(StudentDTO studentDTO);
 
     /**
      * 删除多个学生信息

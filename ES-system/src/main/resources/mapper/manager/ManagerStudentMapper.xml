@@ -59,6 +59,8 @@
         <result property="englishScore"     column="english_score"     />
         <result property="mathScore"     column="math_score"     />
         <result property="cScore"     column="c_score"     />
+        <result property="resultScore"     column="result_score"     />
+        <result property="teaJobNumber"     column="tea_job_number"     />
 
         <association property="dept"     column="dept_id" javaType="SysDept" resultMap="deptResult" />
         <collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
@@ -107,6 +109,41 @@
             </if>
         </where>
     </select>
+
+    <select id="getStudentScoreList" parameterType="StudentDTO" resultMap="result">
+        select
+        t.stu_id,t.stu_num,t.stu_name,t.stu_class,t.stu_period,t.machine_score,t.interview_result,t.result_score,
+        u.tea_job_number
+        from stu_user t
+        left join tea_stu_rel r on t.stu_id = r.stu_id
+        left join tea_user u on r.tea_id = u.tea_id
+        <where>
+            <if test="stuId != null and  stuId != ''">
+                AND t.stu_id = #{stuId}
+            </if>
+            <if test="stuName != null and stuName != ''">
+                AND stu_name like concat('%', #{stuName}, '%')
+            </if>
+            <if test="stuNum != null and stuNum != ''">
+                AND stu_num like concat('%', #{stuNum}, '%')
+            </if>
+            <if test="stuClass != null and stuClass != ''">
+                AND stu_class = #{stuClass}
+            </if>
+            <if test="stuPeriod != null and stuPeriod != ''">
+                AND stu_period = #{stuPeriod}
+            </if>
+            <if test="teaJobNumber != null and teaJobNumber != ''">
+                AND tea_job_number = #{teaJobNumber}
+            </if>
+            <if test="stuPro != null and stuPro != 0 ">
+                AND stu_pro = #{stuPro}
+            </if>
+        </where>
+        group by stu_id order by stu_id desc
+    </select>
+
+
     <select id="getStudent" parameterType="TeaUser" resultMap="result">
         select
         t.stu_id,t.tea_profess,t.stu_num,t.status
@@ -137,7 +174,8 @@
         stu_tel,
         c_score,
         english_score,
-        math_score
+        math_score,
+        stu_period
         )values(
         <trim prefix="" suffixOverrides=",">
             <if test="userId != null and userId != '' ">#{userId},</if>
@@ -148,6 +186,7 @@
             <if test="cScore != null and cScore != '' ">#{cScore},</if>
             <if test="englishScore != null and englishScore != '' ">#{englishScore},</if>
             <if test="mathScore != null and mathScore != '' ">#{mathScore},</if>
+            <if test="stuPeriod != null and stuPeriod != '' ">#{stuPeriod},</if>
         </trim>
         )
     </insert>
@@ -162,6 +201,15 @@
             <if test="cScore != null and cScore != '' ">c_score = #{cScore},</if>
             <if test="englishScore != null and englishScore != '' ">english_score = #{englishScore},</if>
             <if test="mathScore != null and mathScore != '' ">math_score = #{mathScore},</if>
+        </set>
+        where stu_id = #{stuId}
+    </update>
+
+    <update id="updateStudentScoreById" parameterType="StudentDTO">
+        update stu_user
+        <set>
+            <if test="interviewResult != null and interviewResult != '' ">interview_result = #{interviewResult},</if>
+            <if test="machineScore != null and machineScore != '' ">machine_score = #{machineScore},</if>
         </set>
         where stu_id = #{stuId}
     </update>

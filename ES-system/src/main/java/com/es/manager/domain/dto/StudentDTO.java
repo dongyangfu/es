@@ -144,6 +144,30 @@ public class StudentDTO extends SysUser implements Serializable {
      * 第一学期c语言成绩
      */
     private Integer cScore = 0;
+    /**
+     * 学生总成绩
+     */
+    private Integer resultScore = 0;
+    /**
+     * 教师工号
+     */
+    private String teaJobNumber;
+
+    public String getTeaJobNumber() {
+        return teaJobNumber;
+    }
+
+    public void setTeaJobNumber(String teaJobNumber) {
+        this.teaJobNumber = teaJobNumber;
+    }
+
+    public Integer getResultScore() {
+        return resultScore;
+    }
+
+    public void setResultScore(Integer resultScore) {
+        this.resultScore = resultScore;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

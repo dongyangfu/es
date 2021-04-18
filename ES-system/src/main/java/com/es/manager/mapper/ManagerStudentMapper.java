@@ -23,6 +23,13 @@ public interface ManagerStudentMapper {
     List<StudentVO> getStudentList(StudentDTO StudentDTO);
 
     /**
+     * 获取学生成绩
+     * @param studentDTO 获取学生成绩
+     * @return  List<StudentVO>
+     */
+    List<StudentVO> getStudentScoreList(StudentDTO studentDTO);
+
+    /**
      * 增加老师信息
      *
      * @param StudentDTO 老师信息
@@ -35,6 +42,13 @@ public interface ManagerStudentMapper {
      * @param StudentDTO 老师信息
      */
     int updateStudentById(StudentDTO StudentDTO);
+
+    /**
+     * 修改学生分数信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudentScoreById(StudentDTO studentDTO);
 
     /**
      * 删除多个老师信息

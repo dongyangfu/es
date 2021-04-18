@@ -61,6 +61,7 @@ public class StudentVO extends SysUser implements Serializable {
     /**
      * 学生属于哪一年级
      */
+    @Excel(name = "学生届数")
     private String stuPeriod;
     /**
      * 学生特长
@@ -78,15 +79,18 @@ public class StudentVO extends SysUser implements Serializable {
     /**
      * 机试总成绩
      */
+    @Excel(name = "机试总成绩")
     private int machineScore;
 
     /**
      * 面试成绩
      */
+    @Excel(name = "面试成绩")
     private int interviewResult;
     /**
      * 面试成绩状态
      */
+
     private String irStatus;
     /**
      * 第一题机试成绩
@@ -151,6 +155,45 @@ public class StudentVO extends SysUser implements Serializable {
      */
     @Excel(name = "c语言成绩")
     private String cScore;
+
+    /**
+     * 学生总成绩
+     */
+    @Excel(name = "学生总成绩")
+    private Integer resultScore = 0;
+    /**
+     * 导师教师工号
+     */
+    @Excel(name = "导师教师工号")
+    private String teaJobNumber;
+    /**
+     * 导师id
+     */
+    private Long teaId;
+
+    public Integer getResultScore() {
+        return resultScore;
+    }
+
+    public void setResultScore(Integer resultScore) {
+        this.resultScore = resultScore;
+    }
+
+    public String getTeaJobNumber() {
+        return teaJobNumber;
+    }
+
+    public void setTeaJobNumber(String teaJobNumber) {
+        this.teaJobNumber = teaJobNumber;
+    }
+
+    public Long getTeaId() {
+        return teaId;
+    }
+
+    public void setTeaId(Long teaId) {
+        this.teaId = teaId;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

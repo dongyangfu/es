@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +41,9 @@ import java.util.List;
 public class ManagerStudentServiceImpl implements ManagerStudentService {
 
     private static final Logger log = LoggerFactory.getLogger(ManagerStudentServiceImpl.class);
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+
     @Resource
     private ManagerStudentMapper managerStudentMapper;
 
@@ -67,13 +72,20 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     }
 
     @Override
+    public List<StudentVO> getStudentScoreList(StudentDTO studentDTO) {
+        return managerStudentMapper.getStudentScoreList(studentDTO);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public int insertStudent(StudentDTO studentDTO) {
         // 新增用户信息
         int rows = userMapper.insertUser(studentDTO);
         // 新增用户与角色管理
         insertUserRole(studentDTO.getUserId(), studentDTO.getRoleIds());
-        // 新增教师信息
+        // 新增学生信息
+        // 根据当前时间筛选出今年的学生，如果是21届，2022年春天才会选拔，
+        studentDTO.setStuPeriod(String.valueOf(Integer.parseInt(sdf.format(new Date()))-1));
         int i = managerStudentMapper.insertStudent(studentDTO);
         rows += i;
         return rows;
@@ -89,8 +101,14 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
         int sum = userMapper.updateUser(studentDTO);
         // 新增用户与角色管理
         insertUserRole(studentDTO.getUserId(), studentDTO.getRoleIds());
-        // 修改教师信息
+        // 修改学生信息
         return sum + managerStudentMapper.updateStudentById(studentDTO);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateStudentScoreById(StudentDTO studentDTO) {
+        return managerStudentMapper.updateStudentScoreById(studentDTO);
     }
 
     @Override
@@ -104,7 +122,7 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
         userRoleMapper.deleteUserRole(userIds);
         // 删除用户信息
         userMapper.deleteUserByIds(userIds);
-        // 删除教师信息
+        // 删除学生信息
         return managerStudentMapper.deleteStudentByIds(userIds);
     }
 
