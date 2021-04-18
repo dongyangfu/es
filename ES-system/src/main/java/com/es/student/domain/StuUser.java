@@ -62,7 +62,7 @@ public class StuUser extends BaseEntity {
      */
     private int stuIde;
     /**
-     * 申请流程状态，0为未进行面试，1为进行面试未通过，3笔试通过，4为未参加面试，5为参加面试未通过，6面试通过
+     * 申请流程状态，0为未进行笔试，1为笔试后等待成绩，2为进行笔试未通过，3笔试通过，4为未参加面试，5为等待状态，6为参加面试未通过，7面试通过
      */
     private int stuPro;
 
