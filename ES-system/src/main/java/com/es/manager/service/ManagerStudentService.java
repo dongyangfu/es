@@ -5,7 +5,6 @@ import com.es.manager.domain.dto.StudentDTOSuper;
 import com.es.manager.domain.vo.StudentVO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: fudy
@@ -23,8 +22,9 @@ public interface ManagerStudentService {
 
     /**
      * 获取学生成绩
+     *
      * @param studentDTO 获取学生成绩
-     * @return  List<StudentVO>
+     * @return List<StudentVO>
      */
     List<StudentVO> getStudentScoreList(StudentDTO studentDTO);
 
@@ -75,4 +75,18 @@ public interface ManagerStudentService {
      */
     String checkStuNumUnique(StudentDTO studentDTO);
 
+    /**
+     * 返回n个进入预选拔的学生
+     *
+     * @param number 进入预选拔学生个数
+     * @return 选拔成功的学生id
+     */
+    Long[] firstProcessStuIds(int number);
+
+    /**
+     * 批量修改学生信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudentByIds(StudentDTO studentDTO);
 }

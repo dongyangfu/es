@@ -3,6 +3,7 @@ package com.es.manager.mapper;
 import com.es.manager.domain.dto.StudentDTO;
 import com.es.manager.domain.dto.StudentDTOSuper;
 import com.es.manager.domain.vo.StudentVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -75,4 +76,19 @@ public interface ManagerStudentMapper {
      * @return  int
      */
     StudentVO checkStuNumUnique(StudentDTO studentDTO);
+
+    /**
+     * 返回n个进入预选拔的学生
+     *
+     * @param studentDTO 进入预选拔学生个数
+     * @return 选拔成功的学生id
+     */
+    List<StudentVO> firstProcessStuIds(StudentDTO studentDTO);
+
+    /**
+     * 批量修改学生信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudentByIds(StudentDTO studentDTO);
 }

@@ -214,6 +214,22 @@
         where stu_id = #{stuId}
     </update>
 
+    <update id="updateStudentByIds" parameterType="StudentDTO">
+        update stu_user
+        <set>
+            <if test="stuIde != null and stuIde != '' ">stu_ide = #{stuIde},</if>
+        </set>
+        where
+         1 = 1
+         and
+         stu_id in
+        <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </update>
+
+
+
     <delete id="deleteStudentByIds" parameterType="Long">
         delete from stu_user where stu_id in
         <foreach item="stuId" collection="array" open="(" separator="," close=")">
@@ -227,5 +243,17 @@
 		select stu_id, stu_num from stu_user where stu_num=#{stuNum} limit 1
 	</select>
 
+    <select id="firstProcessStuIds"  parameterType="StudentDTO" resultMap="result">
+        select
+        t.stu_id
+        FROM
+        stu_user t
+        where 1 = 1
+            and english_score >= 60
+            and math_score >= 60
+            and c_score >= 60
+        order by (english_score+math_score+c_score) desc
+        limit #{processPersonNum}
+    </select>
 
 </mapper>

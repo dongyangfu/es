@@ -6,11 +6,15 @@ import com.es.common.core.controller.BaseController;
 import com.es.common.core.domain.AjaxResult;
 import com.es.common.core.page.TableDataInfo;
 import com.es.common.enums.BusinessType;
+import com.es.common.utils.PeriodUtil;
 import com.es.common.utils.ShiroUtils;
 import com.es.common.utils.poi.ExcelUtil;
+import com.es.manager.domain.dto.ManagerProcessStatusDTO;
 import com.es.manager.domain.dto.StudentDTO;
+import com.es.manager.domain.vo.ManagerProcessStatusVO;
 import com.es.manager.domain.vo.StudentScoreVO;
 import com.es.manager.domain.vo.StudentVO;
+import com.es.manager.service.ManagerProcessStatusService;
 import com.es.manager.service.ManagerStudentService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -22,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +37,16 @@ import java.util.List;
  **/
 @Controller
 @RequestMapping("/manager/teacher/set")
-public class ManagerProcessController extends BaseController {
+public class ManagerScoreProcessController extends BaseController {
 
-    private final static Logger log = LoggerFactory.getLogger(ManagerProcessController.class);
+    private final static Logger log = LoggerFactory.getLogger(ManagerScoreProcessController.class);
     private static final String prefix = "/manager/teacher/set";
 
     @Autowired
     private ManagerStudentService managerStudentService;
+
+    @Resource
+    private ManagerProcessStatusService managerProcessStatusService;
 
     @RequiresPermissions("manager:teacher:set")
     @GetMapping()
@@ -86,13 +94,36 @@ public class ManagerProcessController extends BaseController {
     public AjaxResult export(StudentDTO dto) {
         List<StudentVO> studentList = managerStudentService.getStudentScoreList(dto);
         List<StudentScoreVO> studentScoreList = new ArrayList<>();
-        studentList.forEach(x->{
+        studentList.forEach(x -> {
             StudentScoreVO studentScoreVO = new StudentScoreVO();
-            BeanUtils.copyProperties(x,studentScoreVO);
+            BeanUtils.copyProperties(x, studentScoreVO);
             studentScoreList.add(studentScoreVO);
         });
         ExcelUtil<StudentScoreVO> util = new ExcelUtil<>(StudentScoreVO.class);
         return util.exportExcel(studentScoreList, "学生分数数据");
     }
-    
+
+    /**
+     * 预选拔
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @GetMapping("/firstProcessStudent")
+    public String firstProcessStudent(ModelMap mmap) {
+        ManagerProcessStatusDTO dto = new ManagerProcessStatusDTO();
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
+        mmap.put("vo", vo);
+        return prefix + "/firstProcessStudent";
+    }
+
+    /**
+     * 预选拔->机试
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/firstProcessStudent/toTwoProcess")
+    @ResponseBody
+    public AjaxResult toTwoProcess(ManagerProcessStatusDTO dto1,ModelMap map) {
+        return  toAjax(managerProcessStatusService.toTwoProcessComputer(dto1));
+    }
+
 }

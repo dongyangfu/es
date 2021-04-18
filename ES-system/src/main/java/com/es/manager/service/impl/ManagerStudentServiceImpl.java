@@ -5,6 +5,7 @@ import com.es.common.constant.UserConstants;
 import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.text.Convert;
 import com.es.common.exception.BusinessException;
+import com.es.common.utils.PeriodUtil;
 import com.es.common.utils.StringUtils;
 import com.es.common.utils.bean.BeanUtils;
 import com.es.common.utils.security.Md5Utils;
@@ -20,6 +21,7 @@ import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysConfigService;
 import com.es.system.service.ISysUserService;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author: fudy
@@ -42,7 +45,6 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
 
     private static final Logger log = LoggerFactory.getLogger(ManagerStudentServiceImpl.class);
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 
     @Resource
     private ManagerStudentMapper managerStudentMapper;
@@ -85,7 +87,7 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
         insertUserRole(studentDTO.getUserId(), studentDTO.getRoleIds());
         // 新增学生信息
         // 根据当前时间筛选出今年的学生，如果是21届，2022年春天才会选拔，
-        studentDTO.setStuPeriod(String.valueOf(Integer.parseInt(sdf.format(new Date()))-1));
+        studentDTO.setStuPeriod(PeriodUtil.getNowPeriod());
         int i = managerStudentMapper.insertStudent(studentDTO);
         rows += i;
         return rows;
@@ -187,6 +189,21 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
             return UserConstants.USER_PHONE_NOT_UNIQUE;
         }
         return UserConstants.USER_PHONE_UNIQUE;
+    }
+
+    @Override
+    public Long[] firstProcessStuIds( int number) {
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setProcessPersonNum(number);
+        List<StudentVO> studentVOS = managerStudentMapper.firstProcessStuIds(studentDTO);
+        List<Long> collect = studentVOS.stream().map(StudentVO::getStuId).collect(Collectors.toList());
+        Long [] result = new Long[collect.size()];
+        return collect.toArray(result);
+    }
+
+    @Override
+    public int updateStudentByIds(StudentDTO studentDTO) {
+        return managerStudentMapper.updateStudentByIds(studentDTO);
     }
 
     public void insertUserRole(Long userId, Long[] roleIds) {

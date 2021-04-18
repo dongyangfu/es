@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.manager.mapper.ManagerProcessStatusMapper">
+
+
+    <resultMap id="result" type="ManagerProcessStatusVO">
+        <id property="id" column="id"/>
+        <result property="processStatus" column="process_status"/>
+        <result property="period" column="period"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+
+    <select id="getManagerProcessStatus" parameterType="ManagerProcessStatusDTO" resultMap="result">
+        select
+        t.id,t.process_status,t.period,t.status
+        FROM
+        manager_process_status t
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="processStatus != null">
+                AND process_status = #{processStatus}
+            </if>
+            <if test="period != null">
+                AND period = #{period}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <update id="update" parameterType="ManagerProcessStatusDTO" >
+        update manager_process_status
+        <set>
+            <if test="processStatus != null and processStatus != '' ">process_status = #{processStatus},</if>
+        </set>
+        where
+        1 = 1
+        <if test="period != null">
+            AND period = #{period}
+        </if>
+    </update>
+
+
+</mapper>
