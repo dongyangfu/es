@@ -113,7 +113,7 @@ public class ManagerScoreProcessController extends BaseController {
         dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
         ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
         mmap.put("vo", vo);
-        return prefix + "/firstProcessStudent";
+        return prefix + "/firstProcessStudent1";
     }
 
     /**
@@ -122,7 +122,30 @@ public class ManagerScoreProcessController extends BaseController {
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/firstProcessStudent/toTwoProcess")
     @ResponseBody
-    public AjaxResult toTwoProcess(ManagerProcessStatusDTO dto1,ModelMap map) {
+    public AjaxResult toTwoProcess(ManagerProcessStatusDTO dto1) {
+        return  toAjax(managerProcessStatusService.toTwoProcessComputer(dto1));
+    }
+
+    /**
+     * 机试成绩汇总
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @GetMapping("/computerScoreResult")
+    public String computerScoreResult(ModelMap mmap) {
+        ManagerProcessStatusDTO dto = new ManagerProcessStatusDTO();
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
+        mmap.put("vo", vo);
+        return prefix + "/computerScore2";
+    }
+
+    /**
+     * 机试成绩汇总->选定面试教师
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/computerScoreResult/toThirdProcess")
+    @ResponseBody
+    public AjaxResult toThirdProcess(ManagerProcessStatusDTO dto1) {
         return  toAjax(managerProcessStatusService.toTwoProcessComputer(dto1));
     }
 
