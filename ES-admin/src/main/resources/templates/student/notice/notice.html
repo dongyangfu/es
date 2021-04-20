@@ -39,7 +39,7 @@
 </div>
 <th:block th:include="include :: footer" />
 <script th:inline="javascript">
-	var editFlag = [[${@permission.hasPermi('student:notice:detail')}]];
+	var editFlag = true;
 	var types = [[${@dict.getType('stu_notice_type')}]];
 	var datas = [[${@dict.getType('stu_notice_status')}]];
 	var prefix = ctx + "student/notice";

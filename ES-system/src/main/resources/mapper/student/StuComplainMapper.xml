@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null and status != ''">stu_status = #{status}, </if>
             <if test="Satisfaction != null and Satisfaction != ''">stu_satisfaction = #{Satisfaction}, </if>
             <if test="updateBy != null and updateBy != ''">stu_update_by = #{updateBy},</if>
-            update_time = sysdate()
+            stu_update_time = sysdate()
         </set>
         where stu_complain_id = #{complainId}
     </update>

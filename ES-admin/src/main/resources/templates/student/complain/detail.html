@@ -15,9 +15,10 @@
 	</style>
 </head>
 <body class="white-bg" onload="init()">
-	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-	<form class="form-horizontal m-t" id="signupForm" th:object="${complain}">
+	<form class="form-horizontal m-t" id="form-notice-edit" th:object="${complain}">
+		<div class="wrapper wrapper-content animated fadeInRight ibox-content">
 	 	<input id="complainId" name="complainId" th:field="*{complainId}"  type="hidden">
+		<input id="Satisfaction1"  th:field="*{Satisfaction}" type="hidden">
 		<div class="form-group">
 			<label class="col-sm-2 control-label is-required">申诉标题：</label>
 			<div class="col-sm-10">
@@ -44,7 +45,7 @@
 				<textarea  th:field="*{complainContent}" class="comments" style="height:expression((this.scrollHeight>950)?'950px':(this.scrollHeight+50)+'px');overflow:auto;" disabled="true"></textarea>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" id="sa">
 			<label class="col-sm-2 control-label">反馈内容：</label>
 			<div class="col-sm-10">
 				<!--<pre id="noticeContent" name="noticeContent" th:field="*{noticeContent}" class="form-control"  type="text" disabled="true"/>-->
@@ -52,16 +53,54 @@
 				<textarea  id="feedbackContent" th:field="*{feedbackContent}" class="comments" style="height:expression((this.scrollHeight>950)?'950px':(this.scrollHeight+50)+'px');overflow:auto;" disabled="true"></textarea>
 			</div>
 		</div>
-	</form>
+		<div class="form-group" id="div">
+			<div class="radio-box">
+				<input type="radio"  name="Satisfaction" id="Satisfaction2" value="1"/>
+				<label for="Satisfaction2">满意</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio"  name="Satisfaction" id="Satisfaction3" value="2" />
+				<label for="Satisfaction3">不满意</label>
+			</div>
+		</div>
     </div>
+	<div class="row">
+		<div class="col-sm-offset-5 col-sm-10">
+			<button id="button1" type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>提 交</button>&nbsp;&nbsp;&nbsp;
+			<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+		</div>
+	</div>
+	</form>
     <th:block th:include="include :: footer" />
     <th:block th:include="include :: jsonview-js" />
 	<script type="text/javascript">
 		var feedbackContent;
+		var prefix=ctx + "student/complain";
 		function init(){
 			feedbackContent = document.getElementById("feedbackContent");
-			if (feedbackContent.value=="" || feedbackContent==null){
+			if ((feedbackContent.value=="" || feedbackContent.value==null)){
 				feedbackContent.innerText="请耐心等待反馈..."
+				$("#button1").hide();
+				$("#div").hide();
+			}
+			if ($("#Satisfaction1").val()>"0"){
+				$("#button1").hide();
+				$("#div").hide();
+				if ($("#Satisfaction1").val()=="1") {
+					$("#sa").append("<p>满意度：  满意</p>");
+				}else {
+					$("#sa").append("<p>满意度：  不满意</p>");
+				}
+			}
+
+		}
+
+		function submitHandler() {
+			if ($.validate.form()) {
+				var data = $('#form-notice-edit').serialize();
+				var satisfaction = $("[name='Satisfaction']:checked").val();
+				data = $.param({"Satisfaction":satisfaction}) + "&" + data;
+				$.operate.save(prefix + "/edit", data);
 			}
 		}
 

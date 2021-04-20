@@ -770,6 +770,16 @@ var table = {
                     callBack(true);
                 });
             },
+            confirmSpe: function (content, callBack) {
+                layer.confirm(content, {
+                    icon: 3,
+                    title: "系统提示",
+                    btn: ['确认']
+                }, function (index) {
+                    layer.close(index);
+                    callBack(true);
+                });
+            },
             // 弹出层指定宽度
             open: function (title, url, width, height, callback) {
             	// 如果是移动端，就使用自适应大小弹窗

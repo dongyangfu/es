@@ -27,7 +27,6 @@ public class StuNoticeController extends BaseController {
     @Autowired
     private IStuNoticeService noticeService;
 
-    @RequiresPermissions("student:notice:view")
     @GetMapping()
     public String notice() {
         return prefix + "/notice";
@@ -36,7 +35,6 @@ public class StuNoticeController extends BaseController {
     /**
      * 查询公告列表
      */
-    @RequiresPermissions("student:notice:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(StuNotice notice) {
@@ -45,7 +43,6 @@ public class StuNoticeController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("student:notice:detail")
     @GetMapping("/detail/{noticeId}")
     public String detail(@PathVariable("noticeId") Long noticeId, ModelMap mmap) {
         mmap.put("notice", noticeService.selectNoticeById(noticeId));
@@ -68,7 +65,6 @@ public class StuNoticeController extends BaseController {
     /**
      * 修改保存公告
      */
-    @RequiresPermissions("student:notice:edit")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody

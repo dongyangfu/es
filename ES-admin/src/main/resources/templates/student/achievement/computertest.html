@@ -95,9 +95,12 @@
     var stuPro = document.getElementById("stuPro");
     function init() {
         if (stuPro.value=="0"){
-            $.modal.confirm("您还未进行笔试");
+            $.modal.confirmSpe("您还未进行笔试",function () {
+                $.modal.closeTab()});
+
         }else if(stuPro.value=="1"){
-            $.modal.confirm("请耐心等待笔试成绩");
+            $.modal.confirmSpe("请耐心等待笔试成绩",function () {
+                $.modal.closeTab()});
         }
     }
 </script>

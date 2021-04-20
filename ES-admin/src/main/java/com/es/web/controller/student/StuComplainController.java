@@ -38,7 +38,7 @@ public class StuComplainController extends BaseController {
     @Autowired
     private IStuNoticeService noticeService;
 
-    @RequiresPermissions("student:complain:view")
+
     @GetMapping()
     public String complain(ModelMap mmap) {
         Long stuUsrId = ShiroUtils.getUserId();
@@ -50,7 +50,6 @@ public class StuComplainController extends BaseController {
     /**
      * 查询申诉列表
      */
-    @RequiresPermissions("student:complain:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list() {
@@ -71,7 +70,6 @@ public class StuComplainController extends BaseController {
     /**
      * 新增保存申诉
      */
-    @RequiresPermissions("student:complain:add")
     @Log(title = "申诉", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -80,7 +78,6 @@ public class StuComplainController extends BaseController {
         return toAjax(iStuComplainService.insertStuComplain(stuComplain,ShiroUtils.getUserId()));
     }
 
-    @RequiresPermissions("student:complain:detail")
     @GetMapping("/detail/{complainId}")
     public String detail(@PathVariable("complainId") Long complainId, ModelMap mmap) {
         mmap.put("complain", iStuComplainService.selectcomplainById(complainId));
@@ -94,22 +91,21 @@ public class StuComplainController extends BaseController {
     /**
      * 修改公告
      */
-    @GetMapping("/edit/{noticeId}")
-    public String edit(@PathVariable("noticeId") Long noticeId, ModelMap mmap) {
+    @GetMapping("/edit/{complainId}")
+    public String edit(@PathVariable("complainId") Long complainId, ModelMap mmap) {
         //mmap.put("notice", noticeService.selectNoticeById(noticeId));
         return prefix + "/edit";
     }
 
     /**
-     * 修改保存公告
+     * 修改保存申诉
      */
-    @RequiresPermissions("student:notice:edit")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(StuNotice notice) {
-        notice.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(noticeService.updateNotice(notice));
+    public AjaxResult editSave(StuComplain stuComplain) {
+        stuComplain.setUpdateBy(ShiroUtils.getLoginName());
+        return toAjax(iStuComplainService.updateStuComplain(stuComplain));
     }
 
 }

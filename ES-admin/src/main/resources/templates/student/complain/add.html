@@ -20,7 +20,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label is-required">申诉标题：</label>
 			<div class="col-sm-10">
-				<input id="complainTitle" name="complainTitle"  class="form-control" type="text">
+				<input id="complainTitle" name="complainTitle"  class="form-control" type="text" required>
 			</div>
 		</div>
 		<div class="form-group">
@@ -28,7 +28,7 @@
 			<div class="col-sm-10">
 				<!--<pre id="noticeContent" name="noticeContent" th:field="*{noticeContent}" class="form-control"  type="text" disabled="true"/>-->
 				<!--<div class="form-control-static"><pre id="noticeContent"></pre></div>-->
-				<textarea  id="complainContent" name="complainContent" class="comments" style="height:expression((this.scrollHeight>950)?'950px':(this.scrollHeight+50)+'px');overflow:auto;" ></textarea>
+				<textarea  id="complainContent" name="complainContent" class="comments" style="height:expression((this.scrollHeight>950)?'950px':(this.scrollHeight+50)+'px');overflow:auto;" required></textarea>
 			</div>
 		</div>
 	</form>
@@ -45,8 +45,6 @@
 
 		function submitHandler() {
 			if ($.validate.form()) {
-				var sHTML = $('.comments').summernote('code');
-				$("#complainContent").val(sHTML);
 				$.operate.save(prefix + "/add", $('#form-notice-add').serialize());
 			}
 		}

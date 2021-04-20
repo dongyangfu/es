@@ -33,7 +33,6 @@ public class StuUserController extends BaseController {
     @Autowired
     private IStuUserService iStuUserService;
 
-    @RequiresPermissions("student:apply:view")
     @GetMapping()
     public String apply(ModelMap mmap) {
         Long stuUsrId = ShiroUtils.getUserId();
@@ -52,7 +51,7 @@ public class StuUserController extends BaseController {
     public AjaxResult  tempsubmit(StuUser stuUser) {
         int uFlag = iStuUserService.updateStuUser1(stuUser);
         if(uFlag>0){
-            return success("保存成功！");
+            return success();
         }
         return error("保存失败，请联系管理员！");
     }
@@ -60,7 +59,6 @@ public class StuUserController extends BaseController {
      * 完善提交申请
      */
     @Transactional(rollbackFor = Exception.class)
-    @RequiresPermissions("student:apply:submit")
     @PostMapping("/submit")
     @ResponseBody
     public AjaxResult  submit(StuUser stuUser) {

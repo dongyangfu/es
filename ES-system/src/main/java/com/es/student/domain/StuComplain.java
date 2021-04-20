@@ -47,6 +47,7 @@ public class StuComplain extends BaseEntity {
         Satisfaction = satisfaction;
     }
 
+
     /**
      * 创建人
      */
@@ -71,7 +72,8 @@ public class StuComplain extends BaseEntity {
     /**
      * 满意度
      */
-    private int Satisfaction;//0为满意，1为不满意
+    private int Satisfaction;//1为满意，2为不满意
+
 
 
 

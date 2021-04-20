@@ -51,7 +51,8 @@
     <form method="post" class="form-horizontal" id="form-user-edit" th:object="${stuUser}"><!--th:object="${user}"-->
     <h4 class="form-header h4">面试结果查看</h4>
         <input name="userId"  type="hidden"  th:field="*{StuId}" />
-        <input id="stuIde" name="stuIde"  type="hidden"  th:field="*{stuPro}" />
+        <input id="stuPro" name="stuPro"  type="hidden"  th:field="*{stuPro}" />
+        <input id="interviewResult" name="interviewResult"  type="hidden"  th:field="*{interviewResult}" />
         <table>
             <tr>
                 <th>班级</th>
@@ -74,21 +75,15 @@
 <th:block th:include="include :: footer" />
 <th:block th:include="include :: select2-js" />
 <script th:inline="javascript">
-    var stuPro,tvalue;
+    var stuPro,tvalue,interviewResult;
     stuPro = document.getElementById("stuPro");
     tvalue = document.getElementById("tvalue");
     function init() {
-        if (stuPro.value=="0" || stuPro.value=="1"){
-            $.modal.confirm("您没有权限查看！");
-        }
-        if (stupro.value==4){
-            tvalue.innerText="未参加";
-        }else if(stupro.value==5){
-            tvalue.innerText="请等待";
-        }else if(stupro.value==6){
-            tvalue.innerText="未通过";;
-        }else if(stupro.value==7){
-            tvalue.innerText="通过";
+        if (stuPro.value<"6"){
+            $.modal.confirmSpe("您还没有权限进行查看！",function () {
+                $.modal.closeTab()});
+        } else {
+            tvalue.innerText=$("#interviewResult").val();
         }
     }
 </script>
