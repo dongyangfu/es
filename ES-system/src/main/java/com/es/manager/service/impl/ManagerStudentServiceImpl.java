@@ -1,6 +1,5 @@
 package com.es.manager.service.impl;
 
-import com.es.common.constant.TeacherProfessTypeEnum;
 import com.es.common.constant.UserConstants;
 import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.text.Convert;
@@ -11,8 +10,6 @@ import com.es.common.utils.bean.BeanUtils;
 import com.es.common.utils.security.Md5Utils;
 import com.es.manager.domain.dto.StudentDTO;
 import com.es.manager.domain.dto.StudentDTOSuper;
-import com.es.manager.domain.dto.StudentDTO;
-import com.es.manager.domain.dto.StudentDTOSuper;
 import com.es.manager.domain.vo.StudentVO;
 import com.es.manager.mapper.ManagerStudentMapper;
 import com.es.manager.service.ManagerStudentService;
@@ -21,7 +18,6 @@ import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysConfigService;
 import com.es.system.service.ISysUserService;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,6 +105,11 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     @Transactional(rollbackFor = Exception.class)
     public int updateStudentScoreById(StudentDTO studentDTO) {
         return managerStudentMapper.updateStudentScoreById(studentDTO);
+    }
+
+    @Override
+    public int updateStudent(StudentDTO studentDTO) {
+        return managerStudentMapper.updateStudent(studentDTO);
     }
 
     @Override
@@ -202,8 +201,23 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     }
 
     @Override
+    public Long[] twoProcessStuIds(int number) {
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setProcessPersonNum(number);
+        List<StudentVO> studentVOS = managerStudentMapper.twoProcessStuIds(studentDTO);
+        List<Long> collect = studentVOS.stream().map(StudentVO::getStuId).collect(Collectors.toList());
+        Long [] result = new Long[collect.size()];
+        return collect.toArray(result);
+    }
+
+    @Override
     public int updateStudentByIds(StudentDTO studentDTO) {
         return managerStudentMapper.updateStudentByIds(studentDTO);
+    }
+
+    @Override
+    public int updateStudentNotByIds(StudentDTO studentDTO) {
+        return managerStudentMapper.updateStudentNotByIds(studentDTO);
     }
 
     public void insertUserRole(Long userId, Long[] roleIds) {

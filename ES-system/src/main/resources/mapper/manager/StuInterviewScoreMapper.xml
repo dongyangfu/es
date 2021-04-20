@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.manager.mapper.StuInterviewScoreMapper">
+
+
+    <resultMap id="result" type="StuInterviewScoreVO">
+        <id property="id" column="id"/>
+        <result property="stuId" column="stu_id"/>
+        <result property="teaId" column="tea_id"/>
+        <result property="score" column="score"/>
+        <result property="period" column="period"/>
+    </resultMap>
+
+
+    <insert id="insertByIds" >
+        insert into stu_interview_score
+        (id,stu_id,period)
+         values
+        <foreach item="stuId" collection="dto.stuIds"  separator ="," >
+        (
+        null,
+        #{stuId},
+        #{period}
+        )
+        </foreach>
+
+    </insert>
+
+
+</mapper>

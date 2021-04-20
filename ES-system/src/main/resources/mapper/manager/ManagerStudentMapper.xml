@@ -209,20 +209,73 @@
         update stu_user
         <set>
             <if test="interviewResult != null and interviewResult != '' ">interview_result = #{interviewResult},</if>
-            <if test="machineScore != null and machineScore != '' ">machine_score = #{machineScore},</if>
+            <choose>
+                <when test="machineScore != null and machineScore != '' ">
+                    <choose>
+                        <when test="machineScore != -1">
+                            machine_score = #{machineScore},
+                        </when>
+                        <otherwise>
+                            machine_score = (
+                            one_machine_score + two_machine_score + three_machine_score + four_machine_score +
+                            five_machine_score
+                            )/5,
+                        </otherwise>
+                    </choose>
+                </when>
+            </choose>
+
         </set>
         where stu_id = #{stuId}
     </update>
+    <update id="updateStudent" parameterType="StudentDTO">
+        update stu_user
+        <set>
+            <if test="interviewResult != null and interviewResult != '' ">interview_result = #{interviewResult},</if>
+            <choose>
+                <when test="machineScore != null and machineScore != '' ">
+                    <choose>
+                        <when test="machineScore != -1">
+                            machine_score = #{machineScore},
+                        </when>
+                        <otherwise>
+                            machine_score = (
+                            one_machine_score + two_machine_score + three_machine_score + four_machine_score +
+                            five_machine_score
+                            )/5,
+                        </otherwise>
+                    </choose>
+                </when>
+            </choose>
+        </set>
+    </update>
+
 
     <update id="updateStudentByIds" parameterType="StudentDTO">
         update stu_user
         <set>
             <if test="stuIde != null and stuIde != '' ">stu_ide = #{stuIde},</if>
+            <if test="stuPro != null and stuPro != '' ">stu_pro = #{stuPro},</if>
         </set>
         where
          1 = 1
          and
          stu_id in
+        <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </update>
+
+    <update id="updateStudentNotByIds" parameterType="StudentDTO">
+        update stu_user
+        <set>
+            <if test="stuIde != null and stuIde != '' ">stu_ide = #{stuIde},</if>
+            <if test="stuPro != null and stuPro != '' ">stu_pro = #{stuPro},</if>
+        </set>
+        where
+        1 = 1
+        and
+        stu_id not in
         <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
             #{stuId}
         </foreach>
@@ -253,6 +306,15 @@
             and math_score >= 60
             and c_score >= 60
         order by (english_score+math_score+c_score) desc
+        limit #{processPersonNum}
+    </select>
+
+    <select id="twoProcessStuIds"  parameterType="StudentDTO" resultMap="result">
+        select
+        t.stu_id
+        FROM
+        stu_user t
+        order by stu_num
         limit #{processPersonNum}
     </select>
 

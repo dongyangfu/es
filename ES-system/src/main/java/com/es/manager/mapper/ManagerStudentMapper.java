@@ -52,6 +52,13 @@ public interface ManagerStudentMapper {
     int updateStudentScoreById(StudentDTO studentDTO);
 
     /**
+     * 修改学生分数信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudent(StudentDTO studentDTO);
+
+    /**
      * 删除多个老师信息
      *
      * @param ids 老师id
@@ -86,9 +93,24 @@ public interface ManagerStudentMapper {
     List<StudentVO> firstProcessStuIds(StudentDTO studentDTO);
 
     /**
+     * 返回n个进入预选拔的学生
+     *
+     * @param studentDTO 进入面试学生个数
+     * @return 选拔成功的学生id
+     */
+    List<StudentVO> twoProcessStuIds(StudentDTO studentDTO);
+
+    /**
      * 批量修改学生信息
      *
      * @param studentDTO 学生信息
      */
     int updateStudentByIds(StudentDTO studentDTO);
+
+    /**
+     * 批量修改学生信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudentNotByIds(StudentDTO studentDTO);
 }

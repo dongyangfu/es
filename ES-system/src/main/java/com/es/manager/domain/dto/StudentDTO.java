@@ -74,12 +74,12 @@ public class StudentDTO extends SysUser implements Serializable {
     /**
      * 机试总成绩
      */
-    private int machineScore;
+    private Integer machineScore;
 
     /**
      * 面试成绩
      */
-    private int interviewResult;
+    private Integer interviewResult;
     /**
      * 面试成绩状态
      */
@@ -324,19 +324,19 @@ public class StudentDTO extends SysUser implements Serializable {
         this.stuPro = stuPro;
     }
 
-    public int getMachineScore() {
+    public Integer getMachineScore() {
         return machineScore;
     }
 
-    public void setMachineScore(int machineScore) {
+    public void setMachineScore(Integer machineScore) {
         this.machineScore = machineScore;
     }
 
-    public int getInterviewResult() {
+    public Integer getInterviewResult() {
         return interviewResult;
     }
 
-    public void setInterviewResult(int interviewResult) {
+    public void setInterviewResult(Integer interviewResult) {
         this.interviewResult = interviewResult;
     }
 

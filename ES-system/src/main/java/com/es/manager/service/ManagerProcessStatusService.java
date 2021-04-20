@@ -24,4 +24,12 @@ public interface ManagerProcessStatusService {
      * @return Boolean 操作结果
      */
     int toTwoProcessComputer(ManagerProcessStatusDTO managerProcessStatusDTO);
+
+    /**
+     * 机试总成绩-》到达面试成绩表
+     *
+     * @param managerProcessStatusDTO 入参
+     * @return int
+     */
+    int toThirdProcessInterview(ManagerProcessStatusDTO managerProcessStatusDTO);
 }

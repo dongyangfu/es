@@ -146,7 +146,7 @@ public class ManagerScoreProcessController extends BaseController {
     @PostMapping("/computerScoreResult/toThirdProcess")
     @ResponseBody
     public AjaxResult toThirdProcess(ManagerProcessStatusDTO dto1) {
-        return  toAjax(managerProcessStatusService.toTwoProcessComputer(dto1));
+        return  toAjax(managerProcessStatusService.toThirdProcessInterview(dto1));
     }
 
 }

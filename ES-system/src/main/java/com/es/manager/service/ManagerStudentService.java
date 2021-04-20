@@ -50,6 +50,13 @@ public interface ManagerStudentService {
     int updateStudentScoreById(StudentDTO studentDTO);
 
     /**
+     * 修改学生分数信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudent(StudentDTO studentDTO);
+
+    /**
      * 删除多个学生信息
      *
      * @param ids 学生id
@@ -84,9 +91,24 @@ public interface ManagerStudentService {
     Long[] firstProcessStuIds(int number);
 
     /**
+     * 返回n个进入预选拔的学生
+     *
+     * @param number 进入面试学生个数
+     * @return 选拔成功的学生id
+     */
+    Long[] twoProcessStuIds(int number);
+
+    /**
      * 批量修改学生信息
      *
      * @param studentDTO 学生信息
      */
     int updateStudentByIds(StudentDTO studentDTO);
+
+    /**
+     * 批量修改学生信息
+     *
+     * @param studentDTO 学生信息
+     */
+    int updateStudentNotByIds(StudentDTO studentDTO);
 }

@@ -21,17 +21,17 @@
 				<div class="form-group">
 					<label class="col-sm-4 control-label is-required">机试成绩汇总：</label>
 					<div class="col-sm-8">
-						<input name="processPersonNum" th:disabled="${vo.processStatus  != 2}" placeholder="请输入进入面试人数" class="form-control" type="text" maxlength="4"  required>
+						<input id ="inputDisabled" name="processPersonNum" th:disabled="${vo.processStatus  != 2}" placeholder="请输入进入面试人数" class="form-control" type="text" maxlength="4"  required>
 					</div>
 				</div>
 			</div>
 		</div>
-		<h4 class="form-header h4" align="center" th:hidden="${vo.processStatus  == 2}" style="color: red" >机试成绩汇总已经结束!</h4>
+		<h4 id ="h4Disabled" class="form-header h4" align="center" th:hidden="${vo.processStatus  == 2}" style="color: red" >机试成绩汇总已经结束!</h4>
 	</form>
 </div>
 <div class="row">
 	<div class="col-sm-offset-5 col-sm-10">
-		<button type="button" class="btn btn-sm btn-primary" th:disabled="${vo.processStatus  != 2}" onclick="submitHandler()" ><i class="fa fa-check"></i>机试成绩汇总</button>&nbsp;
+		<button id="buttonDisabled" type="button" class="btn btn-sm btn-primary" th:disabled="${vo.processStatus  != 2}" onclick="submitHandler()" ><i class="fa fa-check"></i>机试成绩汇总</button>&nbsp;
 		<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
 	</div>
 </div>
@@ -42,17 +42,13 @@
 
 
 	function submitHandler() {
+		document.getElementById("buttonDisabled").setAttribute("disabled",true);
+		// document.getElementById("inputDisabled").setAttribute("disabled",true);
+		// document.getElementById("h4Disabled").setAttribute("hidden",false);
 		if ($.validate.form()) {
 			var data = $("#form-user-edit").serializeArray();
-			$.operate.post(prefix + "/computerScoreResult/toThirdProcess", data,f());
+			$.operate.post(prefix + "/computerScoreResult/toThirdProcess", data);
 		}
-	}
-
-
-	function f() {
-		window.setTimeout(function () {
-			document.location = 'http://localhost:8081/manager/teacher/set/computerScoreResult'
-		},2000);
 	}
 </script>
 </body>

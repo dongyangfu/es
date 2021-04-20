@@ -31,7 +31,7 @@
 </div>
 <div class="row">
 	<div class="col-sm-offset-5 col-sm-10">
-		<button type="button" class="btn btn-sm btn-primary" th:disabled="${vo.processStatus  != 1}" onclick="submitHandler()" ><i class="fa fa-check"></i>预选拔</button>&nbsp;
+		<button id="buttonDisabled" type="button" class="btn btn-sm btn-primary" th:disabled="${vo.processStatus  != 1}" onclick="submitHandler()" ><i class="fa fa-check"></i>预选拔</button>&nbsp;
 		<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
 	</div>
 </div>
@@ -42,18 +42,13 @@
 
 
 	function submitHandler() {
+		document.getElementById("buttonDisabled").setAttribute("disabled",true);
 		if ($.validate.form()) {
 			var data = $("#form-user-edit").serializeArray();
-			$.operate.post(prefix + "/firstProcessStudent/toTwoProcess", data,f());
+			$.operate.post(prefix + "/firstProcessStudent/toTwoProcess", data);
 		}
 	}
 
-
-	function f() {
-		window.setTimeout(function () {
-			document.location = 'http://localhost:8081/manager/teacher/set/firstProcessStudent'
-		},2000);
-	}
 </script>
 </body>
 </html>
