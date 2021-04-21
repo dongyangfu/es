@@ -194,6 +194,7 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     public Long[] firstProcessStuIds( int number) {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setProcessPersonNum(number);
+        studentDTO.setStuPeriod(PeriodUtil.getNowPeriod());
         List<StudentVO> studentVOS = managerStudentMapper.firstProcessStuIds(studentDTO);
         List<Long> collect = studentVOS.stream().map(StudentVO::getStuId).collect(Collectors.toList());
         Long [] result = new Long[collect.size()];
@@ -204,6 +205,7 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     public Long[] twoProcessStuIds(int number) {
         StudentDTO studentDTO = new StudentDTO();
         studentDTO.setProcessPersonNum(number);
+        studentDTO.setStuPeriod(PeriodUtil.getNowPeriod());
         List<StudentVO> studentVOS = managerStudentMapper.twoProcessStuIds(studentDTO);
         List<Long> collect = studentVOS.stream().map(StudentVO::getStuId).collect(Collectors.toList());
         Long [] result = new Long[collect.size()];

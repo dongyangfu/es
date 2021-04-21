@@ -248,6 +248,8 @@
                 </when>
             </choose>
         </set>
+        where 1 = 1
+        <if test="period != null and period != '' ">and period = #{period}</if>
     </update>
 
 
@@ -259,6 +261,7 @@
         </set>
         where
          1 = 1
+        <if test="period != null and period != '' ">and period = #{period}</if>
          and
          stu_id in
         <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
@@ -274,6 +277,7 @@
         </set>
         where
         1 = 1
+        <if test="period != null and period != '' ">and period = #{period}</if>
         and
         stu_id not in
         <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
@@ -302,6 +306,7 @@
         FROM
         stu_user t
         where 1 = 1
+        <if test="period != null and period != '' ">and period = #{period}</if>
             and english_score >= 60
             and math_score >= 60
             and c_score >= 60
@@ -314,6 +319,8 @@
         t.stu_id
         FROM
         stu_user t
+        where  1 = 1
+        <if test="period != null and period != '' ">and period = #{period}</if>
         order by stu_num
         limit #{processPersonNum}
     </select>

@@ -1,5 +1,6 @@
 package com.es.manager.service.impl;
 
+import com.es.common.utils.PeriodUtil;
 import com.es.manager.domain.dto.ManagerProcessStatusDTO;
 import com.es.manager.domain.dto.StuInterviewScoreDTO;
 import com.es.manager.domain.dto.StudentDTO;
@@ -58,11 +59,13 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
         StudentDTO dto = new StudentDTO();
         // -1 代表求和总成绩取平均值
         dto.setMachineScore(-1);
+        dto.setStuPeriod(PeriodUtil.getNowPeriod());
         int i = managerStudentService.updateStudent(dto);
         // 拿到前n个学生
         Long[] stuIds = managerStudentService.twoProcessStuIds(managerProcessStatusDTO.getProcessPersonNum());
         // 根据进入面试环节的个数，前n个学生状态为3，笔试通过
         StudentDTO dto2 = new StudentDTO();
+        dto2.setStuPeriod(PeriodUtil.getNowPeriod());
         dto2.setStuIds(stuIds);
         dto2.setStuPro(3);
         int j = managerStudentService.updateStudentByIds(dto2);
