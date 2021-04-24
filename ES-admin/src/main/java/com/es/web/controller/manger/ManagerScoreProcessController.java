@@ -10,17 +10,16 @@ import com.es.common.utils.PeriodUtil;
 import com.es.common.utils.ShiroUtils;
 import com.es.common.utils.poi.ExcelUtil;
 import com.es.manager.domain.dto.ManagerProcessStatusDTO;
+import com.es.manager.domain.dto.StuInterviewScoreDTO;
 import com.es.manager.domain.dto.StudentDTO;
-import com.es.manager.domain.vo.ManagerProcessStatusVO;
-import com.es.manager.domain.vo.StudentScoreVO;
-import com.es.manager.domain.vo.StudentVO;
+import com.es.manager.domain.vo.*;
 import com.es.manager.service.ManagerProcessStatusService;
 import com.es.manager.service.ManagerStudentService;
+import com.es.manager.service.StuInterviewScoreService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -42,11 +41,14 @@ public class ManagerScoreProcessController extends BaseController {
     private final static Logger log = LoggerFactory.getLogger(ManagerScoreProcessController.class);
     private static final String prefix = "/manager/teacher/set";
 
-    @Autowired
+    @Resource
     private ManagerStudentService managerStudentService;
 
     @Resource
     private ManagerProcessStatusService managerProcessStatusService;
+
+    @Resource
+    private StuInterviewScoreService stuInterviewScoreService;
 
     @RequiresPermissions("manager:teacher:set")
     @GetMapping()
@@ -103,6 +105,22 @@ public class ManagerScoreProcessController extends BaseController {
         return util.exportExcel(studentScoreList, "学生分数数据");
     }
 
+    @Log(title = "面试教师", businessType = BusinessType.EXPORT)
+    @PostMapping("/interview/export")
+    @ResponseBody
+    public AjaxResult interviewExport(StuInterviewScoreDTO dto) {
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        List<StuInterviewScoreVO> all = stuInterviewScoreService.getAllInterviewTea(dto);
+        ArrayList<StuInterviewScoreVOTemp> result = new ArrayList<>();
+        all.forEach(x -> {
+            StuInterviewScoreVOTemp temp = new StuInterviewScoreVOTemp();
+            BeanUtils.copyProperties(x, temp);
+            result.add(temp);
+        });
+        ExcelUtil<StuInterviewScoreVOTemp> util = new ExcelUtil<>(StuInterviewScoreVOTemp.class);
+        return util.exportExcel(result, "面试教师");
+    }
+
     /**
      * 预选拔
      */
@@ -123,7 +141,7 @@ public class ManagerScoreProcessController extends BaseController {
     @PostMapping("/firstProcessStudent/toTwoProcess")
     @ResponseBody
     public AjaxResult toTwoProcess(ManagerProcessStatusDTO dto1) {
-        return  toAjax(managerProcessStatusService.toTwoProcessComputer(dto1));
+        return toAjax(managerProcessStatusService.toTwoProcessComputer(dto1));
     }
 
     /**
@@ -146,7 +164,64 @@ public class ManagerScoreProcessController extends BaseController {
     @PostMapping("/computerScoreResult/toThirdProcess")
     @ResponseBody
     public AjaxResult toThirdProcess(ManagerProcessStatusDTO dto1) {
-        return  toAjax(managerProcessStatusService.toThirdProcessInterview(dto1));
+        return toAjax(managerProcessStatusService.toThirdProcessInterview(dto1));
     }
+
+    /**
+     * 认定面试教师
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @GetMapping("/interviewResult")
+    public String interviewResult(ModelMap mmap) {
+        ManagerProcessStatusDTO dto = new ManagerProcessStatusDTO();
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
+        mmap.put("vo", vo);
+        return prefix + "/third3";
+    }
+
+    @PostMapping("/interviewList")
+    @ResponseBody
+    public TableDataInfo interviewList(StuInterviewScoreDTO dto) {
+        startPage();
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        List<StuInterviewScoreVO> all = stuInterviewScoreService.getAllInterviewTea(dto);
+        return getDataTable(all);
+    }
+
+
+    /**
+     * 面试教师->组建卓越班级
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/interviewResult/toFourProcess")
+    @ResponseBody
+    public AjaxResult toFourProcess(ManagerProcessStatusDTO dto1) {
+        return toAjax(managerProcessStatusService.toFourProcessBuildSuperClass(dto1));
+    }
+
+    /**
+     * 组建卓越班级
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @GetMapping("/buildSuperClass")
+    public String buildSuperClass(ModelMap mmap) {
+        ManagerProcessStatusDTO dto = new ManagerProcessStatusDTO();
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
+        mmap.put("vo", vo);
+        return prefix + "/buildSuperClass4";
+    }
+
+    /**
+     * 组建卓越班级
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/interviewResult/toFiveProcess")
+    @ResponseBody
+    public AjaxResult toFiveProcess(ManagerProcessStatusDTO dto1) {
+        return toAjax(managerProcessStatusService.toFourProcessBuildSuperClass(dto1));
+    }
+
 
 }

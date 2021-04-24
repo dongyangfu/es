@@ -32,4 +32,13 @@ public interface ManagerProcessStatusService {
      * @return int
      */
     int toThirdProcessInterview(ManagerProcessStatusDTO managerProcessStatusDTO);
+
+    /**
+     * 认定面试教师-》到达组建卓越班级
+     *
+     * @param managerProcessStatusDTO 入参
+     * @return int
+     */
+    int toFourProcessBuildSuperClass(ManagerProcessStatusDTO managerProcessStatusDTO);
+
 }

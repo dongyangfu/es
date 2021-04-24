@@ -16,6 +16,7 @@ import com.es.manager.domain.vo.TeacherVO;
 import com.es.manager.mapper.ManagerTeacherMapper;
 import com.es.manager.service.ManagerTeacherService;
 import com.es.system.domain.SysUserRole;
+import com.es.system.mapper.SysRoleMapper;
 import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysConfigService;
@@ -67,6 +68,9 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     @Autowired
     private ISysConfigService configService;
 
+    @Resource
+    private SysRoleMapper sysRoleMapper;
+
 
     @Override
     public List<TeacherVO> getTeacherList(TeacherDTO teacherDTO) {
@@ -85,6 +89,8 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertTeacher(TeacherDTO teacherDTO) {
+        SysRole stu = sysRoleMapper.selectRoleByName("教师");
+        teacherDTO.setRoleIds(new Long[]{stu.getRoleId()});
         // 新增用户信息
         int rows = userMapper.insertUser(teacherDTO);
         // 新增用户与角色管理
@@ -102,6 +108,8 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateTeacherById(TeacherDTO teacherDTO) {
+        SysRole stu = sysRoleMapper.selectRoleByName("教师");
+        teacherDTO.setRoleIds(new Long[]{stu.getRoleId()});
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(teacherDTO.getUserId());
         // 删除教师特长

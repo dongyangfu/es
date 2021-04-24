@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.es.manager.domain.vo.SysRoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +92,12 @@ public class SysRoleServiceImpl implements ISysRoleService {
             }
         }
         return roles;
+    }
+
+    @Override
+    public List<SysRoleVO> selectUserIdByRoleName(String roleName) {
+        List<SysRoleVO> sysRoleVOS = roleMapper.selectUserIdByRoleName(roleName);
+        return sysRoleVOS;
     }
 
     /**

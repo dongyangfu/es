@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('学生分数列表')" />
+	<th:block th:include="include :: layout-latest-css" />
+	<th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+	
+	<div class="ui-layout-center">
+		<div class="container-div">
+			<div class="row">
+				<div class="col-sm-12 search-collapse">
+					<form id="user-form">
+						<input type="hidden" id="deptId" name="deptId">
+		                <input type="hidden" id="parentId" name="parentId">
+						<div class="select-list">
+							<ul>
+								<h4 id ="h4Disabled" class="form-header h4" align="center" th:hidden="${vo.processStatus  < 3}"  >如果下方表格无数据，请点击认定面试教师按钮!</h4>
+								</ul>
+							</ul>
+						</div>
+					</form>
+				</div>
+				
+		        <div class="btn-group-sm" id="toolbar" role="group">
+		             <a class="btn btn-sm btn-primary" onclick="submitHandler()" >
+			            <i class="fa fa-edit"></i> 认定面试教师
+			        </a>
+		            <a class="btn btn-warning" onclick="$.table.exportExcel()" >
+			            <i class="fa fa-download"></i> 导出
+			        </a>
+		        </div>
+		        
+		        <div class="col-sm-12 select-table table-striped">
+				    <table id="bootstrap-table"></table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+	<script th:inline="javascript">
+		var editFlag = true;
+		var removeFlag = true;
+		var resetPwdFlag = true;
+		var prefix = ctx + "manager/teacher/set";
+		var prefix2 = ctx + "system/user";
+		$(function() {
+		    var panehHidden = false;
+		    if ($(this).width() < 769) {
+		        panehHidden = true;
+		    }
+		    $('body').layout({ initClosed: panehHidden, west__size: 185 });
+	     	// 回到顶部绑定
+	    	if ($.fn.toTop !== undefined) {
+	    		var opt = {
+	    			win:$('.ui-layout-center'),
+	    			doc:$('.ui-layout-center')
+	    		};
+	    		$('#scroll-up').toTop(opt);
+	    	}
+		    queryUserList();
+		});
+
+		function queryUserList() {
+			var options = {
+				url: prefix + "/interviewList",
+				// createUrl: prefix + "/add",
+				updateUrl: prefix + "/edit/{id}",
+				// removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/interview/export",
+				// importUrl: prefix + "/importData",
+				// importTemplateUrl: prefix + "/importTemplate",
+				// sortName: "createTime",
+				// sortOrder: "desc",
+				modalName: "用户",
+				columns: [{
+					checkbox: true
+				},
+					{
+						field: 'teaGroupOrder',
+						title: '组数'
+					},
+					{
+						field: 'groupLeader',
+						title: '组长/组员',
+						formatter: function (value, row) {
+							return isLeader(row);
+						}
+					},
+					{
+						field: 'teaJobNumber',
+						title: '教师工号'
+					},
+					{
+						field: 'userName',
+						title: '教师名称'
+					}]
+			};
+			$.table.init(options);
+		}
+		function submitHandler() {
+			// document.getElementById("buttonDisabled").setAttribute("disabled",true);
+			if ($.validate.form()) {
+				var data = $("#user-form").serializeArray();
+				$.operate.post(prefix + "/interviewResult/toFourProcess", data);
+			}
+		}
+		$('#btnExpand').click(function() {
+			$._tree.expandAll(true);
+		    $(this).hide();
+		    $('#btnCollapse').show();
+		});
+
+		$('#btnCollapse').click(function() {
+			$._tree.expandAll(false);
+		    $(this).hide();
+		    $('#btnExpand').show();
+		});
+
+		$('#btnRefresh').click(function() {
+			queryDeptTree();
+		});
+
+		/* 用户管理-部门 */
+		function dept() {
+			var url = ctx + "system/dept";
+			$.modal.openTab("部门管理", url);
+		}
+
+		/* 用户管理-重置密码 */
+		function resetPwd(userId) {
+		    var url = prefix2 + '/resetPwd/' + userId;
+		    $.modal.open("重置密码", url, '800', '300');
+		}
+
+		/* 教师职位判断显示 */
+		function isLeader(row) {
+			if (row.groupLeader == 1) {
+				return '组长';
+			} else {
+				return '组员';
+			}
+		}
+		/* 用户状态显示 */
+		function statusTools(row) {
+		    if (row.status == 1) {
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.userId + '\')"></i> ';
+    		} else {
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.userId + '\')"></i> ';
+    		}
+		}
+
+		/* 用户管理-停用 */
+		function disable(userId) {
+			$.modal.confirm("确认要停用用户吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "userId": userId, "status": 1 });
+		    })
+		}
+
+		/* 用户管理启用 */
+		function enable(userId) {
+			$.modal.confirm("确认要启用用户吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "userId": userId, "status": 0 });
+		    })
+		}
+	</script>
+</body>
+<!-- 导入区域 -->
+<script id="importTpl" type="text/template">
+<form enctype="multipart/form-data" class="mt20 mb10">
+	<div class="col-xs-offset-1">
+		<input type="file" id="file" name="file"/>
+		<div class="mt10 pt5">
+			<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
+			 &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+		</div>
+		<font color="red" class="pull-left mt10">
+			提示：仅允许导入“xls”或“xlsx”格式文件！
+		</font>
+	</div>
+</form>
+</script>
+</html>

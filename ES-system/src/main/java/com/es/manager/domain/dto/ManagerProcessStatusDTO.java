@@ -26,6 +26,14 @@ public class ManagerProcessStatusDTO extends ManagerProcessStatus implements Ser
      * 当前环节请求人数
      */
     private Integer processPersonNum;
+    /**
+     * 面试教师每组几人
+     */
+    private Integer interviewGroupPersonNum;
+    /**
+     * 面试教师总共几组
+     */
+    private Integer interviewGroupNum;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -45,5 +53,21 @@ public class ManagerProcessStatusDTO extends ManagerProcessStatus implements Ser
 
     public void setProcessPersonNum(Integer processPersonNum) {
         this.processPersonNum = processPersonNum;
+    }
+
+    public Integer getInterviewGroupNum() {
+        return interviewGroupNum;
+    }
+
+    public void setInterviewGroupNum(Integer interviewGroupNum) {
+        this.interviewGroupNum = interviewGroupNum;
+    }
+
+    public Integer getInterviewGroupPersonNum() {
+        return interviewGroupPersonNum;
+    }
+
+    public void setInterviewGroupPersonNum(Integer interviewGroupPersonNum) {
+        this.interviewGroupPersonNum = interviewGroupPersonNum;
     }
 }

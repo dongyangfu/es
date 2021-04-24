@@ -1,6 +1,7 @@
 package com.es.manager.service.impl;
 
 import com.es.common.constant.UserConstants;
+import com.es.common.core.domain.entity.SysRole;
 import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.text.Convert;
 import com.es.common.exception.BusinessException;
@@ -14,9 +15,11 @@ import com.es.manager.domain.vo.StudentVO;
 import com.es.manager.mapper.ManagerStudentMapper;
 import com.es.manager.service.ManagerStudentService;
 import com.es.system.domain.SysUserRole;
+import com.es.system.mapper.SysRoleMapper;
 import com.es.system.mapper.SysUserMapper;
 import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysConfigService;
+import com.es.system.service.ISysRoleService;
 import com.es.system.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +52,9 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     @Resource
     private SysUserRoleMapper userRoleMapper;
 
+    @Resource
+    private SysRoleMapper sysRoleMapper;
+
     @Autowired
     private ISysUserService sysUserService;
 
@@ -78,6 +84,8 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
         // 新增用户信息
         int rows = userMapper.insertUser(studentDTO);
         // 新增用户与角色管理
+        SysRole stu = sysRoleMapper.selectRoleByName("学生");
+        studentDTO.setRoleIds(new Long[]{stu.getRoleId()});
         insertUserRole(studentDTO.getUserId(), studentDTO.getRoleIds());
         // 新增学生信息
         // 根据当前时间筛选出今年的学生，如果是21届，2022年春天才会选拔，
@@ -96,6 +104,8 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
         // 修改用户信息
         int sum = userMapper.updateUser(studentDTO);
         // 新增用户与角色管理
+        SysRole stu = sysRoleMapper.selectRoleByName("学生");
+        studentDTO.setRoleIds(new Long[]{stu.getRoleId()});
         insertUserRole(studentDTO.getUserId(), studentDTO.getRoleIds());
         // 修改学生信息
         return sum + managerStudentMapper.updateStudentById(studentDTO);
@@ -128,7 +138,7 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+//    @Transactional(rollbackFor = Exception.class)
     public String importUser(List<StudentDTOSuper> userList, Boolean isUpdateSupport, String operName) {
         if (StringUtils.isNull(userList) || userList.size() == 0) {
             throw new BusinessException("导入用户数据不能为空！");
@@ -143,9 +153,9 @@ public class ManagerStudentServiceImpl implements ManagerStudentService {
                 StudentDTO user = new StudentDTO();
                 BeanUtils.copyProperties(user1, user);
                 user.setcScore(user1.getCcScore());
-                user.setStuId(user.getUserId());
-                user.setStuName(user.getUserName());
-                user.setStuTel(user.getPhonenumber());
+                user.setStuId(user1.getUserId());
+                user.setStuName(user1.getUserName());
+                user.setStuTel(user1.getPhonenumber());
                 // 验证是否存在这个用户
                 SysUser u = userMapper.selectUserByLoginName(user.getLoginName());
                 if (StringUtils.isNull(u)) {

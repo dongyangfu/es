@@ -1,8 +1,10 @@
 package com.es.system.mapper;
 
-import java.util.List;
-
 import com.es.common.core.domain.entity.SysRole;
+import com.es.manager.domain.vo.SysRoleVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 角色表 数据层
@@ -25,12 +27,29 @@ public interface SysRoleMapper {
     public List<SysRole> selectRolesByUserId(Long userId);
 
     /**
+     * 根据角色名称查询用户列表
+     *
+     * @param roleName 角色名称
+     * @return 用户id列表
+     */
+     List<SysRoleVO> selectUserIdByRoleName(@Param("roleName") String roleName);
+
+    /**
      * 通过角色ID查询角色
      *
      * @param roleId 角色ID
      * @return 角色对象信息
      */
     public SysRole selectRoleById(Long roleId);
+
+    /**
+     * 通过角色ID查询角色
+     *
+     * @param roleName 角色名称
+     * @return 角色对象信息
+     */
+    public SysRole selectRoleByName(String roleName);
+
 
     /**
      * 通过角色ID删除角色

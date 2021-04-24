@@ -30,6 +30,14 @@ public class StuInterviewScore extends BaseEntity {
      * 面试分数
      */
     private Integer score;
+    /**
+     * 教师面试组数，有第一组，第二组，第三组
+     */
+    private Integer teaGroupOrder;
+    /**
+     * 该教师是否是组长
+     */
+    private Integer groupLeader;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -73,5 +81,21 @@ public class StuInterviewScore extends BaseEntity {
 
     public void setPeriod(Integer period) {
         this.period = period;
+    }
+
+    public Integer getTeaGroupOrder() {
+        return teaGroupOrder;
+    }
+
+    public void setTeaGroupOrder(Integer teaGroupOrder) {
+        this.teaGroupOrder = teaGroupOrder;
+    }
+
+    public Integer getGroupLeader() {
+        return groupLeader;
+    }
+
+    public void setGroupLeader(Integer groupLeader) {
+        this.groupLeader = groupLeader;
     }
 }

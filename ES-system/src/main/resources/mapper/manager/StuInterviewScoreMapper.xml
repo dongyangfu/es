@@ -11,7 +11,13 @@
         <result property="teaId" column="tea_id"/>
         <result property="score" column="score"/>
         <result property="period" column="period"/>
+        <result property="teaGroupOrder" column="tea_group_order"/>
+        <result property="groupLeader" column="group_leader"/>
+        <result property="userName" column="user_name"/>
+        <result property="teaJobNumber" column="tea_job_number"/>
     </resultMap>
+
+
 
 
     <insert id="insertByIds" >
@@ -27,6 +33,49 @@
         </foreach>
 
     </insert>
+
+    <select id="getAll" parameterType="StuInterviewScoreDTO" resultMap="result">
+        select
+        id,stu_id,tea_id,score,period,tea_group_order,group_leader
+        from
+            stu_interview_score
+        where 1=1
+            AND period = #{period}
+
+    </select>
+
+    <select id="getAllInterviewTea" parameterType="StuInterviewScoreDTO" resultMap="result">
+        select
+        s.id,s.stu_id,s.tea_id,s.score,s.period,s.tea_group_order,s.group_leader,u.user_name,t.tea_job_number
+        from
+            stu_interview_score s
+        left join
+            sys_user u on u.user_id = s.tea_id
+        left join
+            tea_user t on t.tea_id = s.tea_id
+        where 1=1
+            AND period = #{period}
+            AND s.tea_id is not null
+        group by
+            s.tea_id
+        order by
+            tea_group_order,group_leader
+    </select>
+
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="dto" item="temp"    >
+            update
+                stu_interview_score
+            set
+                tea_id = #{temp.teaId} ,
+                tea_group_order = #{temp.teaGroupOrder} ,
+                group_leader = #{temp.groupLeader}
+            where
+                id = #{temp.id} ;
+        </foreach>
+
+    </update>
 
 
 </mapper>

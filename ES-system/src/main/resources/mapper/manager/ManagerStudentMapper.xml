@@ -182,7 +182,7 @@
             <if test="stuNum != null and stuNum != '' ">#{stuNum},</if>
             <if test="userName != null and userName != '' ">#{userName},</if>
             <if test="stuClass != null and stuClass != '' ">#{stuClass},</if>
-            <if test="phonenumber != null and phonenumber != '' ">#{phonenumber},</if>
+            <if test="stuTel != null and stuTel != '' ">#{stuTel},</if>
             <if test="cScore != null and cScore != '' ">#{cScore},</if>
             <if test="englishScore != null and englishScore != '' ">#{englishScore},</if>
             <if test="mathScore != null and mathScore != '' ">#{mathScore},</if>
@@ -218,8 +218,8 @@
                         <otherwise>
                             machine_score = (
                             one_machine_score + two_machine_score + three_machine_score + four_machine_score +
-                            five_machine_score
-                            )/5,
+                            five_machine_score + six_machine_score
+                            ),
                         </otherwise>
                     </choose>
                 </when>
@@ -241,15 +241,15 @@
                         <otherwise>
                             machine_score = (
                             one_machine_score + two_machine_score + three_machine_score + four_machine_score +
-                            five_machine_score
-                            )/5,
+                            five_machine_score + six_machine_score
+                            ),
                         </otherwise>
                     </choose>
                 </when>
             </choose>
         </set>
         where 1 = 1
-        <if test="period != null and period != '' ">and period = #{period}</if>
+        <if test="stuPeriod != null and stuPeriod != '' ">and stu_period = #{stuPeriod}</if>
     </update>
 
 
@@ -261,7 +261,7 @@
         </set>
         where
          1 = 1
-        <if test="period != null and period != '' ">and period = #{period}</if>
+        <if test="stuPeriod != null and stuPeriod != '' ">and stu_period = #{stuPeriod}</if>
          and
          stu_id in
         <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
@@ -277,7 +277,7 @@
         </set>
         where
         1 = 1
-        <if test="period != null and period != '' ">and period = #{period}</if>
+        <if test="stuPeriod != null and stuPeriod != '' ">and stu_period = #{stuPeriod}</if>
         and
         stu_id not in
         <foreach item="stuId" collection="stuIds" open="(" separator="," close=")">
@@ -306,7 +306,7 @@
         FROM
         stu_user t
         where 1 = 1
-        <if test="period != null and period != '' ">and period = #{period}</if>
+        <if test="stuPeriod != null and stuPeriod != '' ">and stu_period = #{stuPeriod}</if>
             and stu_ide = 2
             and english_score >= 60
             and math_score >= 60
@@ -321,7 +321,7 @@
         FROM
         stu_user t
         where  1 = 1
-        <if test="period != null and period != '' ">and period = #{period}</if>
+        <if test="stuPeriod != null and stuPeriod != '' ">and stu_period = #{stuPeriod}</if>
         order by stu_num
         limit #{processPersonNum}
     </select>
