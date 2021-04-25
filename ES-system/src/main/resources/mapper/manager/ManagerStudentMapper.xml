@@ -107,6 +107,9 @@
             <if test="stuClass != null and stuClass != ''">
                 AND stu_class = #{stuClass}
             </if>
+            <if test="stuPro != null and stuPro != ''">
+                AND stu_pro = #{stuPro}
+            </if>
         </where>
     </select>
 

@@ -50,13 +50,13 @@ public class ManagerScoreProcessController extends BaseController {
     @Resource
     private StuInterviewScoreService stuInterviewScoreService;
 
-    @RequiresPermissions("manager:teacher:set")
+//    @RequiresPermissions("manager:teacher:set")
     @GetMapping()
     public String menu() {
         return prefix + "/studentScore";
     }
 
-    @RequiresPermissions("manager:teacher:list")
+//    @RequiresPermissions("manager:teacher:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(StudentDTO studentDTO) {
@@ -191,13 +191,36 @@ public class ManagerScoreProcessController extends BaseController {
 
 
     /**
-     * 面试教师->组建卓越班级
+     * 面试教师->面试成绩汇总
      */
     @Transactional(rollbackFor = Exception.class)
     @PostMapping("/interviewResult/toFourProcess")
     @ResponseBody
     public AjaxResult toFourProcess(ManagerProcessStatusDTO dto1) {
-        return toAjax(managerProcessStatusService.toFourProcessBuildSuperClass(dto1));
+        return toAjax(managerProcessStatusService.toFourProcessInterviewScore(dto1));
+    }
+
+    /**
+     * 面试成绩汇总
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @GetMapping("/interviewScoreResult")
+    public String interviewScoreResult(ModelMap mmap) {
+        ManagerProcessStatusDTO dto = new ManagerProcessStatusDTO();
+        dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
+        ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
+        mmap.put("vo", vo);
+        return prefix + "/interviewScore4";
+    }
+
+    /**
+     * 面试成绩汇总->组建卓越班级
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/interviewScoreResult/toFiveProcess")
+    @ResponseBody
+    public AjaxResult toFiveProcess(ManagerProcessStatusDTO dto1) {
+        return toAjax(managerProcessStatusService.toFiveProcessBuildSuperClass(dto1));
     }
 
     /**
@@ -210,17 +233,17 @@ public class ManagerScoreProcessController extends BaseController {
         dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
         ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
         mmap.put("vo", vo);
-        return prefix + "/buildSuperClass4";
+        return prefix + "/buildSuperClass5";
     }
 
     /**
      * 组建卓越班级
      */
     @Transactional(rollbackFor = Exception.class)
-    @PostMapping("/interviewResult/toFiveProcess")
+    @PostMapping("/buildSuperClass/toFinalProcess")
     @ResponseBody
-    public AjaxResult toFiveProcess(ManagerProcessStatusDTO dto1) {
-        return toAjax(managerProcessStatusService.toFourProcessBuildSuperClass(dto1));
+    public AjaxResult toFinalProcess(ManagerProcessStatusDTO dto1) {
+        return toAjax(managerProcessStatusService.toFinalProcess(dto1));
     }
 
 

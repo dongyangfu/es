@@ -19,19 +19,19 @@
 			</div>
 			<div class="col-sm-6">
 				<div class="form-group">
-					<label class="col-sm-4 control-label is-required">组建卓越班级人数：</label>
+					<label class="col-sm-4 control-label is-required">面试成绩汇总：</label>
 					<div class="col-sm-8">
-						<input id ="inputDisabled" name="processPersonNum" th:disabled="${vo.processStatus  != 4}" placeholder="请输入班级人数" class="form-control" type="text" maxlength="4"  required>
+						<input id ="inputDisabled" name="processPersonNum" th:disabled="${vo.processStatus  != 4}" placeholder="请输入面试通过人数" class="form-control" type="text" maxlength="4"  required>
 					</div>
 				</div>
 			</div>
 		</div>
-		<h4 id ="h4Disabled" class="form-header h4" align="center" th:hidden="${vo.processStatus  < 4}" style="color: red" >组建卓越班级已经结束!</h4>
+		<h4 id ="h4Disabled" class="form-header h4" align="center" th:hidden="${vo.processStatus  <= 4}" style="color: red" >面试成绩汇总已经结束!</h4>
 	</form>
 </div>
 <div class="row">
 	<div class="col-sm-offset-5 col-sm-10">
-		<button id="buttonDisabled" type="button" class="btn btn-sm btn-primary" th:disabled="${vo.processStatus  != 4}" onclick="submitHandler()" ><i class="fa fa-check"></i>组建卓越班级</button>&nbsp;
+		<button id="buttonDisabled" type="button" class="btn btn-sm btn-primary" th:disabled="${vo.processStatus  != 4}" onclick="submitHandler()" ><i class="fa fa-check"></i>面试成绩汇总</button>&nbsp;
 		<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
 	</div>
 </div>
@@ -47,9 +47,8 @@
 		// document.getElementById("h4Disabled").setAttribute("hidden",false);
 		if ($.validate.form()) {
 			var data = $("#form-user-edit").serializeArray();
-			$.operate.post(prefix + "/computerScoreResult/toThirdProcess", data);
+			$.operate.post(prefix + "/interviewScoreResult/toFiveProcess", data);
 		}
-		alert("组建卓越班级成功，流程结束！");
 	}
 </script>
 </body>

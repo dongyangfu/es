@@ -105,7 +105,7 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int toFourProcessBuildSuperClass(ManagerProcessStatusDTO managerProcessStatusDTO) {
+    public int toFourProcessInterviewScore(ManagerProcessStatusDTO managerProcessStatusDTO) {
         managerProcessStatusDTO.setInterviewGroupNum(3);
         managerProcessStatusDTO.setInterviewGroupPersonNum(4);
         managerProcessStatusDTO.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
@@ -122,7 +122,9 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
         StuInterviewScoreDTO stuInterviewScoreDTO = new StuInterviewScoreDTO();
         stuInterviewScoreDTO.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
         Map<Integer, List<StuInterviewScoreVO>> groupByStuId = stuInterviewScoreService.getAll(stuInterviewScoreDTO).stream().collect(Collectors.groupingBy(StuInterviewScore::getStuId));
-        int stuGroupSize = groupByStuId.size() / managerProcessStatusDTO.getInterviewGroupNum();
+        boolean flag = groupByStuId.size() % managerProcessStatusDTO.getInterviewGroupNum() == 0;
+        int size = groupByStuId.size() / managerProcessStatusDTO.getInterviewGroupNum();
+        int stuGroupSize = flag ? size : size+1;
         int stuGroupNum = stuGroupSize;
         int stuGroupOrder = 0;
         for (Map.Entry<Integer, List<StuInterviewScoreVO>> stuIds : groupByStuId.entrySet()) {
@@ -152,6 +154,36 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
         //	修改卓越选拔流程控制，流程由3-》4。
         managerProcessStatusDTO.setProcessStatus(4);
         return managerProcessStatusMapper.update(managerProcessStatusDTO);
+    }
+
+    @Override
+    public int toFiveProcessBuildSuperClass(ManagerProcessStatusDTO managerProcessStatusDTO) {
+        // 先汇总学生总成绩，做平均值，然后存入学生表机试总成绩中，
+        StudentDTO dto = new StudentDTO();
+        // -1 代表求和总成绩取平均值
+        dto.setMachineScore(-1);
+        dto.setStuPeriod(PeriodUtil.getNowPeriod());
+        int i = managerStudentService.updateStudent(dto);
+        // 拿到前n个学生
+        Long[] stuIds = managerStudentService.twoProcessStuIds(managerProcessStatusDTO.getProcessPersonNum());
+        // 根据进入面试环节的个数，前n个学生状态为3，笔试通过
+        StudentDTO dto2 = new StudentDTO();
+        dto2.setStuPeriod(PeriodUtil.getNowPeriod());
+        dto2.setStuIds(stuIds);
+        dto2.setStuPro(3);
+        int j = managerStudentService.updateStudentByIds(dto2);
+        // 其他学生状态为2笔试未通过
+        dto2.setStuPro(2);
+        int m = managerStudentService.updateStudentNotByIds(dto2);
+        // 修改卓越选拔流程控制，流程由2-》3。
+        managerProcessStatusDTO.setProcessStatus(3);
+        int update = managerProcessStatusMapper.update(managerProcessStatusDTO);
+        return i + j + m + update ;
+    }
+
+    @Override
+    public int toFinalProcess(ManagerProcessStatusDTO managerProcessStatusDTO) {
+        return 0;
     }
 
     /**

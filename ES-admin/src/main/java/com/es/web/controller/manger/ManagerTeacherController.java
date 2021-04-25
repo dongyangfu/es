@@ -58,13 +58,13 @@ public class ManagerTeacherController extends BaseController {
     private SysPasswordService passwordService;
 
 
-    @RequiresPermissions("manager:teacher:view")
+//    @RequiresPermissions("manager:teacher:view")
     @GetMapping()
     public String menu() {
         return prefix + "/user";
     }
 
-    @RequiresPermissions("manager:teacher:list")
+//    @RequiresPermissions("manager:teacher:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(TeacherDTO teacherDTO) {

@@ -50,13 +50,13 @@ public class ManagerStudentController extends BaseController {
     @Autowired
     private SysPasswordService passwordService;
 
-    @RequiresPermissions("manager:student:view")
+//    @RequiresPermissions("manager:student:view")
     @GetMapping()
     public String menu() {
         return prefix + "/user";
     }
 
-    @RequiresPermissions("manager:student:list")
+//    @RequiresPermissions("manager:student:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(StudentDTO studentDTO) {
