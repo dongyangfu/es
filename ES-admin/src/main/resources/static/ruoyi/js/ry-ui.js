@@ -1093,7 +1093,11 @@ var table = {
                 table.set();
                 $.modal.openTab("修改" + table.options.modalName, $.operate.editUrl(id));
             },
-            editTabSpec: function(id,score,practiceId) {
+            editTabSpec: function(id,score,practiceId,stuPracticeName) {
+                if($.common.isEmpty(stuPracticeName)){
+                    $.modal.msgWarning("课题题目还未录入，不可提交成绩！");
+                    return;
+                }
                 if($.common.isNotEmpty(score)){
                     $.modal.msgWarning("成绩已提交，不可编辑");
                     return;

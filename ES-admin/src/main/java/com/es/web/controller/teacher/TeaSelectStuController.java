@@ -70,6 +70,18 @@ public class TeaSelectStuController extends BaseController {
         return getDataTable(list);
     }
 
+    @PostMapping("/selectListInterview")
+    @ResponseBody
+    public TableDataInfo selectListInterview() {
+        startPage();
+        Long teaId = ShiroUtils.getUserId();
+        Map<String, Object> map = new HashMap<>(20);
+        map.put("teaId", teaId);
+        List<Map<String, Object>> list = teaStuService.selectStuSelectListInterview(map);
+        return getDataTable(list);
+    }
+
+
     /**
      * 修改学生机试成绩信息
      */
@@ -137,7 +149,10 @@ public class TeaSelectStuController extends BaseController {
     @GetMapping("/editInt/{stuId}")
     public String editInt(@PathVariable("stuId") Long stuId, ModelMap mmap) {
         //通过stuId查询学生信息，用于前端修改页面的展示
-        Map<String, Object> stuMap = teaStuService.selectStuByStuId(stuId);
+        Map<String, Object> map = new HashMap<>(20);
+        map.put("stuId",stuId);
+        map.put("teaId",ShiroUtils.getUserId());
+        Map<String, Object> stuMap = teaStuService.selectStuByStuIdAndTeaId(map);
         mmap.put("stuMap", stuMap);
         return prefix + "/editInterview";
     }
@@ -164,6 +179,42 @@ public class TeaSelectStuController extends BaseController {
     @ResponseBody
     public AjaxResult editSaveTemp(StuUser stuUser) {
         int uFlag = teaStuService.updateStuScoreTemp(stuUser);
+        if(uFlag>0){
+            return success("保存成绩成功！");
+        }
+        return error("保存成绩失败，请联系管理员！");
+    }
+
+    /**
+     * 修改学生面试成绩信息(已提交状态)
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/editInterview")
+    @ResponseBody
+    public AjaxResult editInterviewSave(Integer stuId,Integer score) {
+        Map<String, Object> map = new HashMap<>(20);
+        map.put("stuId", stuId);
+        map.put("score", score);
+        map.put("teaId", ShiroUtils.getUserId());
+        int uFlag = teaStuService.updateStuInterviewScore(map);
+        if(uFlag>0){
+            return success("提交成绩成功！");
+        }
+        return error("提交成绩失败，请联系管理员！");
+    }
+
+    /**
+     * 修改学生面试成绩信息(暂存状态)
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("/editInterviewTemp")
+    @ResponseBody
+    public AjaxResult editInterviewSaveTemp(Integer stuId,Integer score) {
+        Map<String, Object> map = new HashMap<>(20);
+        map.put("stuId", stuId);
+        map.put("score", score);
+        map.put("teaId", ShiroUtils.getUserId());
+        int uFlag = teaStuService.updateStuInterviewScoreTemp(map);
         if(uFlag>0){
             return success("保存成绩成功！");
         }

@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectUserVo">
         select stu_id, stu_num, stu_name, stu_sex, stu_age, stu_class, stu_tel, stu_wx, stu_qq, stu_mail, stu_spe, stu_ide, stu_pro, machine_score,
         interview_result, ir_status,one_machine_score,one_ms_status,two_machine_score,two_ms_status,three_machine_score,three_ms_status,four_machine_score,four_ms_status,
-        five_machine_score,five_ms_status,six_machine_score,six_ms_status
+        five_machine_score,five_ms_status,six_machine_score,six_ms_status,stu_period
 		from stu_user
     </sql>
     

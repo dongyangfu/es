@@ -17,10 +17,11 @@
 			s.stu_name stuName,
 			s.stu_class stuClass,
 			s.stu_tel stuTel,
-			spr.stu_practice_name stuPracticeName,
+			COALESCE (spr.stu_practice_name,'') stuPracticeName,
 			COALESCE (spr.score,'') score,
 			spr.practice_id practiceId,
 			su.user_name teaName,
+			cp.semester semester,
 			CASE
 				spr.status
 				WHEN '00' THEN
@@ -88,7 +89,7 @@
 			s.stu_id
 	</select>
     <!--查询去年新生，第二学期参与选拔的学生列表（选拔阶段）-->
-    <select id="selectStuSelectList" resultType="map">
+    <select id="selectStuSelectList" resultType="map" parameterType="Long">
 		SELECT
 			s.stu_id stuId,
 			s.stu_num stuNum,
@@ -157,7 +158,36 @@
 		ORDER BY
 			s.stu_id
 	</select>
-    <!--通过学生ID查询需要修改成绩的学生信息-->
+
+	<!--查询去年新生，通过教师ID查询负责面试的学生列表（选拔阶段）-->
+	<select id="selectStuSelectListInterview" resultType="map" parameterType="map">
+		SELECT
+			s.stu_id stuId,
+			s.stu_num stuNum,
+			s.stu_name stuName,
+			s.stu_class stuClass,
+			s.stu_tel stuTel,
+			sis.score interviewResult,
+			CASE
+				sis.status
+				WHEN '00' THEN
+				'已提交'
+				WHEN '01' THEN
+				'暂存状态' ELSE '未录入'
+			END AS irStatus
+		FROM
+			stu_user s
+			LEFT JOIN stu_interview_score sis ON s.stu_id = sis.stu_id
+		WHERE
+			sis.period = (select year(now())-1)
+			<if test="teaId != null and teaId != ''">
+				AND sis.tea_id = #{teaId}
+			</if>
+		ORDER BY
+			s.stu_id
+	</select>
+
+    <!--通过学生ID查询需要修改机试成绩的学生信息-->
     <select id="selectStuByStuId" parameterType="Long" resultType="map">
 		SELECT
 			s.stu_id stuId,
@@ -178,6 +208,26 @@
 		WHERE
 			s.stu_id = #{stuId}
 	</select>
+
+	<!--通过学生ID和教师ID查询需要修改面试成绩的学生信息-->
+	<select id="selectStuByStuIdAndTeaId" parameterType="map" resultType="map">
+		SELECT
+			s.stu_id stuId,
+			s.stu_num stuNum,
+			s.stu_name stuName,
+			s.stu_class stuClass,
+			s.stu_tel stuTel,
+			COALESCE (sis.score,'') score
+		FROM
+		stu_user s
+			LEFT JOIN stu_interview_score sis ON s.stu_id = sis.stu_id
+		WHERE
+			s.stu_id = #{stuId}
+			<if test="teaId != null and teaId != ''">
+				AND sis.tea_id = #{teaId}
+			</if>
+	</select>
+
     <!--保存教师提交的学生成绩（提交状态）-->
     <update id="updateStuScore" parameterType="StuUser">
 		UPDATE stu_user
@@ -212,6 +262,36 @@
 		</if>
 		WHERE
 			stu_id = #{stuId}
+	</update>
+
+	<!--保存教师提交的学生面试成绩（提交状态）-->
+	<update id="updateStuInterviewScore" parameterType="map">
+		UPDATE stu_interview_score
+		SET
+		<if test="score != null and score != ''">
+			score = #{score},
+			status = '00'
+		</if>
+		WHERE
+		stu_id = #{stuId}
+		<if test="teaId != null and teaId != ''">
+			AND tea_Id = #{teaId}
+		</if>
+	</update>
+
+	<!--保存教师提交的学生面试成绩（暂存状态）-->
+	<update id="updateStuInterviewScoreTemp" parameterType="map">
+		UPDATE stu_interview_score
+		SET
+		<if test="score != null and score != ''">
+			score = #{score},
+			status = '01'
+		</if>
+		WHERE
+		stu_id = #{stuId}
+		<if test="teaId != null and teaId != ''">
+			AND tea_Id = #{teaId}
+		</if>
 	</update>
 
     <!--保存教师提交的学生成绩（暂存状态）-->
@@ -253,7 +333,8 @@
 	<!--更新学生选择老师后的通过状态（实践管理阶段）-->
 	<update id="updateStatus" parameterType="map">
 		UPDATE tea_stu_rel
-		SET STATUS = #{status}
+		SET STATUS = #{status},
+			practice_id = #{practiceId}
 		WHERE
 			stu_id = #{stuId}
 			AND tea_id = #{teaId};
@@ -297,4 +378,23 @@
 			stu_id = #{stuId}
 			AND practice_id = #{practiceId}
 	</update>
+
+	<!--根据学生信息与实践环节信息查询实践环节ID-->
+	<select id="selectPracticeId" parameterType="string" resultType="map">
+		SELECT
+			practice_id,
+			practice_name,
+			semester
+		FROM
+			course_practice cp
+		WHERE
+			cp.semester = #{semester}
+	</select>
+	
+	<!-- 插入学生与实践环节的关系 -->
+	<insert id="insertStuPracticeRel" parameterType="map" >
+		INSERT INTO stu_practice_rel ( stu_id, practice_id )
+		VALUES
+			(#{stuId},#{practiceId})
+	</insert>
 </mapper> 

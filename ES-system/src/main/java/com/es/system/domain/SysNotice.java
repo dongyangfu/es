@@ -36,6 +36,10 @@ public class SysNotice extends BaseEntity {
      * 公告状态（0正常 1关闭）
      */
     private String status;
+    /**
+     * 公告对象
+     */
+    private String teaOrStu;
 
     public Long getNoticeId() {
         return noticeId;
@@ -79,19 +83,32 @@ public class SysNotice extends BaseEntity {
         return status;
     }
 
+    public String getTeaOrStu() {
+        return teaOrStu;
+    }
+
+    public void setTeaOrStu(String teaOrStu) {
+        this.teaOrStu = teaOrStu;
+    }
+
+    public SysNotice(Long noticeId, String noticeTitle, String noticeType, String noticeContent, String status, String teaOrStu) {
+        this.noticeId = noticeId;
+        this.noticeTitle = noticeTitle;
+        this.noticeType = noticeType;
+        this.noticeContent = noticeContent;
+        this.status = status;
+        this.teaOrStu = teaOrStu;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("noticeId", getNoticeId())
-                .append("noticeTitle", getNoticeTitle())
-                .append("noticeType", getNoticeType())
-                .append("noticeContent", getNoticeContent())
-                .append("status", getStatus())
-                .append("createBy", getCreateBy())
-                .append("createTime", getCreateTime())
-                .append("updateBy", getUpdateBy())
-                .append("updateTime", getUpdateTime())
-                .append("remark", getRemark())
-                .toString();
+        return "SysNotice{" +
+                "noticeId=" + noticeId +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", noticeType='" + noticeType + '\'' +
+                ", noticeContent='" + noticeContent + '\'' +
+                ", status='" + status + '\'' +
+                ", teaOrStu='" + teaOrStu + '\'' +
+                '}';
     }
 }

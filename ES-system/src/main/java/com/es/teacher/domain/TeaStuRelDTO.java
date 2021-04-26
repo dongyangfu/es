@@ -92,25 +92,31 @@ public class TeaStuRelDTO extends BaseEntity {
      */
     private String practiceId;
 
+    /**
+     * 实践环节属于哪一期
+     */
+    private String semester;
+
 
     public TeaStuRelDTO() {
     }
 
-    public TeaStuRelDTO(String stuPeriod, String practiceName, String stuName, String stuNum, Long teaId, Long stuId, String stuClass, String stuPracticeName, String score, String practiceNumber, String status, String stuTel, String practiceId, String teaName) {
-        this.stuPeriod = stuPeriod;
-        this.practiceName = practiceName;
-        this.stuName = stuName;
-        this.stuNum = stuNum;
-        this.teaId = teaId;
+    public TeaStuRelDTO(Long stuId, String stuNum, String stuName, String stuPeriod, String stuClass, String stuPracticeName, String score, String teaName, String practiceName, Long teaId, String practiceNumber, String status, String stuTel, String practiceId, String semester) {
         this.stuId = stuId;
+        this.stuNum = stuNum;
+        this.stuName = stuName;
+        this.stuPeriod = stuPeriod;
         this.stuClass = stuClass;
         this.stuPracticeName = stuPracticeName;
         this.score = score;
+        this.teaName = teaName;
+        this.practiceName = practiceName;
+        this.teaId = teaId;
         this.practiceNumber = practiceNumber;
         this.status = status;
         this.stuTel = stuTel;
         this.practiceId = practiceId;
-        this.teaName = teaName;
+        this.semester = semester;
     }
 
     public String getTeaName() {
@@ -225,23 +231,32 @@ public class TeaStuRelDTO extends BaseEntity {
         this.stuTel = stuTel;
     }
 
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
     @Override
     public String toString() {
         return "TeaStuRelDTO{" +
-                "stuPeriod='" + stuPeriod + '\'' +
-                ", practiceName='" + practiceName + '\'' +
-                ", stuName='" + stuName + '\'' +
+                "stuId=" + stuId +
                 ", stuNum='" + stuNum + '\'' +
-                ", teaId=" + teaId +
-                ", stuId=" + stuId +
+                ", stuName='" + stuName + '\'' +
+                ", stuPeriod='" + stuPeriod + '\'' +
                 ", stuClass='" + stuClass + '\'' +
                 ", stuPracticeName='" + stuPracticeName + '\'' +
                 ", score='" + score + '\'' +
+                ", teaName='" + teaName + '\'' +
+                ", practiceName='" + practiceName + '\'' +
+                ", teaId=" + teaId +
                 ", practiceNumber='" + practiceNumber + '\'' +
                 ", status='" + status + '\'' +
                 ", stuTel='" + stuTel + '\'' +
                 ", practiceId='" + practiceId + '\'' +
-                ", teaName='" + teaName + '\'' +
+                ", semester='" + semester + '\'' +
                 '}';
     }
 }

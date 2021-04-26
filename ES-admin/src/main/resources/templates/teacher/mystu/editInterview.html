@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label is-required">面试成绩：</label>
                     <div class="col-sm-5">
-                        <input class="form-control" type="text" name="interviewResult" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" placeholder="请输入0~100的数字" id="interviewResult" maxlength="3" th:value="${stuMap.interviewResult}" required>
+                        <input class="form-control" type="text" name="score" onkeyup="this.value=this.value.replace(/\D/g,'')" onblur="this.value=this.value.replace(/\D/g,'')" placeholder="请输入0~100的数字" id="score" maxlength="3" th:value="${stuMap.score}" required>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
         if ($.validate.form()) {
             $.modal.confirm("提交后就不可再更改，是否确定提交？", function() {
                 var data = $("#form-stu-edit").serializeArray();
-                $.operate.saveTab(prefix + "/edit", data);
+                $.operate.saveTab(prefix + "/editInterview", data);
             })
         }
     }
@@ -72,7 +72,7 @@
         if ($.validate.form()) {
             $.modal.confirm("保存后还可以更改，是否确定保存？", function() {
                 var data = $("#form-stu-edit").serializeArray();
-                $.operate.saveTab(prefix + "/editTemp", data);
+                $.operate.saveTab(prefix + "/editInterviewTemp", data);
             })
         }
     }

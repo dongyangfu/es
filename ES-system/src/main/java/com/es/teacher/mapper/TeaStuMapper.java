@@ -27,7 +27,7 @@ public interface TeaStuMapper {
     List<Map<String,Object>>  selectStuSelectList();
 
     /**
-     * 通过学生ID查询学生成绩信息
+     * 通过学生ID或者 学生ID和教师ID查询学生成绩信息
      *
      * @param stuId 学生ID
      * @return 学生信息以及成绩信息
@@ -90,4 +90,44 @@ public interface TeaStuMapper {
      * @return int
      */
     int auditCourseStatus(Map<String,Object> map);
+
+    /**
+     * 根据学生信息与实践环节信息查询实践环节ID
+     * @param semester 实践环节的学期信息
+     * @return
+     */
+    Map<String,Object> selectPracticeId(String semester);
+
+    /**
+     * 插入学生与实践环节的关系
+     * @param map 学生id与实践环节ID
+     * @return int
+     */
+    int insertStuPracticeRel(Map<String,Object> map);
+
+    /**
+     * 查询去年新生，通过教师ID查询负责面试的学生列表（选拔阶段）
+     * @param map 教师信息
+     * @return 学生信息
+     */
+    List<Map<String,Object>> selectStuSelectListInterview(Map<String,Object> map);
+
+    /**
+     *保存教师提交的学生面试成绩（提交状态）
+     * @return int
+     */
+    int updateStuInterviewScore(Map<String,Object> map);
+
+    /**
+     *保存教师提交的学生面试成绩（暂存状态）
+     * @return int
+     */
+    int updateStuInterviewScoreTemp(Map<String,Object> map);
+
+    /**
+     * 通过学生ID和教师ID查询需要修改面试成绩的学生信息
+     * @param map 学生ID与教师ID
+     * @return map
+     */
+    Map<String,Object> selectStuByStuIdAndTeaId(Map<String,Object> map);
 }

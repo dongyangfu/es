@@ -87,6 +87,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         Date now = new Date();
         return DateFormatUtils.format(now, "yyyyMMdd");
     }
+    /**
+     * 获取当前年份
+     */
+    public static final String dateYear() {
+        Date now = new Date();
+        return DateFormatUtils.format(now, "yyyy");
+    }
+    /**
+     * 获取当前月份
+     */
+    public static final String dateMonth() {
+        Date now = new Date();
+        return DateFormatUtils.format(now, "M");
+    }
 
     /**
      * 日期型字符串转化为日期 格式
