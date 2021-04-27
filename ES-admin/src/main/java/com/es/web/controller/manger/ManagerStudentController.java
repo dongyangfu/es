@@ -8,6 +8,7 @@ import com.es.common.core.domain.entity.SysRole;
 import com.es.common.core.domain.entity.SysUser;
 import com.es.common.core.page.TableDataInfo;
 import com.es.common.enums.BusinessType;
+import com.es.common.utils.PeriodUtil;
 import com.es.common.utils.ShiroUtils;
 import com.es.common.utils.poi.ExcelUtil;
 import com.es.framework.shiro.service.SysPasswordService;
@@ -62,6 +63,30 @@ public class ManagerStudentController extends BaseController {
     public TableDataInfo list(StudentDTO studentDTO) {
         startPage();
         List<StudentVO> StudentList = managerStudentService.getStudentList(studentDTO);
+        log.info("ManagerStudentController#list: {}", JSON.toJSONString(StudentList));
+        return getDataTable(StudentList);
+    }
+
+    @PostMapping("/list/{opt}")
+    @ResponseBody
+    public TableDataInfo list(@PathVariable String opt) {
+        startPage();
+        StudentDTO dto = new StudentDTO();
+        if ("apply".equals(opt)){
+            // 申请进入卓越班
+            dto.setStuIde(-2);
+        }else if ("approve".equals(opt)){
+            // 申请成功学生
+            dto.setStuIde(-3);
+        }else if ("computer".equals(opt)){
+            // 机试通过人数
+            dto.setStuPro(3);
+        }else if ("superClass".equals(opt)){
+            // 面试通过人数
+            dto.setStuPro(7);
+        }
+        dto.setStuPeriod(PeriodUtil.getNowPeriod());
+        List<StudentVO> StudentList = managerStudentService.getStudentList(dto);
         log.info("ManagerStudentController#list: {}", JSON.toJSONString(StudentList));
         return getDataTable(StudentList);
     }

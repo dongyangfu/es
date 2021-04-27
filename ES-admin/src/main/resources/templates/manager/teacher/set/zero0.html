@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('学生分数列表')" />
+	<th:block th:include="include :: header('学生列表')" />
 	<th:block th:include="include :: layout-latest-css" />
 	<th:block th:include="include :: ztree-css" />
 </head>
@@ -16,17 +16,34 @@
 		                <input type="hidden" id="parentId" name="parentId">
 						<div class="select-list">
 							<ul>
-								<h4 id ="h4Disabled" class="form-header h4" align="center" th:hidden="${vo.processStatus  != 3}"  >如果下方表格无数据，请点击认定面试教师按钮!</h4>
-								</ul>
+								<li>
+									学生姓名：<input type="text" name="userName"/>
+								</li>
+								<li>
+									学生学号：<input type="text" name="stuNum"/>
+								</li>
+								<li>
+									用户状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+										<option value="">所有</option>
+										<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+									</select>
+								</li>
+								<li class="select-time">
+									<label>创建时间： </label>
+									<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+									<span>-</span>
+									<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+								</li>
+								<li>
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+								</li>
 							</ul>
 						</div>
 					</form>
 				</div>
 				
 		        <div class="btn-group-sm" id="toolbar" role="group">
-		             <a class="btn btn-sm btn-primary" onclick="submitHandler()" >
-			            <i class="fa fa-edit"></i> 认定面试教师
-			        </a>
 		            <a class="btn btn-warning" onclick="$.table.exportExcel()" >
 			            <i class="fa fa-download"></i> 导出
 			        </a>
@@ -46,7 +63,7 @@
 		var editFlag = true;
 		var removeFlag = true;
 		var resetPwdFlag = true;
-		var prefix = ctx + "manager/teacher/set";
+		var prefix = ctx + "manager/student";
 		var prefix2 = ctx + "system/user";
 		$(function() {
 		    var panehHidden = false;
@@ -66,49 +83,59 @@
 		});
 
 		function queryUserList() {
-			var options = {
-				url: prefix + "/interviewList",
-				// createUrl: prefix + "/add",
-				updateUrl: prefix + "/edit/{id}",
-				// removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/interview/export",
-				// importUrl: prefix + "/importData",
-				// importTemplateUrl: prefix + "/importTemplate",
-				// sortName: "createTime",
-				// sortOrder: "desc",
-				modalName: "用户",
-				columns: [{
-					checkbox: true
-				},
+		    var options = {
+		        url: prefix + "/list/apply",
+		        createUrl: prefix + "/add",
+		        updateUrl: prefix + "/edit/{id}",
+		        removeUrl: prefix + "/remove",
+		        exportUrl: prefix + "/export",
+		        importUrl: prefix + "/importData",
+		        importTemplateUrl: prefix + "/importTemplate",
+		        sortName: "createTime",
+		        sortOrder: "desc",
+		        modalName: "用户",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'userId',
+		            title: '用户ID',
+					hidden: true
+		        },
+		        {
+		            field: 'userName',
+		            title: '用户名称'
+		        },
 					{
-						field: 'teaGroupOrder',
-						title: '组数'
+						field: 'stuNum',
+						title: '学生学号'
 					},
 					{
-						field: 'groupLeader',
-						title: '组长/组员',
-						formatter: function (value, row) {
-							return isLeader(row);
-						}
+						field: 'stuClass',
+						title: '学生原班级'
 					},
 					{
-						field: 'teaJobNumber',
-						title: '教师工号'
+						field: 'phonenumber',
+						title: '联系电话'
 					},
-					{
-						field: 'userName',
-						title: '教师名称'
-					}]
-			};
-			$.table.init(options);
+
+		        {
+		        	visible: editFlag == 'hidden' ? false : true,
+		        	title: '用户状态',
+		        	align: 'center',
+		        	formatter: function (value, row, index) {
+		        		return statusTools(row);
+		        	}
+		        },
+		        {
+		            field: 'createTime',
+		            title: '创建时间',
+		            sortable: true
+		        }]
+		    };
+		    $.table.init(options);
 		}
-		function submitHandler() {
-			// document.getElementById("buttonDisabled").setAttribute("disabled",true);
-			if ($.validate.form()) {
-				var data = $("#user-form").serializeArray();
-				$.operate.post(prefix + "/interviewResult/toFourProcess", data);
-			}
-		}
+
 		$('#btnExpand').click(function() {
 			$._tree.expandAll(true);
 		    $(this).hide();
@@ -137,14 +164,7 @@
 		    $.modal.open("重置密码", url, '800', '300');
 		}
 
-		/* 教师职位判断显示 */
-		function isLeader(row) {
-			if (row.groupLeader == 1) {
-				return '组长';
-			} else {
-				return '组员';
-			}
-		}
+
 		/* 用户状态显示 */
 		function statusTools(row) {
 		    if (row.status == 1) {

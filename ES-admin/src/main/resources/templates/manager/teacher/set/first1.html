@@ -10,28 +10,27 @@
 	<div class="ui-layout-center">
 		<div class="container-div">
 			<div class="row">
-				<div class="col-sm-12 search-collapse">
-					<form id="user-form">
-						<input type="hidden" id="deptId" name="deptId">
-		                <input type="hidden" id="parentId" name="parentId">
-						<div class="select-list">
-							<ul>
-								<h4 id ="h4Disabled" class="form-header h4" align="center" th:hidden="${vo.processStatus  != 3}"  >如果下方表格无数据，请点击认定面试教师按钮!</h4>
-								</ul>
-							</ul>
-						</div>
-					</form>
-				</div>
+<!--				<div class="col-sm-12 search-collapse">-->
+
+<!--				</div>-->
 				
 		        <div class="btn-group-sm" id="toolbar" role="group">
-		             <a class="btn btn-sm btn-primary" onclick="submitHandler()" >
-			            <i class="fa fa-edit"></i> 认定面试教师
-			        </a>
-		            <a class="btn btn-warning" onclick="$.table.exportExcel()" >
-			            <i class="fa fa-download"></i> 导出
-			        </a>
+
+					<form id="user-form">
+						<div  th:hidden="${vo.processStatus  != 1}">
+								<div >
+									<input name="processPersonNum" th:disabled="${vo.processStatus  != 1}" placeholder="请输入预选拔人数" class="form-control" type="text" maxlength="4"  required>
+								</div>
+						</div>
+					</form>
+					<a class="btn btn-sm btn-primary" onclick="submitHandler()" >
+						<i class="fa fa-edit"></i> 学生预选拔
+					</a>
+
+					<a class="btn btn-warning" onclick="$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出
+					</a>
 		        </div>
-		        
 		        <div class="col-sm-12 select-table table-striped">
 				    <table id="bootstrap-table"></table>
 				</div>
@@ -47,6 +46,7 @@
 		var removeFlag = true;
 		var resetPwdFlag = true;
 		var prefix = ctx + "manager/teacher/set";
+		var prefix1 = ctx + "manager/student";
 		var prefix2 = ctx + "system/user";
 		$(function() {
 		    var panehHidden = false;
@@ -67,7 +67,7 @@
 
 		function queryUserList() {
 			var options = {
-				url: prefix + "/interviewList",
+				url: prefix1 + "/list/approve",
 				// createUrl: prefix + "/add",
 				updateUrl: prefix + "/edit/{id}",
 				// removeUrl: prefix + "/remove",
@@ -81,23 +81,39 @@
 					checkbox: true
 				},
 					{
-						field: 'teaGroupOrder',
-						title: '组数'
-					},
-					{
-						field: 'groupLeader',
-						title: '组长/组员',
-						formatter: function (value, row) {
-							return isLeader(row);
-						}
-					},
-					{
-						field: 'teaJobNumber',
-						title: '教师工号'
+						field: 'userId',
+						title: '用户ID',
+						hidden: true
 					},
 					{
 						field: 'userName',
-						title: '教师名称'
+						title: '用户名称'
+					},
+					{
+						field: 'stuNum',
+						title: '学生学号'
+					},
+					{
+						field: 'stuClass',
+						title: '学生原班级'
+					},
+					{
+						field: 'phonenumber',
+						title: '联系电话'
+					},
+
+					{
+						visible: editFlag == 'hidden' ? false : true,
+						title: '用户状态',
+						align: 'center',
+						formatter: function (value, row, index) {
+							return statusTools(row);
+						}
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						sortable: true
 					}]
 			};
 			$.table.init(options);
@@ -106,7 +122,7 @@
 			// document.getElementById("buttonDisabled").setAttribute("disabled",true);
 			if ($.validate.form()) {
 				var data = $("#user-form").serializeArray();
-				$.operate.post(prefix + "/interviewResult/toFourProcess", data);
+				$.operate.post(prefix + "/firstProcessStudent/toTwoProcess", data);
 			}
 		}
 		$('#btnExpand').click(function() {

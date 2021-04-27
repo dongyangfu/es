@@ -28,6 +28,14 @@ public interface ISysRoleService {
     public Set<String> selectRoleKeys(Long userId);
 
     /**
+     * 通过角色ID查询角色
+     *
+     * @param roleName 角色名称
+     * @return 角色对象信息
+     */
+    public SysRole selectRoleByName(String roleName);
+
+    /**
      * 根据用户ID查询角色
      *
      * @param userId 用户ID

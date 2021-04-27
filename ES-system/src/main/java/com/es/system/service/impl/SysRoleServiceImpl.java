@@ -73,6 +73,11 @@ public class SysRoleServiceImpl implements ISysRoleService {
         return permsSet;
     }
 
+    @Override
+    public SysRole selectRoleByName(String roleName) {
+        return roleMapper.selectRoleByName(roleName);
+    }
+
     /**
      * 根据用户ID查询角色
      *

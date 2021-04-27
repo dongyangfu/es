@@ -26,14 +26,17 @@
 									教师分类：<select name="searchCondition" th:with="type=${@dict.getType('sys_normal_disable')}">
 									<option value="">所有</option>
 									<option th:value="isComputer" th:text="机试教师"></option>
-									<option th:value="isInterview" th:text="面试教师"></option>
+<!--									<option th:value="isInterview" th:text="面试教师"></option>-->
 									<option th:value="isCharge" th:text="卓越班主任"></option>
 								</select>
 								</li>
 								<li>
-									教师职称：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+									教师职称：<select name="teaProfess" th:with="type=${@dict.getType('sys_normal_disable')}">
 									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+									<option th:value="1" th:text="教授"></option>
+									<option th:value="2" th:text="副教授"></option>
+									<option th:value="3" th:text="讲师"></option>
+									<option th:value="4" th:text="助教"></option>
 								</select>
 								</li>
 								<li>

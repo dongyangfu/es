@@ -110,6 +110,15 @@
             <if test="stuPro != null and stuPro != ''">
                 AND stu_pro = #{stuPro}
             </if>
+            <if test="stuIde != null and stuIde == -2 ">
+                AND (stu_ide = 2 or stu_ide = 3 or stu_ide = 4)
+            </if>
+            <if test="stuIde != null and stuIde == -3 ">
+                and stu_ide = 3
+            </if>
+            <if test="stuPeriod != null and stuPeriod != ''">
+                AND stu_period = #{stuPeriod}
+            </if>
         </where>
     </select>
 

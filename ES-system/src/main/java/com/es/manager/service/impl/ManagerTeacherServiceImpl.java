@@ -108,8 +108,8 @@ public class ManagerTeacherServiceImpl implements ManagerTeacherService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateTeacherById(TeacherDTO teacherDTO) {
-        SysRole stu = sysRoleMapper.selectRoleByName("教师");
-        teacherDTO.setRoleIds(new Long[]{stu.getRoleId()});
+//        SysRole stu = sysRoleMapper.selectRoleByName("教师");
+//        teacherDTO.setRoleIds(new Long[]{stu.getRoleId()});
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(teacherDTO.getUserId());
         // 删除教师特长

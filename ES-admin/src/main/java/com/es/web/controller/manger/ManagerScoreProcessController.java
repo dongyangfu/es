@@ -120,6 +120,14 @@ public class ManagerScoreProcessController extends BaseController {
         ExcelUtil<StuInterviewScoreVOTemp> util = new ExcelUtil<>(StuInterviewScoreVOTemp.class);
         return util.exportExcel(result, "面试教师");
     }
+    /**
+     * 申请报名卓越班
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @GetMapping("/apply")
+    public String apply() {
+        return prefix + "/zero0";
+    }
 
     /**
      * 预选拔
@@ -131,7 +139,7 @@ public class ManagerScoreProcessController extends BaseController {
         dto.setPeriod(Integer.parseInt(PeriodUtil.getNowPeriod()));
         ManagerProcessStatusVO vo = managerProcessStatusService.getManagerProcessStatus(dto);
         mmap.put("vo", vo);
-        return prefix + "/firstProcessStudent1";
+        return prefix + "/first1";
     }
 
     /**

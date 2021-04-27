@@ -1,5 +1,6 @@
 package com.es.manager.service.impl;
 
+import com.es.common.core.domain.entity.SysRole;
 import com.es.common.utils.PeriodUtil;
 import com.es.manager.domain.dto.ManagerProcessStatusDTO;
 import com.es.manager.domain.dto.StuInterviewScoreDTO;
@@ -12,8 +13,11 @@ import com.es.manager.mapper.ManagerProcessStatusMapper;
 import com.es.manager.service.ManagerProcessStatusService;
 import com.es.manager.service.ManagerStudentService;
 import com.es.manager.service.StuInterviewScoreService;
+import com.es.system.domain.SysUserRole;
+import com.es.system.mapper.SysUserRoleMapper;
 import com.es.system.service.ISysRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -42,6 +46,9 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
 
     @Resource
     private ISysRoleService sysRoleService;
+
+    @Resource
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
     public ManagerProcessStatusVO getManagerProcessStatus(ManagerProcessStatusDTO managerProcessStatusDTO) {
@@ -104,7 +111,7 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class,isolation = Isolation.READ_UNCOMMITTED)
     public int toFourProcessInterviewScore(ManagerProcessStatusDTO managerProcessStatusDTO) {
         managerProcessStatusDTO.setInterviewGroupNum(3);
         managerProcessStatusDTO.setInterviewGroupPersonNum(4);
@@ -151,6 +158,27 @@ public class ManagerProcessStatusServiceImpl implements ManagerProcessStatusServ
             }
             stuInterviewScoreService.updateList(teaDTO);
         }
+        // 将教师的权限增加面试教师
+        // 获取到面试教师的角色id
+//        SysRole interviewRoleId = sysRoleService.selectRoleByName("面试教师");
+//        // 将面试教师的userId和id插入到sys-user-role表中
+//        for (Long userId : teaIdsResult) {
+//            List<SysUserRole> userRoleList = new ArrayList<>();
+//            List<SysUserRole> sysUserRoles = sysUserRoleMapper.selectUserRoleByUserId(userId);
+//            // 删除用户与角色关联
+//            sysUserRoleMapper.deleteUserRoleByUserId(userId);
+//            sysUserRoles.forEach(x->{
+//                SysUserRole sysUserRole = new SysUserRole();
+//                sysUserRole.setUserId(userId);
+//                sysUserRole.setRoleId(x.getRoleId());
+//                userRoleList.add(x);
+//            });
+//            SysUserRole sysUserRole = new SysUserRole();
+//            sysUserRole.setUserId(userId);
+//            sysUserRole.setRoleId(interviewRoleId.getRoleId());
+//            userRoleList.add(sysUserRole);
+//            sysUserRoleMapper.batchUserRole(userRoleList);
+//        }
         //	修改卓越选拔流程控制，流程由3-》4。
         managerProcessStatusDTO.setProcessStatus(4);
         return managerProcessStatusMapper.update(managerProcessStatusDTO);
